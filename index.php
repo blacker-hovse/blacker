@@ -174,7 +174,7 @@ include(__DIR__ . '/md/Michelf/MarkdownExtra.inc.php');
 			</ul>
 			<div>
 				<a href="/">
-					<img src="/crest.png" alt="Blacker" />
+					<img src="crest.png" alt="Blacker" />
 				</a>
 			</div>
 		</div>
@@ -183,7 +183,7 @@ include(__DIR__ . '/md/Michelf/MarkdownExtra.inc.php');
 echo \Michelf\MarkdownExtra::defaultTransform(file_get_contents(__DIR__ . '/src/home.md'));
 ?>		</div>
 		<div id="footer">
-			<img src="/lion.png" alt="" />
+			<img src="lion.png" alt="" />
 			<p>Copyright &copy; 2005&ndash;2015 Blacker House<br />California Institute of Technology</p>
 			<h1>&gamma;&delta;&beta;&gamma;</h1>
 		</div>
