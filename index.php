@@ -120,11 +120,9 @@ if ($page == 404) {
 			.pull-right {
 				float: right;
 			}
-			.channel {
-				padding-left: 2em;
-			}
 			.item {
 				position: relative;
+				margin-left: 2em;
 				border-left: 0.3em solid #111;
 				padding: 1em 0 1em 4em;
 				font-size: 0.9em;
@@ -254,7 +252,7 @@ if ($page == 404) {
 			</div>
 		</div>
 		<div id="main">
-			<div class="container">
+			<div>
 <?
 echo \Michelf\MarkdownExtra::defaultTransform(file_get_contents(__DIR__ . "/src/$page.md"));
 ?>			</div>
@@ -262,7 +260,7 @@ echo \Michelf\MarkdownExtra::defaultTransform(file_get_contents(__DIR__ . "/src/
 if ($page == 'home') {
 	echo <<<EOF
 			<h2>News</h2>
-			<div class="channel">
+			<div>
 
 EOF;
 
