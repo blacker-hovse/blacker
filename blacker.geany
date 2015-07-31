@@ -1,7 +1,7 @@
 [file_prefs]
 final_new_line=true
 ensure_convert_new_lines=false
-strip_trailing_spaces=false
+strip_trailing_spaces=true
 replace_tabs=false
 
 [indentation]
@@ -23,10 +23,10 @@ long_line_behaviour=1
 long_line_column=80
 
 [files]
-current_page=2
-FILE_NAME_0=0;None;0;EUTF-8;1;1;1;%2Ftmp%2Ftitanic_notes.txt;0;4
-FILE_NAME_1=7996;C;0;EUTF-8;1;1;1;%2Fhome%2Fwoot%2FDocuments%2Fgeany-zencoding%2Fsrc%2Fzen-editor.c;0;4
-FILE_NAME_2=26132;Python;0;EUTF-8;1;1;1;%2Fhome%2Fwoot%2F.config%2Fgeany%2Fplugins%2Fzencoding%2Fzencoding%2Fzen_settings.py;0;4
+current_page=0
+FILE_NAME_0=4225;PHP;0;EUTF-8;1;1;1;%2Fhome%2Fwoot%2FDocuments%2Fblacker%2Findex.php;0;4
+FILE_NAME_1=152;Markdown;0;EUTF-8;0;1;1;%2Fhome%2Fwoot%2FDocuments%2Fblacker%2Fsrc%2Fpeople.md;0;4
+FILE_NAME_2=362;Markdown;0;EUTF-8;1;1;1;%2Fhome%2Fwoot%2FDocuments%2Fblacker%2Fsrc%2Fhome.md;0;4
 
 [VTE]
 last_dir=/home/woot/Documents/blacker
