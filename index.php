@@ -3,7 +3,7 @@ include(__DIR__ . '/md/Michelf/MarkdownExtra.inc.php');
 $server = parse_url($_SERVER['REQUEST_URI']);
 $page = 404;
 
-if (preg_match('/(\w+)(\/?)/', $server['path'], $matches)) {
+if (preg_match('/^\/(\w+)(\/?)(\?.*)?$/', $server['path'], $matches)) {
 	if (!$matches[2]) {
 		header("Location: $server[path]/");
 		die();
@@ -12,6 +12,14 @@ if (preg_match('/(\w+)(\/?)/', $server['path'], $matches)) {
 	}
 } elseif ($server['path'] == '/') {
 	$page = 'home';
+}
+
+if ($page == 404) {
+	header('HTTP/1.1 404 Not Found');
+	header('Status: 404 Not Found');
+} else {
+	header('HTTP/1.1 200 OK');
+	header('Status: 200 OK');
 }
 ?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -117,13 +125,13 @@ if (preg_match('/(\w+)(\/?)/', $server['path'], $matches)) {
 			}
 			.item {
 				position: relative;
-				border-left: 0.2em solid #111;
+				border-left: 0.3em solid #111;
 				padding: 1em 0 1em 4em;
 				font-size: 0.9em;
 			}
 			.thumbnail {
 				position: absolute;
-				top: 1em;
+				top: 1.2em;
 				left: -2.4em;
 				border-radius: 3em;
 				padding: 0.5em;
@@ -233,7 +241,7 @@ if (preg_match('/(\w+)(\/?)/', $server['path'], $matches)) {
 			</ul>
 			<ul class="pull-right">
 				<li>
-					<a href="/quotes/">Quotes</a>
+					<a href="/hell_quotes/">Quotes</a>
 				</li>
 				<li>
 					<a href="/wiki/">Wiki</a>
