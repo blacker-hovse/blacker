@@ -254,7 +254,7 @@ if ($page == 404) {
 			</div>
 		</div>
 		<div id="main">
-			<div>
+			<div class="container">
 <?
 echo \Michelf\MarkdownExtra::defaultTransform(file_get_contents(__DIR__ . "/src/$page.md"));
 ?>			</div>
