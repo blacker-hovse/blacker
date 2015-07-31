@@ -271,16 +271,17 @@ EOF;
 	$items = $rss->getElementsByTagName('item');
 
 	for ($i = 0; $i < $items->length and $i < 5; $i++) {
-		$title = $items[$i]->getElementsByTagName('title')->item(0)->firstChild->nodeValue;
-		$date = strftime('%e %B %Y', strtotime($items[$i]->getElementsByTagName('pubDate')->item(0)->firstChild->nodeValue));
-		$link = $items[$i]->getElementsByTagName('link')->item(0)->firstChild->nodeValue;
-		$media = $items[$i]->getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'thumbnail');
+		$item = $items->get($i);
+		$title = $item->getElementsByTagName('title')->item(0)->firstChild->nodeValue;
+		$date = strftime('%e %B %Y', strtotime($item->getElementsByTagName('pubDate')->item(0)->firstChild->nodeValue));
+		$link = $item->getElementsByTagName('link')->item(0)->firstChild->nodeValue;
+		$media = $item->getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'thumbnail');
 		$media = $media->length ? $media->get(0)->getAttribute('url') : '';
 
 		$description = implode('</p>
 				<p>', array_slice(explode('
 ', preg_replace('/(<br\s*\/?>\s*)+/', '
-', strip_tags(str_replace('>', '> ', $items[$i]->getElementsByTagName('description')->item(0)->firstChild->nodeValue), '<br><br/>')), 3), 0, -1));
+', strip_tags(str_replace('>', '> ', $item->getElementsByTagName('description')->item(0)->firstChild->nodeValue), '<br><br/>')), 3), 0, -1));
 
 		echo <<<EOF
 				<div class="item">
