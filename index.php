@@ -241,7 +241,7 @@ if ($page == 404) {
 			</ul>
 			<ul class="pull-right">
 				<li>
-					<a href="/hell_quotes/">Quotes</a>
+					<a href="/quotes/">Quotes</a>
 				</li>
 				<li>
 					<a href="/wiki/">Wiki</a>
@@ -275,7 +275,7 @@ EOF;
 		$date = strftime('%e %B %Y', strtotime($items[$i]->getElementsByTagName('pubDate')->item(0)->firstChild->nodeValue));
 		$link = $items[$i]->getElementsByTagName('link')->item(0)->firstChild->nodeValue;
 		$media = $items[$i]->getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'thumbnail');
-		$media = $media->length ? $media[0]->getAttribute('url') : '';
+		$media = $media->length ? $media->get(0)->getAttribute('url') : '';
 
 		$description = implode('</p>
 				<p>', array_slice(explode('
