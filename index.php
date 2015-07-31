@@ -268,20 +268,20 @@ EOF;
 
 	$rss = new DOMDocument;
 	$rss->load('http://blackerhovse.blogspot.com/feeds/posts/default?alt=rss');
-	$items = $rss->getElementsByTagName('item');
+	$items = $rss->itemElementsByTagName('item');
 
 	for ($i = 0; $i < $items->length and $i < 5; $i++) {
-		$item = $items->get($i);
-		$title = $item->getElementsByTagName('title')->item(0)->firstChild->nodeValue;
-		$date = strftime('%e %B %Y', strtotime($item->getElementsByTagName('pubDate')->item(0)->firstChild->nodeValue));
-		$link = $item->getElementsByTagName('link')->item(0)->firstChild->nodeValue;
-		$media = $item->getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'thumbnail');
-		$media = $media->length ? $media->get(0)->getAttribute('url') : '';
+		$item = $items->item($i);
+		$title = $item->itemElementsByTagName('title')->item(0)->firstChild->nodeValue;
+		$date = strftime('%e %B %Y', strtotime($item->itemElementsByTagName('pubDate')->item(0)->firstChild->nodeValue));
+		$link = $item->itemElementsByTagName('link')->item(0)->firstChild->nodeValue;
+		$media = $item->itemElementsByTagNameNS('http://search.yahoo.com/mrss/', 'thumbnail');
+		$media = $media->length ? $media->item(0)->itemAttribute('url') : '';
 
 		$description = implode('</p>
 				<p>', array_slice(explode('
 ', preg_replace('/(<br\s*\/?>\s*)+/', '
-', strip_tags(str_replace('>', '> ', $item->getElementsByTagName('description')->item(0)->firstChild->nodeValue), '<br><br/>')), 3), 0, -1));
+', strip_tags(str_replace('>', '> ', $item->itemElementsByTagName('description')->item(0)->firstChild->nodeValue), '<br><br/>')), 3), 0, -1));
 
 		echo <<<EOF
 				<div class="item">
