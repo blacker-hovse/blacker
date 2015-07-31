@@ -26,7 +26,7 @@ if ($page == 404) {
 	<head>
 		<title>Blacker</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link href="http://fonts.googleapis.com/css?family=Roboto:400,700|Oswald|Advent+Pro&amp;subset=latin,greek" rel="stylesheet" type="text/css" />
+		<link href="//fonts.googleapis.com/css?family=Roboto:400,700|Oswald|Advent+Pro&amp;subset=latin,greek" rel="stylesheet" type="text/css" />
 		<style type="text/css">
 			body {
 				margin: 0;
