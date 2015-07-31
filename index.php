@@ -42,6 +42,7 @@ if ($page == 404) {
 				border-bottom: 1px solid #111;
 				padding: 2em 10% 0.5em 10%;
 				width: 80%;
+				background-color: #000;
 				background-color: rgba(0, 0, 0, 0.8);
 				text-align: center;
 			}
@@ -64,6 +65,7 @@ if ($page == 404) {
 			}
 			#header img {
 				margin-top: -1.5em;
+				border: 0;
 				width: 4em;
 			}
 			#main {
@@ -72,13 +74,6 @@ if ($page == 404) {
 			#main > * {
 				margin-left: 20%;
 				margin-right: 20%;
-			}
-			#main img.pull-right {
-				margin: 0 0 1em 2em;
-				padding: 0.5em;
-				width: 5.4em;
-				background-color: #111;
-				opacity: 0.8;
 			}
 			#footer {
 				margin-top: 3em;
