@@ -163,11 +163,11 @@ input[type=checkbox], input[type=radio] {
 }
 .form-control > label {
 	position: absolute;
-	top: 0.6em;
+	top: 0.1em;
 	left: 0;
 	right: 70%;
 	display: block;
-	padding: 0 1em;
+	padding: 0.5em 1em;
 	text-align: right;
 	font-weight: bold;
 }
