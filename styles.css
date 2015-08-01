@@ -98,7 +98,7 @@ input, textarea {
 	width: 100%;
 	background-color: #111;
 	color: #ccc;
-	font-size: 1em;
+	font-size: 0.9em;
 	font-family: Roboto, sans-serif;
 }
 input:hover, textarea:hover, input:focus, textarea:focus {
@@ -138,6 +138,15 @@ input[type=checkbox], input[type=radio] {
 }
 .btn-lg {
 	font-size: 1.1em;
+}
+.form-group input, .form-group textarea, .form-group .btn {
+	font-size: 1em;
+}
+.form-group .btn-sm {
+	font-size: 0.8em;
+}
+.form-group .btn-lg {
+	font-size: 1.2em;
 }
 .item {
 	position: relative;
