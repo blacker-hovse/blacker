@@ -88,12 +88,36 @@ body {
 .text-center {
 	text-align: center;
 }
+input, textarea {
+	display: block;
+	margin: -0.5em;
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	border-color: #333;
+	padding: 0.5em;
+	width: 100%;
+	background-color: #111;
+	color: #ccc;
+	font-size: 1em;
+	font-family: Roboto, sans-serif;
+}
+input:hover, textarea:hover, input:focus, textarea:focus {
+	border-color: #ccc;
+	color: #fff;
+}
+input[type=checkbox], input[type=radio] {
+	display: inline;
+	margin: 0;
+	width: 1em;
+	height: 1em;
+}
 .btn, input[type=submit] {
 	display: inline-block;
 	border: 1px solid #111;
 	margin: 0 0.5em;
 	border-radius: 0.4em;
 	padding: 0.2em 0.6em;
+	width: auto;
 	background-color: #222;
 	color: #ccc;
 	text-decoration: none;
@@ -132,6 +156,33 @@ body {
 	height: 3.6em;
 	background-color: #222;
 }
+.form-control {
+	position: relative;
+	padding: 1em;
+	font-size: 0.9em;
+}
+.form-control > label {
+	position: absolute;
+	top: 0.6em;
+	left: 0;
+	right: 70%;
+	display: block;
+	padding: 0 1em;
+	text-align: right;
+	font-weight: bold;
+}
+.form-control.optional > label::before {
+	content: '(optional)';
+	padding-right: 0.5em;
+	color: #999;
+	font-weight: normal;
+}
+.input-group {
+	margin-left: 30%;
+}
+.input-group label {
+	padding-left: 0.5em;
+}
 h1 {
 	margin-top: 0.5em;
 	margin-bottom: 0;
@@ -142,7 +193,7 @@ h1 {
 	font-weight: normal;
 }
 h2 {
-	margin: 1em 20% 0 20%;
+	margin: 1em 20%;
 	border-top: 1px solid #222;
 	padding-top: 1em;
 	color: #999;
@@ -154,6 +205,10 @@ h2 {
 }
 h3 {
 	font-size: 1.2em;
+}
+p, form {
+	margin-top: 1em;
+	margin-bottom: 1em;
 }
 small {
 	padding-left: 1em;
