@@ -261,9 +261,6 @@ a:hover {
 		margin: 1em 0;
 		width: 50%;
 	}
-	.pull-left, .pull-right {
-		float: none;
-	}
 	#main {
 		padding-top: 0;
 	}
@@ -274,5 +271,14 @@ a:hover {
 	#footer {
 		margin: 0 -1em;
 		padding: 1em 0;
+	}
+	.pull-left, .pull-right {
+		float: none;
+	}
+	.form-control > label {
+		position: static;
+	}
+	.input-group {
+		margin: 0;
 	}
 }
