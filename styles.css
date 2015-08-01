@@ -240,7 +240,7 @@ table {
 td {
 	padding: 0.5em;
 }
-td:first-child {
+h2 + table td:first-child {
 	width: 40%;
 	color: #fff;
 	text-align: right;
