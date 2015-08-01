@@ -277,6 +277,8 @@ a:hover {
 	}
 	.form-control > label {
 		position: static;
+		padding: 1em 0.5em;
+		text-align: left;
 	}
 	.input-group {
 		margin: 0;
