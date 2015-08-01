@@ -113,9 +113,10 @@ input[type=checkbox], input[type=radio] {
 }
 .btn, input[type=submit] {
 	display: inline-block;
+	margin: 0.2em 0.4em;
 	border: 1px solid #111;
-	margin: 0 0.5em;
 	border-radius: 0.4em;
+	outline: 0;
 	padding: 0.2em 0.6em;
 	width: auto;
 	background-color: #222;
@@ -245,7 +246,6 @@ td:first-child {
 	text-align: right;
 }
 a {
-	outline: 0;
 	color: #999;
 }
 a:hover {
