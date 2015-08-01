@@ -139,13 +139,13 @@ input[type=checkbox], input[type=radio] {
 .btn-lg {
 	font-size: 1.1em;
 }
-.form-group input, .form-group textarea, .form-group .btn {
+.form-control input, .form-control textarea, .form-control .btn {
 	font-size: 1em;
 }
-.form-group .btn-sm {
+.form-control .btn-sm {
 	font-size: 0.8em;
 }
-.form-group .btn-lg {
+.form-control .btn-lg {
 	font-size: 1.2em;
 }
 .item {
