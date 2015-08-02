@@ -239,6 +239,10 @@ table {
 }
 td {
 	padding: 0.5em;
+	text-align: center;
+}
+h2 + table td {
+	text-align: left;
 }
 h2 + table td:first-child {
 	width: 40%;
