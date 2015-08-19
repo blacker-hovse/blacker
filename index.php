@@ -1,5 +1,6 @@
 <?
-include(__DIR__ . '/md/Michelf/MarkdownExtra.inc.php');
+include(__DIR__ . '/lib/include.php');
+include(__DIR__ . '/lib/md/Michelf/MarkdownExtra.inc.php');
 $server = parse_url($_SERVER['REQUEST_URI']);
 $page = 404;
 
@@ -24,36 +25,13 @@ if ($page == 404) {
 ?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Blacker</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link href="//fonts.googleapis.com/css?family=Roboto:400,700|Oswald|Advent+Pro&amp;subset=latin,greek" rel="stylesheet" type="text/css" />
-		<link href="/styles.css" rel="stylesheet" type="text/css" />
-	</head>
+<?
+print_head('Blacker');
+?>	</head>
 	<body>
-		<div id="header">
-			<ul class="pull-left">
-				<li>
-					<a href="/people/">People</a>
-				</li>
-				<li>
-					<a href="/gallery/">Gallery</a>
-				</li>
-			</ul>
-			<ul class="pull-right">
-				<li>
-					<a href="/quotes/">Quotes</a>
-				</li>
-				<li>
-					<a href="/wiki/">Wiki</a>
-				</li>
-			</ul>
-			<div>
-				<a href="/">
-					<img src="/crest.png" alt="Blacker" />
-				</a>
-			</div>
-		</div>
-		<div id="main">
+<?
+print_header();
+?>		<div id="main">
 			<div>
 <?
 echo \Michelf\MarkdownExtra::defaultTransform(file_get_contents(__DIR__ . "/src/$page.md"));
@@ -102,10 +80,10 @@ EOF;
 EOF;
 }
 ?>		</div>
-		<div id="footer">
-			<img src="/lion.png" alt="" />
-			<p>Copyright &copy; 2005&ndash;2015 Blacker House<br />California Institute of Technology<br />Website design by <a href="http://dt.clrhome.org/">DT</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:mole-imss@ugcs.caltech.edu">Contact</a></p>
-			<h1>&gamma;&delta;&beta;&gamma;</h1>
-		</div>
-	</body>
+<?
+print_footer(
+	'Copyright &copy; 2005&ndash;2015 Blacker House',
+	'California Institute of Technology'
+);
+?>	</body>
 </html>
