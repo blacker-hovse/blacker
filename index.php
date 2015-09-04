@@ -44,8 +44,13 @@ if ($page == 'home') {
 
 EOF;
 
+	$ch = curl_init('https://blacker.caltech.edu/history/?feed=rss2');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 	$rss = new DOMDocument;
-	$rss->load('http://blackerhovse.blogspot.com/feeds/posts/default?alt=rss');
+	$rss->loadXML(curl_exec($ch));
+	curl_close($ch);
 	$items = $rss->getElementsByTagName('item');
 
 	for ($i = 0; $i < $items->length and $i < 5; $i++) {
@@ -56,10 +61,8 @@ EOF;
 		$media = $item->getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'thumbnail');
 		$media = $media->length ? $media->item(0)->getAttribute('url') : '';
 
-		$description = implode('</p>
-				<p>', array_slice(explode('
-', preg_replace('/(<br\s*\/?>\s*)+/', '
-', strip_tags(str_replace('>', '> ', $item->getElementsByTagName('description')->item(0)->firstChild->nodeValue), '<br><br/>')), 3), 0, -1));
+		$description = str_replace('&#160;', '</p>
+					<p>', $item->getElementsByTagName('description')->item(0)->firstChild->nodeValue);
 
 		echo <<<EOF
 				<div class="item">
