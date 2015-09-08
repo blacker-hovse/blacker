@@ -1,4 +1,4 @@
-            <p class="pull-right page-list"><?
+            <p class="pull-right"><?
 echo $page_list;
 ?></p>
             <div class="clearfix"></div>

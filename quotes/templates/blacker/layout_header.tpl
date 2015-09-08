@@ -5,7 +5,12 @@ include(__DIR__ . '/../../../lib/include.php');
 	<head>
 <?
 print_head($title);
-?>	</head>
+?>		<style type="text/css">
+			.quote-block h2 {
+				display: none;
+			}
+		</style>
+	</head>
 	<body>
 <?
 print_header();
@@ -14,4 +19,4 @@ print_header();
 <?
 echo $heading;
 ?></h1>
-			<div class="text-center qdbs-nav"><a href="./"><b>home</b></a> / <a href="./?p=top"><b>top</b></a> / <a href="./?p=bottom"><b>bottom</b></a> / <a href="./?p=latest"><b>latest</b></a> / <a href="./?p=random"><b>random</b></a><a href="./?p=random1"><b>&gt;0</b></a> / <a href="./?p=browse"><b>browse</b></a> / <a href="./?p=search"><b>search</b></a> / <a href="./?p=add"><b>add</b></a> / <a href="./admin/"><b>admin</b></a></div>
+			<div class="text-center"><a href="./"><b>home</b></a> / <a href="./?p=top"><b>top</b></a> / <a href="./?p=bottom"><b>bottom</b></a> / <a href="./?p=latest"><b>latest</b></a> / <a href="./?p=random"><b>random</b></a><a href="./?p=random1"><b>&gt;0</b></a> / <a href="./?p=browse"><b>browse</b></a> / <a href="./?p=search"><b>search</b></a> / <a href="./?p=add"><b>add</b></a> / <a href="./admin/"><b>admin</b></a></div>

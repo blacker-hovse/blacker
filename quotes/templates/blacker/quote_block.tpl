@@ -1,4 +1,4 @@
-			<div>
+			<div class="quote-block">
 				<h2></h2>
 				<table>
 					<tr>
