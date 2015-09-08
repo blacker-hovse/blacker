@@ -46,6 +46,7 @@ body {
 	margin-right: 20%;
 }
 #footer {
+	clear: both;
 	margin-top: 3em;
 	border-top: 1px solid #111;
 	padding: 2em 10%;
@@ -82,8 +83,14 @@ body {
 .pull-left {
 	float: left;
 }
+#main .pull-left {
+	margin-right: 0;
+}
 .pull-right {
 	float: right;
+}
+#main .pull-right {
+	margin-left: 0;
 }
 .text-center {
 	text-align: center;
@@ -111,7 +118,7 @@ input[type=checkbox], input[type=radio] {
 	width: 1em;
 	height: 1em;
 }
-.btn, input[type=submit] {
+.btn, input[type=submit], input[type=reset] {
 	display: inline-block;
 	margin: 0.2em 0.4em;
 	border: 1px solid #111;
@@ -124,17 +131,17 @@ input[type=checkbox], input[type=radio] {
 	text-decoration: none;
 	font-size: 0.9em;
 }
-.btn:hover, input[type=submit]:hover, .btn:focus, input[type=submit]:focus {
+.btn:hover, input[type=submit]:hover, input[type=reset]:hover, .btn:focus, input[type=submit]:focus, input[type=reset]:focus {
 	border-color; #222;
 	background-color: #333;
 	color: #ccc;
 }
-.btn:active, input[type=submit]:active {
+.btn:active, input[type=submit]:active, input[type=reset]:active {
 	border-color: #222;
 	background-color: #111;
 	color: #999;
 }
-.btn.disabled, input[type=submit].disabled, .btn[disabled], input[type=submit][disabled] {
+.btn.disabled, input[type=submit].disabled, input[type=reset].disabled, .btn[disabled], input[type=submit][disabled], input[type=reset][disabled] {
 	border-color: #444;
 	background-color: #444;
 	color: #999;
@@ -200,6 +207,9 @@ input[type=checkbox], input[type=radio] {
 }
 .form-control-static {
 	margin: -0.4em;
+}
+.clearfix {
+	clear: both;
 }
 h1 {
 	margin-top: 0.5em;
