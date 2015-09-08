@@ -26,7 +26,7 @@ if ($page == 404) {
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 <?
-print_head();
+print_head(ucwords(str_replace('_', ' ', $page)));
 ?>	</head>
 	<body>
 <?
