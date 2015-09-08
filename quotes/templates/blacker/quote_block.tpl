@@ -1,5 +1,5 @@
 			<div>
-				<h2>Browse</h2>
+				<h2></h2>
 				<table>
 					<tr>
 <?

@@ -5,12 +5,7 @@ include(__DIR__ . '/../../../lib/include.php');
 	<head>
 <?
 print_head($title);
-?>		<style type="text/css">
-			.qdbs-nav + .page-list {
-				display: none;
-			}
-		</style>
-	</head>
+?>	</head>
 	<body>
 <?
 print_header();
