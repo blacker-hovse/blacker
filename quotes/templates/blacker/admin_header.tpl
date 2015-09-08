@@ -5,7 +5,12 @@ include(__DIR__ . '/../../../lib/include.php');
 	<head>
 <?
 print_head($title);
-?>	</head>
+?>		<style type="text/css">
+			.quote-block h2 {
+				display: none;
+			}
+		</style>
+	</head>
 	<body>
 <?
 print_header();

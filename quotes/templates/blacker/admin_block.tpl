@@ -1,5 +1,5 @@
-			<div>
-				<h2>Browse</h2>
+			<div class="quote-block">
+				<h2></h2>
 				<table>
 					<tr>
 <?

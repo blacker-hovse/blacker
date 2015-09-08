@@ -1,4 +1,3 @@
-			<h2>Add Quote</h2>
 			<p>Enter your quote below.</p>
 			<form action="./" name="admin" method="POST">
 				<div class="form-control">
