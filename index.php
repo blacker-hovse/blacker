@@ -2,7 +2,7 @@
 include(__DIR__ . '/lib/include.php');
 include(__DIR__ . '/lib/md/Michelf/MarkdownExtra.inc.php');
 $server = parse_url($_SERVER['REQUEST_URI']);
-$page = 404;
+$page = 'error';
 
 if (preg_match('/^\/(\w+)(\/?)(\?.*)?$/', $server['path'], $matches)) {
 	if (!$matches[2]) {
@@ -15,7 +15,7 @@ if (preg_match('/^\/(\w+)(\/?)(\?.*)?$/', $server['path'], $matches)) {
 	$page = 'home';
 }
 
-if ($page == 404) {
+if ($page == 'error') {
 	header('HTTP/1.1 404 Not Found');
 	header('Status: 404 Not Found');
 } else {
