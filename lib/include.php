@@ -10,7 +10,7 @@ function print_head($title = NULL) {
 		<title>$title</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link href="//fonts.googleapis.com/css?family=Roboto:400,700|Oswald|Advent+Pro&amp;subset=latin,greek" rel="stylesheet" type="text/css" />
-		<link href="/lib/styles.css" rel="stylesheet" type="text/css" />
+		<link href="/lib/css/blacker.css" rel="stylesheet" type="text/css" />
 		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
 EOF;
