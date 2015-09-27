@@ -40,7 +40,7 @@ echo \Michelf\MarkdownExtra::defaultTransform(file_get_contents(__DIR__ . "/src/
 if ($page == 'home') {
 	echo <<<EOF
 			<h2>News</h2>
-			<div>
+			<div class="feed">
 
 EOF;
 

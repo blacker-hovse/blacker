@@ -4,6 +4,7 @@ session_start();
 $db = 'limbo.db';
 $create = !file_exists($db);
 $pdo = new PDO('sqlite:' . $db);
+setlocale(LC_MONETARY, 'en_US.UTF-8');
 
 if ($create) {
 	$pdo->exec(<<<EOF
@@ -73,11 +74,9 @@ print_head('Limbo');
 		<script type="text/javascript" src="/lib/js/jquery.min.js"></script>
 		<script type="text/javascript" src="/lib/js/selectize.min.js"></script>
 		<script type="text/javascript">// <![CDATA
-			$(function() {
-				$('#purchase-item').selectize({
-					options: [
+			var items = [
 <?
-$result = $pdo->prepare('SELECT * FROM `items`');
+$result = $pdo->prepare('SELECT `name`, `count`, `price` FROM `items`');
 $result->execute();
 $rows = $result->fetchAll(PDO::FETCH_ASSOC);
 $items = array();
@@ -87,18 +86,123 @@ foreach ($rows as $row) {
 		$items[$row['name']] = array();
 	}
 
-	$items[$row['name']][] = $row;
+	$price = (int) round($row['price'] * 100);
+
+	if (!array_key_exists($price, $items[$row['name']])) {
+		$items[$row['name']][$price] = 0;
+	}
+
+	$items[$row['name']][$price] += $row['count'];
 }
 
-foreach ($items as $name => $item) {
-	$text = addslashes($name);
+foreach ($items as $i => $item) {
+	$name = addslashes($i);
+	$prices = $item;
+	ksort($prices);
+	$total = 0;
 
 	echo <<<EOF
-						{text: '$text', value: '$text'},
+				{
+					text: '$name',
+					prices: {
+
+EOF;
+
+	foreach ($prices as $j => $count) {
+		$price = $j / 100;
+		$total += $count;
+
+		echo <<<EOF
+						$price: $count,
+
+EOF;
+	}
+
+	echo <<<EOF
+					},
+					total: $total
+				},
 
 EOF;
 }
-?>					]
+?>			];
+
+			var users = [
+<?
+$result = $pdo->prepare('SELECT `name` FROM `users`');
+$result->execute();
+$users = $result->fetchAll(PDO::FETCH_COLUMN);
+
+foreach ($users as $user) {
+	$name = addslashes($user);
+
+	echo <<<EOF
+				{
+					text: '$name',
+					value: '$name'
+				},
+
+EOF;
+}
+?>			];
+
+			function limit(e) {
+				var f = $(e).attr('min');
+				var g = $(e).attr('max');
+
+				if ($(e).val() < f) {
+					$(e).val(f);
+				} else if ($(e).val() > g) {
+					$(e).val(g);
+				}
+			}
+
+			$(function() {
+				$('#purchase-count, #stock-count').change(function() {
+					limit(this);
+				});
+
+				$('#user').selectize({
+					create: true,
+					maxItems: 1,
+					options: users,
+					render: {
+						option_create: function(e, f) {
+							return '<div class="create">Create user <b>' + f(e.input) + '</b>...</div>';
+						}
+					}
+				});
+
+				$('#purchase-item').selectize({
+					maxItems: 1,
+					onItemAdd: function(e, f) {
+						e = f.data('count');
+						$('#purchase-count').attr('max', e);
+						limit('#purchase-count');
+					},
+					options: items,
+					render: {
+						item: function(e, f) {
+							return '<div data-count="' + f(e.total) + '">' + f(e.text) + '</div>';
+						},
+						option: function(e, f) {
+							var g = '';
+
+							for (var i in e.prices) {
+								g += ', ' + e.prices[i] + ' at $' + parseFloat(i).toFixed(2);
+							}
+
+							return '<div class="item"><span>' + f(e.text) + '</span><small>' + f(g.slice(2)) + '</small></div>'
+						}
+					},
+					valueField: 'text'
+				});
+
+				$('#stock-item').selectize({
+					create: true,
+					maxItems: 1,
+					options: items,
+					valueField: 'text'
 				});
 			});
 		// ]]></script>
@@ -108,8 +212,9 @@ EOF;
 			<h1>Limbo 5</h1>
 <?
 $subtitles = array(
-	'Free Market, Bitch!',
-	'Making the C-Store Look Bad',
+	'Caffeine is Life',
+	'Free Market, Bitch',
+	'Beats the C-Store',
 	'Risen from the Ashes',
 	'This Time It Works',
 	'Vive le Capitalisme'
@@ -136,6 +241,7 @@ if (!$_SESSION) {
 				</div>
 			</form>
 			<h2>Donate</h2>
+			<p>Enter the amount of money you physically deposited into the cash jar.</p>
 			<form action="./" method="post">
 				<div class="form-control">
 					<label for="donation">Amount</label>
@@ -153,12 +259,17 @@ if (!$_SESSION) {
 EOF;
 } else {
 	$name = htmlentities($_SESSION['name'], NULL, 'UTF-8');
-	$balance = str_replace('-', '&minus;', $_SESSION['balance']);
-	$payment = $_SESSION['balance'] < 0 ? -$_SESSION['balance'] : 0;
+	$balance = money_format('%.2n', abs($_SESSION['balance']));
+	$payment = 0;
+
+	if ($_SESSION['balance'] < 0) {
+		$balance = '&minus;' . $balance;
+		$payment = -$_SESSION['balance'];
+	}
 
 	echo <<<EOF
-			<h2>Logged in as $name</h2>
-			<p>Your balance is <strong>$balance</strong>.</p>
+			<h2>$subtitle</h2>
+			<p>Hello, <b>$name</b>. Your balance is <b>$balance</b>.</p>
 			<form action="./" method="post">
 				<p class="text-center">
 					<input type="hidden" name="user" value="" />
@@ -199,13 +310,13 @@ EOF;
 						<input type="number" id="stock-price" name="stock-price" min="0" step="0.01" />
 					</div>
 					<div class="input-group input-group-right percent">
-						<input type="number" id="stock-count" name="stock-count" min="0" value="10" />
+						<input type="number" id="stock-count" name="stock-count" min="0" max="99" value="5" />
 					</div>
 				</div>
 				<div class="form-control optional">
-					<label for="stock-description">Description</label>
+					<label for="stock-notes">Notes</label>
 					<div class="input-group">
-						<textarea name="stock-description" id="stock-description" rows="4" maxlength="255"></textarea>
+						<textarea name="stock-notes" id="stock-notes" rows="4" maxlength="255"></textarea>
 					</div>
 				</div>
 				<div class="form-control">
@@ -215,11 +326,12 @@ EOF;
 				</div>
 			</form>
 			<h2>Pay Limbo</h2>
+			<p>Enter the amount of money you physically deposited into the cash jar.</p>
 			<form action="./" method="post">
 				<div class="form-control">
 					<label for="deposit-amount">Amount</label>
 					<div class="input-group">
-						<input type="number" id="deposit-amount" name="deposit-amount" min="0" value="$payment" />
+						<input type="number" id="deposit-amount" name="deposit-amount" min="0" />
 					</div>
 				</div>
 				<div class="form-control">
@@ -229,11 +341,12 @@ EOF;
 				</div>
 			</form>
 			<h2>Withdraw Money</h2>
+			<p>Enter the amount of money you physically retrieved from the cash jar.</p>
 			<form action="./" method="post">
 				<div class="form-control">
 					<label for="withdrawal-amount">Amount</label>
 					<div class="input-group">
-						<input type="number" id="withdrawal-amount" name="withdrawal-amount" min="0" value="0" />
+						<input type="number" id="withdrawal-amount" name="withdrawal-amount" min="0" />
 					</div>
 				</div>
 				<div class="form-control">

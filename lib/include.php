@@ -32,7 +32,7 @@ function print_header() {
 					<a href="/quotes/">Quotes</a>
 				</li>
 				<li>
-					<a href="/wiki/">Wiki</a>
+					<a href="/tools/">Tools</a>
 				</li>
 			</ul>
 			<div>
