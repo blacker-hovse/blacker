@@ -80,6 +80,13 @@ body {
 	line-height: 1;
 	letter-spacing: 0.2em;
 }
+#main > .error {
+	text-align: center;
+	margin: 0 25%;
+	border: 0.2em dotted #000;
+	background-color: #d46a6a;
+	color: #000;
+}
 .pull-left {
 	float: left;
 }
@@ -95,7 +102,7 @@ body {
 .text-center {
 	text-align: center;
 }
-input, textarea, .selectize-input.selectize-input.selectize-input.selectize-input.selectize-input {
+input, textarea, #main .selectize-input {
 	display: block;
 	box-shadow: none;
 	box-sizing: content-box;
@@ -112,7 +119,7 @@ input, textarea, .selectize-input.selectize-input.selectize-input.selectize-inpu
 	line-height: 1;
 	font-family: Roboto, sans-serif;
 }
-.selectize-input.selectize-input input {
+#main .selectize-input input {
 	color: #ccc;
 	font-size: 1em;
 }
@@ -128,7 +135,7 @@ input, textarea, .selectize-input.selectize-input.selectize-input.selectize-inpu
 	background-color: #333;
 	color: #ccc;
 }
-input:hover, textarea:hover, .selectize-input:hover, input:focus, textarea:focus, .selectize-input.focus {
+input:hover, textarea:hover, #main .selectize-input:hover, input:focus, textarea:focus, #main .selectize-input.focus {
 	border-color: #ccc;
 	color: #fff;
 }
@@ -145,7 +152,7 @@ input[type=checkbox], input[type=radio] {
 	display: inline-block;
 	margin: 0.4em;
 	border: 1px solid #111;
-	border-radius: 0.4em;
+	border-radius: 0.3em;
 	outline: 0;
 	padding: 0.2em 0.6em;
 	width: auto;
@@ -176,7 +183,7 @@ body .btn-sm {
 body .btn-lg {
 	font-size: 1.2em;
 }
-.form-control input, .form-control textarea, .form-control .selectize-input.selectize-input.selectize-input.selectize-input, .form-control .btn {
+.form-control input, .form-control textarea, #main .form-control .selectize-input, .form-control .btn {
 	font-size: 1em;
 }
 .form-control .btn-sm {
@@ -317,6 +324,9 @@ a:hover {
 		margin-left: 10%;
 		margin-right: 10%;
 	}
+	#main > .error {
+		margin: 0 20%;
+	}
 }
 @media screen and (max-width: 640px) {
 	body {
@@ -339,7 +349,7 @@ a:hover {
 	#main {
 		padding-top: 0;
 	}
-	#main > * {
+	#main > *, #main > .error {
 		margin-left: 0;
 		margin-right: 0;
 	}

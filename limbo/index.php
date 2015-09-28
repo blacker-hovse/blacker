@@ -4,7 +4,34 @@ session_start();
 $db = 'limbo.db';
 $create = !file_exists($db);
 $pdo = new PDO('sqlite:' . $db);
+$error = false;
 setlocale(LC_MONETARY, 'en_US.UTF-8');
+
+function limbo_deposit($user, $amount) {
+	global $pdo;
+
+	$parameters = array(
+		'amount' => $amount,
+		':user' => $user
+	);
+
+	$result = $pdo->prepare('UPDATE `users` SET `balance` = `balance` + :amount WHERE `id` = :user');
+	$result->execute($parameters);
+	$result = $pdo->prepare("INSERT INTO `balance_changes` (`user`, `amount`, `updated`) VALUES (:user, :amount, DATETIME('now'))");
+	$result->execute($parameters);
+}
+
+function limbo_stock_part($item, $count, $user) {
+	global $pdo;
+
+	$result = $pdo->prepare("INSERT INTO `stock_changes` (`item`, `count`, `user`, `updated`) VALUES(:item, :count, :user, DATETIME('now'))");
+
+	$result->execute(array(
+		':item' => $item,
+		':count' => $count,
+		':user' => $user
+	));
+}
 
 if ($create) {
 	$pdo->exec(<<<EOF
@@ -52,18 +79,153 @@ EOF
 		);
 }
 
-if (isset($_POST['user'])) {
-	$result = $pdo->prepare('SELECT * FROM `users` WHERE `name` = :user');
+if (array_key_exists('user', $_POST)) {
+	$user = trim($_POST['user']);
+	$email = array_key_exists('email', $_POST) ? trim($_POST['email']) : false;
+
+	if ($email) {
+		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$result = $pdo->prepare('SELECT `name` FROM `users` WHERE `email` = :email');
+
+			$result->execute(array(
+				':email' => $email
+			));
+
+			if ($name = $result->fetch(PDO::FETCH_COLUMN)) {
+				$error = "User <b>$name</b> exists with this email address.";
+			} elseif ($user) {
+				if (preg_match('/^[\w ]+$/', $user)) {
+					$result = $pdo->prepare("INSERT INTO `users` (`name`, `email`, `created`) VALUES (:user, :email, DATETIME('now'))");
+
+					$result->execute(array(
+						':user' => $user,
+						':email' => $email
+					));
+
+					$_SESSION = array(
+						'name' => $user,
+						'email' => $email,
+						'balance' => 0
+					);
+				} else {
+					$error = 'Usernames may only contain letters, numbers, and spaces.';
+				}
+			} else {
+				$error = 'No user exists with this email address.';
+			}
+		} else {
+			$error = 'Invalid email address.';
+		}
+	} else {
+		$result = $pdo->prepare('SELECT * FROM `users` WHERE `name` = :user');
+
+		$result->execute(array(
+			':user' => $user
+		));
+
+		$_SESSION = $result->fetch(PDO::FETCH_ASSOC);
+
+		if (!$_SESSION) {
+			session_destroy();
+
+			if ($user) {
+				$error = 'Username not found.';
+			}
+		}
+	}
+}
+
+if (array_key_exists('purchase-item', $_POST)) {
+	$count = (int) $_POST['purchase-count'];
+	$total = 0;
+	$result = $pdo->prepare('SELECT * FROM `items` WHERE `name` = :item ORDER BY `price`');
 
 	$result->execute(array(
-		':user' => $_POST['user']
+		':item' => $_POST['purchase-item']
 	));
 
-	$_SESSION = $result->fetch(PDO::FETCH_ASSOC);
+	while ($count and $item = $result->fetch(PDO::FETCH_ASSOC)) {
+		if ($count < $item['count']) {
+			$update = $pdo->prepare('UPDATE `items` SET `count` = `count` - :count WHERE `id` = :id');
 
-	if (!$_SESSION) {
-		session_destroy();
+			$update->execute(array(
+				':count' => $count,
+				':id' => $item['id']
+			));
+
+			$cost = $count * $item['price'];
+			$total += $cost;
+			limbo_stock_part($item['id'], -$count, $_SESSION['id']);
+			$count = 0;
+		} else {
+			$update = $pdo->prepare('DELETE FROM `items` WHERE `id` = :id');
+
+			$update->execute(array(
+				':id' => $item['id']
+			));
+
+			$cost = $item['count'] * $item['price'];
+			$total += $cost;
+			limbo_stock_part($item['id'], -$item['count'], $_SESSION['id']);
+			$count -= $item['count'];
+		}
+
+		$cost = round($cost * (1 - $item['tax']), 2);
+		limbo_deposit($item['user'], $cost);
+
+		if ($item['user'] == $_SESSION['id']) {
+			$_SESSION['balance'] += $cost;
+		}
 	}
+
+	$_SESSION['balance'] -= $total;
+	limbo_deposit($_SESSION['id'], -$total);
+}
+
+if (array_key_exists('stock-item', $_POST)) {
+	$name = htmlentities($_POST['stock-item'], NULL, 'UTF-8');
+	$count = (int) $_POST['stock-count'];
+	$price = round(max($_POST['stock-price'], 0), 2);
+	$tax = (int) min(max($_POST['stock-tax'], 0), 99) / 100;
+	$description = htmlentities($_POST['stock-notes'], NULL, 'UTF-8');
+	$result = $pdo->prepare('SELECT * FROM `items` WHERE `name` = :item AND `user` = :user');
+
+	$result->execute(array(
+		':item' => $name,
+		':user' => $_SESSION['id']
+	));
+
+	if ($item = $result->fetch(PDO::FETCH_ASSOC)) {
+		$result = $pdo->prepare('UPDATE `items` SET `count` = `count` + :count, `price` = :price, `tax` = :tax, `description` = :description WHERE `name` = :item AND `user` = :user');
+	} else {
+		$result = $pdo->prepare("INSERT INTO `items` (`name`, `count`, `user`, `price`, `tax`, `description`, `created`) VALUES (:item, :count, :user, :price, :tax, :description, DATETIME('now'))");
+	}
+
+	$result->execute(array(
+		':count' => $count,
+		':price' => $price,
+		':tax' => $tax,
+		':description' => $description,
+		':item' => $name,
+		':user' => $_SESSION['id']
+	));
+
+	$result = $pdo->prepare('SELECT `id` FROM `items` WHERE `name` = :item AND `user` = :user');
+
+	$result->execute(array(
+		':item' => $name,
+		':user' => $_SESSION['id']
+	));
+
+	limbo_stock_part($result->fetch(PDO::FETCH_COLUMN), $count, $_SESSION['id']);
+}
+
+if (array_key_exists('deposit-amount', $_POST)) {
+	limbo_deposit($_SESSION['id'], round(max($_POST['deposit-amount'], 0), 2));
+}
+
+if (array_key_exists('withdrawal-amount', $_POST)) {
+	limbo_deposit($_SESSION['id'], -round(max($_POST['deposit-amount'], 0), 2));
 }
 ?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -76,12 +238,11 @@ print_head('Limbo');
 		<script type="text/javascript">// <![CDATA
 			var items = [
 <?
-$result = $pdo->prepare('SELECT `name`, `count`, `price` FROM `items`');
+$result = $pdo->prepare('SELECT `name`, `count`, `price` FROM `items` ORDER BY `name`, `price`');
 $result->execute();
-$rows = $result->fetchAll(PDO::FETCH_ASSOC);
 $items = array();
 
-foreach ($rows as $row) {
+while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	if (!array_key_exists($row['name'], $items)) {
 		$items[$row['name']] = array();
 	}
@@ -97,29 +258,30 @@ foreach ($rows as $row) {
 
 foreach ($items as $i => $item) {
 	$name = addslashes($i);
-	$prices = $item;
-	ksort($prices);
 	$total = 0;
 
 	echo <<<EOF
 				{
 					text: '$name',
-					prices: {
+					values: [
 
 EOF;
 
-	foreach ($prices as $j => $count) {
+	foreach ($item as $j => $count) {
 		$price = $j / 100;
 		$total += $count;
 
 		echo <<<EOF
-						$price: $count,
+						{
+							price: $price,
+							count: $count
+						},
 
 EOF;
 	}
 
 	echo <<<EOF
-					},
+					],
 					total: $total
 				},
 
@@ -131,9 +293,8 @@ EOF;
 <?
 $result = $pdo->prepare('SELECT `name` FROM `users`');
 $result->execute();
-$users = $result->fetchAll(PDO::FETCH_COLUMN);
 
-foreach ($users as $user) {
+while ($user = $result->fetch(PDO::FETCH_COLUMN)) {
 	$name = addslashes($user);
 
 	echo <<<EOF
@@ -188,8 +349,8 @@ EOF;
 						option: function(e, f) {
 							var g = '';
 
-							for (var i in e.prices) {
-								g += ', ' + e.prices[i] + ' at $' + parseFloat(i).toFixed(2);
+							for (var i = 0; i < e.values.length; i++) {
+								g += ', ' + e.values[i].count + ' at $' + parseFloat(e.values[i].price).toFixed(2);
 							}
 
 							return '<div class="item"><span>' + f(e.text) + '</span><small>' + f(g.slice(2)) + '</small></div>'
@@ -211,6 +372,13 @@ EOF;
 	    <div id="main">
 			<h1>Limbo 5</h1>
 <?
+if ($error) {
+	echo <<<EOF
+			<div class="error">$error</div>
+
+EOF;
+}
+
 $subtitles = array(
 	'Caffeine is Life',
 	'Free Market, Bitch',
@@ -225,13 +393,18 @@ $subtitle = $subtitles[mt_rand(0, count($subtitles) - 1)];
 if (!$_SESSION) {
 	echo <<<EOF
 			<h2>$subtitle</h2>
-			<p>Limbo is an honor code store. You are trusted to pay according to the listed price of any items you take from this store. Please record all transactions.</p>
-			<h2>Login</h2>
+			<p>Limbo is an honor code store. To create an account, please provide your email.</p>
 			<form action="./" method="post">
 				<div class="form-control">
 					<label for="user">Username</label>
 					<div class="input-group">
 						<input type="text" id="user" name="user" />
+					</div>
+				</div>
+				<div class="form-control optional">
+					<label for="email">Email</label>
+					<div class="input-group">
+						<input type="email" id="email" name="email" />
 					</div>
 				</div>
 				<div class="form-control">
@@ -310,7 +483,7 @@ EOF;
 						<input type="number" id="stock-price" name="stock-price" min="0" step="0.01" />
 					</div>
 					<div class="input-group input-group-right percent">
-						<input type="number" id="stock-count" name="stock-count" min="0" max="99" value="5" />
+						<input type="number" id="stock-tax" name="stock-tax" min="0" max="99" value="5" />
 					</div>
 				</div>
 				<div class="form-control optional">
