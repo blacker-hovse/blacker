@@ -171,7 +171,7 @@ EOF;
 			$url = substr($url, 0, $i);
 		}
 
-		$options = " value=\"$url?u=$short\" disabled=\"disabled\"";
+		$options = " value=\"$url?u=$short\" readonly=\"readonly\"";
 	}
 
 	echo <<<EOF
