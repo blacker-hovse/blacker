@@ -314,6 +314,7 @@ h2 + table td:first-child {
 	width: 40%;
 	color: #fff;
 	text-align: right;
+	vertical-align: top;
 }
 a {
 	color: #999;
