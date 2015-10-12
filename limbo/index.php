@@ -280,36 +280,42 @@ print_head('Limbo');
 		<script type="text/javascript">// <![CDATA
 			var items = [
 <?
-$result = $pdo->prepare('SELECT `name`, `count`, `price` FROM `items` ORDER BY `name`, `price`');
+$result = $pdo->prepare('SELECT `name`, `count`, `price`, `description` FROM `items` ORDER BY `name`, `price`');
 $result->execute();
 $items = array();
 
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	if (!array_key_exists($row['name'], $items)) {
-		$items[$row['name']] = array();
+		$items[$row['name']] = array(
+			'prices' => array(),
+			'description' => ''
+		);
 	}
 
 	$price = (int) round($row['price'] * 100);
 
-	if (!array_key_exists($price, $items[$row['name']])) {
-		$items[$row['name']][$price] = 0;
+	if (!array_key_exists($price, $items[$row['name']]['prices'])) {
+		$items[$row['name']]['prices'][$price] = 0;
 	}
 
-	$items[$row['name']][$price] += $row['count'];
+	$items[$row['name']]['prices'][$price] += $row['count'];
+	$items[$row['name']]['description'] .= '<br />' . $row['description'];
 }
 
 foreach ($items as $i => $item) {
 	$name = addslashes($i);
+	$description = addslashes(substr($item['description'], 6));
 	$total = 0;
 
 	echo <<<EOF
 				{
-					text: '$name',
+					name: '$name',
+					description: '$description',
 					values: [
 
 EOF;
 
-	foreach ($item as $j => $count) {
+	foreach ($item['prices'] as $j => $count) {
 		$price = $j / 100;
 		$total += $count;
 
@@ -388,7 +394,7 @@ EOF;
 					options: items,
 					render: {
 						item: function(e, f) {
-							return '<div data-count="' + f(e.total) + '">' + f(e.text) + '</div>';
+							return '<div data-count="' + f(e.total) + '">' + f(e.name) + '</div>';
 						},
 						option: function(e, f) {
 							var g = '';
@@ -397,17 +403,19 @@ EOF;
 								g += ', ' + e.values[i].count + ' at $' + parseFloat(e.values[i].price).toFixed(2);
 							}
 
-							return '<div class="item"><span>' + f(e.text) + '</span><small>' + f(g.slice(2)) + '</small></div>'
+							return '<div class="item"><span class="pull-right">' + f(g.slice(2)) + '</span><span>' + f(e.name) + '</span><small>' + e.description + '</small></div>'
 						}
 					},
-					valueField: 'text'
+					labelField: 'name',
+					valueField: 'name'
 				});
 
 				$('#stock-item').selectize({
 					create: true,
 					maxItems: 1,
 					options: items,
-					valueField: 'text'
+					labelField: 'name',
+					valueField: 'name'
 				});
 			});
 		// ]]></script>
