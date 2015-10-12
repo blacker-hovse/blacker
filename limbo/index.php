@@ -166,8 +166,8 @@ if (array_key_exists('user', $_POST)) {
 if (array_key_exists('donation', $_POST)) {
 	$amount = round(max($_POST['donation'], 0), 2);
 	limbo_deposit(0, -$amount);
-	$amount = number_format($amount, 2);
-	$success = "Successfully recorded donation of \$$amount.";
+	$amount = money_format('%.2n', $amount);
+	$success = "Successfully recorded donation of $amount.";
 }
 
 if (array_key_exists('purchase-item', $_POST)) {
@@ -258,16 +258,16 @@ if (array_key_exists('deposit-amount', $_POST)) {
 	$amount = round(max($_POST['deposit-amount'], 0), 2);
 	limbo_deposit($_SESSION['id'], $amount);
 	limbo_deposit(0, -$amount);
-	$amount = number_format($amount, 2);
-	$success = "Successfully recorded deposit of \$$amount.";
+	$amount = money_format('%.2n', $amount);
+	$success = "Successfully recorded deposit of $amount.";
 }
 
 if (array_key_exists('withdrawal-amount', $_POST)) {
 	$amount = round(max($_POST['withdrawal-amount'], 0), 2);
 	limbo_deposit($_SESSION['id'], -$amount);
 	limbo_deposit(0, $amount);
-	$amount = number_format($amount, 2);
-	$success = "Successfully recorded withdrawal of \$$amount.";
+	$amount = money_format('%.2n', $amount);
+	$success = "Successfully recorded withdrawal of $amount.";
 }
 ?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
