@@ -80,12 +80,17 @@ body {
 	line-height: 1;
 	letter-spacing: 0.2em;
 }
-#main > .error {
+#main > .error, #main > .success {
 	text-align: center;
 	margin: 0 25%;
 	border: 0.2em dotted #000;
-	background-color: #d46a6a;
 	color: #000;
+}
+#main > .error {
+	background-color: #d46a6a;
+}
+#main > .success {
+	background-color: #55aa55;
 }
 .pull-left {
 	float: left;
@@ -324,7 +329,7 @@ a:hover {
 		margin-left: 10%;
 		margin-right: 10%;
 	}
-	#main > .error {
+	#main > .error, #main .success {
 		margin: 0 20%;
 	}
 }
@@ -349,7 +354,7 @@ a:hover {
 	#main {
 		padding-top: 0;
 	}
-	#main > *, #main > .error {
+	#main > *, #main > .error, #main > .success {
 		margin-left: 0;
 		margin-right: 0;
 	}

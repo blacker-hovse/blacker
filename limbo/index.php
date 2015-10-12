@@ -5,6 +5,7 @@ $db = 'limbo.db';
 $create = !file_exists($db);
 $pdo = new PDO('sqlite:' . $db);
 $error = false;
+$success = false;
 setlocale(LC_MONETARY, 'en_US.UTF-8');
 
 function limbo_deposit($user, $amount) {
@@ -19,6 +20,10 @@ function limbo_deposit($user, $amount) {
 	$result->execute($parameters);
 	$result = $pdo->prepare("INSERT INTO `balance_changes` (`user`, `amount`, `updated`) VALUES (:user, :amount, DATETIME('now'))");
 	$result->execute($parameters);
+
+	if ($user == $_SESSION['id']) {
+		$_SESSION['balance'] += $amount;
+	}
 }
 
 function limbo_stock_part($item, $count, $user) {
@@ -72,8 +77,24 @@ EOF
 	$pdo->exec(<<<EOF
 CREATE TABLE `balance_changes` (
 	`user` int NOT NULL,
-	`amount` int NOT NULL,
-	`updated` int NOT NULL
+	`amount` decimal NOT NULL,
+	`updated` datetime NOT NULL
+)
+EOF
+		);
+
+	$pdo->exec(<<<EOF
+INSERT INTO `users` (
+	`id`,
+	`name`,
+	`email`,
+	`created`
+)
+VALUES (
+	0,
+	'limbo',
+	'mole-imss@blacker.caltech.edu',
+	DATETIME('now')
 )
 EOF
 		);
@@ -102,7 +123,14 @@ if (array_key_exists('user', $_POST)) {
 						':email' => $email
 					));
 
+					$result = $pdo->prepare('SELECT `id` FROM `users` WHERE `name` = :user');
+
+					$result->execute(array(
+						':user' => $user
+					));
+
 					$_SESSION = array(
+						'id' => $result->fetch(PDO::FETCH_COLUMN),
 						'name' => $user,
 						'email' => $email,
 						'balance' => 0
@@ -135,13 +163,22 @@ if (array_key_exists('user', $_POST)) {
 	}
 }
 
+if (array_key_exists('donation', $_POST)) {
+	$amount = round(max($_POST['donation'], 0), 2);
+	limbo_deposit(0, -$amount);
+	$amount = number_format($amount, 2);
+	$success = "Successfully recorded donation of \$$amount.";
+}
+
 if (array_key_exists('purchase-item', $_POST)) {
+	$name = htmlentities($_POST['purchase-item'], NULL, 'UTF-8');
 	$count = (int) $_POST['purchase-count'];
+	$initial = $count;
 	$total = 0;
 	$result = $pdo->prepare('SELECT * FROM `items` WHERE `name` = :item ORDER BY `price`');
 
 	$result->execute(array(
-		':item' => $_POST['purchase-item']
+		':item' => $name
 	));
 
 	while ($count and $item = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -172,14 +209,10 @@ if (array_key_exists('purchase-item', $_POST)) {
 
 		$cost = round($cost * (1 - $item['tax']), 2);
 		limbo_deposit($item['user'], $cost);
-
-		if ($item['user'] == $_SESSION['id']) {
-			$_SESSION['balance'] += $cost;
-		}
 	}
 
-	$_SESSION['balance'] -= $total;
 	limbo_deposit($_SESSION['id'], -$total);
+	$success = "Successfully recorded purchase of $initial $name.";
 }
 
 if (array_key_exists('stock-item', $_POST)) {
@@ -218,14 +251,23 @@ if (array_key_exists('stock-item', $_POST)) {
 	));
 
 	limbo_stock_part($result->fetch(PDO::FETCH_COLUMN), $count, $_SESSION['id']);
+	$success = "Successfully recorded stock of $count $name.";
 }
 
 if (array_key_exists('deposit-amount', $_POST)) {
-	limbo_deposit($_SESSION['id'], round(max($_POST['deposit-amount'], 0), 2));
+	$amount = round(max($_POST['deposit-amount'], 0), 2);
+	limbo_deposit($_SESSION['id'], $amount);
+	limbo_deposit(0, -$amount);
+	$amount = number_format($amount, 2);
+	$success = "Successfully recorded deposit of \$$amount.";
 }
 
 if (array_key_exists('withdrawal-amount', $_POST)) {
-	limbo_deposit($_SESSION['id'], -round(max($_POST['deposit-amount'], 0), 2));
+	$amount = round(max($_POST['withdrawal-amount'], 0), 2);
+	limbo_deposit($_SESSION['id'], -$amount);
+	limbo_deposit(0, $amount);
+	$amount = number_format($amount, 2);
+	$success = "Successfully recorded withdrawal of \$$amount.";
 }
 ?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -310,11 +352,13 @@ EOF;
 			function limit(e) {
 				var f = $(e).attr('min');
 				var g = $(e).attr('max');
+				var h = parseInt(f);
+				var i = parseInt(g);
 
-				if ($(e).val() < f) {
-					$(e).val(f);
-				} else if ($(e).val() > g) {
-					$(e).val(g);
+				if (f.length && parseInt($(e).val()) < h) {
+					$(e).val(h);
+				} else if (g.length && $(e).val() > i) {
+					$(e).val(i);
 				}
 			}
 
@@ -379,6 +423,13 @@ if ($error) {
 EOF;
 }
 
+if ($success) {
+	echo <<<EOF
+			<div class="success">$success</div>
+
+EOF;
+}
+
 $subtitles = array(
 	'Caffeine is Life',
 	'Free Market, Bitch',
@@ -419,7 +470,7 @@ if (!$_SESSION) {
 				<div class="form-control">
 					<label for="donation">Amount</label>
 					<div class="input-group">
-						<input type="text" id="donation" name="donation" />
+						<input type="number" id="donation" name="donation" min="0" step="0.01" />
 					</div>
 				</div>
 				<div class="form-control">
@@ -504,7 +555,7 @@ EOF;
 				<div class="form-control">
 					<label for="deposit-amount">Amount</label>
 					<div class="input-group">
-						<input type="number" id="deposit-amount" name="deposit-amount" min="0" />
+						<input type="number" id="deposit-amount" name="deposit-amount" min="0" step="0.01" />
 					</div>
 				</div>
 				<div class="form-control">
@@ -519,7 +570,7 @@ EOF;
 				<div class="form-control">
 					<label for="withdrawal-amount">Amount</label>
 					<div class="input-group">
-						<input type="number" id="withdrawal-amount" name="withdrawal-amount" min="0" />
+						<input type="number" id="withdrawal-amount" name="withdrawal-amount" min="0" step="0.01" />
 					</div>
 				</div>
 				<div class="form-control">
