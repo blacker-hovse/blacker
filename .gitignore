@@ -1,6 +1,2 @@
 /src/
 *.db
-/quotes/*
-!/quotes/templates/
-/quotes/templates/*
-!/quotes/templates/blacker/
