@@ -407,6 +407,7 @@ EOF;
 						}
 					},
 					labelField: 'name',
+					searchField: 'name',
 					valueField: 'name'
 				});
 
@@ -415,6 +416,7 @@ EOF;
 					maxItems: 1,
 					options: items,
 					labelField: 'name',
+					searchField: 'name',
 					valueField: 'name'
 				});
 			});
