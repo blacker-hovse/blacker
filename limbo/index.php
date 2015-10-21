@@ -503,12 +503,8 @@ EOF;
 
 	echo <<<EOF
 			<h2>$subtitle</h2>
-			<p>Hello, <b>$name</b>. Your balance is <b>$balance</b>.</p>
 			<form action="./" method="post">
-				<p class="text-center">
-					<input type="hidden" name="user" value="" />
-					<input type="submit" class="btn-lg" value="Logout" />
-				</p>
+				<p>Hello, <b>$name</b>. Your balance is <b>$balance</b>. <input type="hidden" name="user" value="" /> <input type="submit" class="btn-sm" value="Logout" /></p>
 			</form>
 			<h2>Make a Purchase</h2>
 			<form action="./" method="post">
