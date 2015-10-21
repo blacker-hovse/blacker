@@ -299,6 +299,7 @@ small {
 	color: #999;
 }
 table {
+	margin: 0;
 	width: 100%;
 	font-size: 0.9em;
 	line-height: 1;
