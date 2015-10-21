@@ -80,6 +80,12 @@ body {
 	line-height: 1;
 	letter-spacing: 0.2em;
 }
+#main table {
+	margin: 0;
+	width: 100%;
+	font-size: 0.9em;
+	line-height: 1;
+}
 #main > .error, #main > .success {
 	text-align: center;
 	margin: 0 25%;
@@ -297,12 +303,6 @@ p, form {
 small {
 	padding-left: 1em;
 	color: #999;
-}
-table {
-	margin: 0;
-	width: 100%;
-	font-size: 0.9em;
-	line-height: 1;
 }
 td {
 	padding: 0.5em;
