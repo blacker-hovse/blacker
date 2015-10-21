@@ -589,7 +589,7 @@ EOF;
 					</div>
 				</div>
 			</form>
-			<h2>Purchase Log</h2>
+			<h2>Inventory Log</h2>
 			<table>
 
 EOF;
@@ -603,6 +603,12 @@ EOF;
 	$rows = $result->fetchAll(PDO::FETCH_ASSOC);
 
 	foreach ($rows as $row) {
+		if ($row['count'] < 0) {
+			$action = sprintf('Purchased %d %s', -$row['count'], $row['name']);
+		} else {
+			$action = sprintf('Stocked %d %s', $row['count'], $row['name']);
+		}
+
 		echo <<<EOF
 				<tr>
 					<td>$row[updated]</td>
