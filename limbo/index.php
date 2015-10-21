@@ -603,6 +603,10 @@ EOF;
 	$rows = $result->fetchAll(PDO::FETCH_ASSOC);
 
 	foreach ($rows as $row) {
+		$updated = new DateTime($row['updated']);
+		$updated->setTimezone('America/Los Angeles');
+		$updated = $updated->format('%D, %j %M %Y %H:%i:%s');
+
 		if ($row['count'] < 0) {
 			$action = sprintf('Purchased %d %s', -$row['count'], $row['name']);
 		} else {
@@ -611,7 +615,7 @@ EOF;
 
 		echo <<<EOF
 				<tr>
-					<td>$row[updated]</td>
+					<td>$updated</td>
 					<td>$action</td>
 				</tr>
 
