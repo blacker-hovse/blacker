@@ -594,7 +594,7 @@ EOF;
 
 EOF;
 
-	$result = $pdo->prepare('SELECT `items`.`name`, `stock_changes`.`count`, `stock_changes`.`updated` FROM `stock_changes` LEFT JOIN `items` ON `stock_changes`.`item` = `items`.`id` WHERE `stock_changes`.`user` = :user');
+	$result = $pdo->prepare('SELECT `items`.`name`, `stock_changes`.`count`, `stock_changes`.`updated` FROM `stock_changes` LEFT JOIN `items` ON `stock_changes`.`item` = `items`.`id` WHERE `stock_changes`.`user` = :user ORDER BY `updated` DESC');
 
 	$result->execute(array(
 		':user' => $_SESSION['id']
