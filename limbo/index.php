@@ -612,7 +612,7 @@ EOF;
 		echo <<<EOF
 				<tr>
 					<td>$row[updated]</td>
-					<td>$row[count] $row[name]</td>
+					<td>$action</td>
 				</tr>
 
 EOF;
