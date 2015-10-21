@@ -423,7 +423,7 @@ EOF;
 		// ]]></script>
 	</head>
 	<body>
-	    <div id="main">
+		<div id="main">
 			<h1>Limbo 5</h1>
 <?
 if ($error) {
@@ -603,9 +603,7 @@ EOF;
 	$rows = $result->fetchAll(PDO::FETCH_ASSOC);
 
 	foreach ($rows as $row) {
-		$updated = new DateTime($row['updated']);
-		$updated->setTimezone('America/Los Angeles');
-		$updated = $updated->format('%D, %j %M %Y %H:%i:%s');
+		$updated = date_format(date_create($row['updated']), 'D, j M Y H:i:s');
 
 		if ($row['count'] < 0) {
 			$action = sprintf('Purchased %d %s', -$row['count'], $row['name']);
