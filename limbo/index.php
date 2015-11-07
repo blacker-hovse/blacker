@@ -497,7 +497,7 @@ if (!$_SESSION) {
 
 EOF;
 
-	$result = $pdo->prepare('SELECT * FROM `users` WHERE `balance` < -1 ORDER BY `balance`');
+	$result = $pdo->prepare('SELECT * FROM `users` WHERE `balance` < -1 AND `id` <> 0 ORDER BY `balance`');
 	$result->execute();
 
 	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
