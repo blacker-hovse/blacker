@@ -502,12 +502,12 @@ EOF;
 
 	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		$name = htmlentities($row['name'], NULL, 'UTF-8');
-		$balance = money_format('%.2n', $row['balance']);
+		$balance = money_format('%.2n', -$row['balance']);
 
 		echo <<<EOF
 				<tr>
 					<td>$name</td>
-					<td>$balance</td>
+					<td>&minus;$balance</td>
 				</tr>
 
 EOF;
