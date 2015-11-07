@@ -207,7 +207,10 @@ if (array_key_exists('purchase-item', $_POST)) {
 			$count -= $item['count'];
 		}
 
-		$cost = round($cost * (1 - $item['tax']), 2);
+		if ($item['user'] != $_SESSION['id']) {
+			$cost = round($cost * (1 - $item['tax']), 2);
+		}
+
 		limbo_deposit($item['user'], $cost);
 	}
 
@@ -585,12 +588,12 @@ EOF;
 					</div>
 				</div>
 			</form>
-			<h2>Inventory Log</h2>
+			<h2>Transaction Log</h2>
 			<table>
 
 EOF;
 
-	$result = $pdo->prepare('SELECT `items`.`name`, `stock_changes`.`count`, `stock_changes`.`updated` FROM `stock_changes` LEFT JOIN `items` ON `stock_changes`.`item` = `items`.`id` WHERE `stock_changes`.`user` = :user ORDER BY `updated` DESC');
+	$result = $pdo->prepare('SELECT `items`.`name` AS `name`, `stock_changes`.`count` AS `count`, NULL AS `amount`, `stock_changes`.`updated` AS `updated` FROM `stock_changes` LEFT JOIN `items` ON `stock_changes`.`item` = `items`.`id` WHERE `stock_changes`.`user` = :user UNION ALL SELECT NULL AS `name`, NULL AS `count`, `balance_changes`.`amount`, `updated` FROM `balance_changes` WHERE `user` = :user ORDER BY `updated` DESC');
 
 	$result->execute(array(
 		':user' => $_SESSION['id']
@@ -601,7 +604,9 @@ EOF;
 	foreach ($rows as $row) {
 		$updated = date_format(date_create($row['updated']), 'D, j M Y H:i:s');
 
-		if ($row['count'] < 0) {
+		if (!is_null($row['amount'])) {
+			$action = sprintf('Credited %d', $row['amount']);
+		} elseif ($row['count'] < 0) {
 			$action = sprintf('Purchased %d %s', -$row['count'], $row['name']);
 		} else {
 			$action = sprintf('Stocked %d %s', $row['count'], $row['name']);

@@ -4,15 +4,19 @@ include(__DIR__ . '/lib/md/Michelf/MarkdownExtra.inc.php');
 $server = parse_url($_SERVER['REQUEST_URI']);
 $page = 'error';
 
-if (preg_match('/^\/(\w+)(\/?)(\?.*)?$/', $server['path'], $matches)) {
-	if (!$matches[2]) {
+if ($server['path'] == '/') {
+	$page = 'home';
+} elseif (preg_match('/^\/[\w\/]+$/', $server['path'])) {
+	if (substr($server['path'], -1) != '/') {
 		header("Location: $server[path]/");
 		die();
-	} elseif ($matches[1] != 'home' && file_exists(__DIR__ . "/src/$matches[1].md")) {
-		$page = $matches[1];
 	}
-} elseif ($server['path'] == '/') {
-	$page = 'home';
+
+	$path = substr($server['path'], 1, -1);
+
+	if ($path != 'home' && file_exists(__DIR__ . "/src/$path.md")) {
+		$page = $path;
+	}
 }
 
 if ($page == 'error') {
@@ -26,7 +30,7 @@ if ($page == 'error') {
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 <?
-print_head(ucwords(str_replace('_', ' ', $page)));
+print_head(ucwords(strtr($page, '_/', ' :')));
 ?>	</head>
 	<body>
 <?
