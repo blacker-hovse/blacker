@@ -492,6 +492,29 @@ if (!$_SESSION) {
 					</div>
 				</div>
 			</form>
+			<h2>Wall of Shame</h2>
+			<table>
+
+EOF;
+
+	$result = $pdo->prepare('SELECT * FROM `users` WHERE `balance` < -1 ORDER BY `balance`');
+	$result->execute();
+
+	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+		$name = htmlentities($row['name'], NULL, 'UTF-8');
+		$balance = money_format('%.2n', $row['balance']);
+
+		echo <<<EOF
+				<tr>
+					<td>$name</td>
+					<td>$balance</td>
+				</tr>
+
+EOF;
+	}
+
+	echo <<<EOF
+			</table>
 
 EOF;
 } else {
@@ -593,15 +616,31 @@ EOF;
 
 EOF;
 
-	$result = $pdo->prepare('SELECT `items`.`name` AS `name`, `stock_changes`.`count` AS `count`, NULL AS `amount`, `stock_changes`.`updated` AS `updated` FROM `stock_changes` LEFT JOIN `items` ON `stock_changes`.`item` = `items`.`id` WHERE `stock_changes`.`user` = :user UNION ALL SELECT NULL AS `name`, NULL AS `count`, `balance_changes`.`amount`, `updated` FROM `balance_changes` WHERE `user` = :user ORDER BY `updated` DESC');
+	$result = $pdo->prepare(<<<EOF
+SELECT `items`.`name` AS `name`,
+	`stock_changes`.`count` AS `count`,
+	NULL AS `amount`,
+	`stock_changes`.`updated` AS `updated`
+FROM `stock_changes`
+	LEFT JOIN `items`
+		ON `stock_changes`.`item` = `items`.`id`
+WHERE `stock_changes`.`user` = :user
+UNION ALL SELECT NULL AS `name`,
+	NULL AS `count`,
+	`amount`,
+	`updated`
+FROM `balance_changes`
+WHERE `user` = :user
+ORDER BY `updated` DESC
+
+EOF
+		);
 
 	$result->execute(array(
 		':user' => $_SESSION['id']
 	));
 
-	$rows = $result->fetchAll(PDO::FETCH_ASSOC);
-
-	foreach ($rows as $row) {
+	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 		$updated = date_format(date_create($row['updated']), 'D, j M Y H:i:s');
 
 		if (!is_null($row['amount'])) {
