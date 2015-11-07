@@ -605,11 +605,17 @@ EOF;
 		$updated = date_format(date_create($row['updated']), 'D, j M Y H:i:s');
 
 		if (!is_null($row['amount'])) {
-			$action = sprintf('Credited %d', $row['amount']);
-		} elseif ($row['count'] < 0) {
-			$action = sprintf('Purchased %d %s', -$row['count'], $row['name']);
+			if ($row['amount'] < 0) {
+				$action = sprintf('Debited $%.2f', -$row['amount']);
+			} else {
+				$action = sprintf('Credited $%.2f', $row['amount']);
+			}
 		} else {
-			$action = sprintf('Stocked %d %s', $row['count'], $row['name']);
+			if ($row['count'] < 0) {
+				$action = sprintf('Purchased %d %s', -$row['count'], $row['name']);
+			} else {
+				$action = sprintf('Stocked %d %s', $row['count'], $row['name']);
+			}
 		}
 
 		echo <<<EOF
