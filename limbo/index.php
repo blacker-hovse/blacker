@@ -106,14 +106,24 @@ if (array_key_exists('user', $_POST)) {
 
 	if ($email) {
 		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			$result = $pdo->prepare('SELECT `name` FROM `users` WHERE `email` = :email');
+			$result = $pdo->prepare('SELECT * FROM `users` WHERE `email` = :email OR `name` = :user');
 
 			$result->execute(array(
-				':email' => $email
+				':email' => $email,
+				':user' => $user
 			));
 
-			if ($name = $result->fetch(PDO::FETCH_COLUMN)) {
+			$row = $result->fetch(PDO::FETCH_ASSOC);
+
+			if ($row) {
+				$name = htmlentities($row['name'], NULL, 'UTF-8');
 				$error = "User <b>$name</b> exists with this email address.";
+
+				if ($row['id'] == 0) {
+					$error = "Username <b>$name</b> disallowed.";
+				} elseif ($row['name'] == $user) {
+					$error = "User <b>$name</b> exists.";
+				}
 			} elseif ($user) {
 				if (preg_match('/^[\w ]+$/', $user)) {
 					$result = $pdo->prepare("INSERT INTO `users` (`name`, `email`, `created`) VALUES (:user, :email, DATETIME('now'))");
@@ -145,7 +155,7 @@ if (array_key_exists('user', $_POST)) {
 			$error = 'Invalid email address.';
 		}
 	} else {
-		$result = $pdo->prepare('SELECT * FROM `users` WHERE `name` = :user');
+		$result = $pdo->prepare('SELECT * FROM `users` WHERE `name` = :user AND `id` <> 0');
 
 		$result->execute(array(
 			':user' => $user
@@ -342,7 +352,7 @@ EOF;
 
 			var users = [
 <?
-$result = $pdo->prepare('SELECT `name` FROM `users`');
+$result = $pdo->prepare('SELECT `name` FROM `users` WHERE `id` <> 0');
 $result->execute();
 
 while ($user = $result->fetch(PDO::FETCH_COLUMN)) {
