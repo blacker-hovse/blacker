@@ -22,6 +22,7 @@ function print_head($title = NULL) {
 		  ga('create', 'UA-65942614-1', 'auto');
 		  ga('send', 'pageview');
 		// ]]></script>
+
 EOF;
 }
 

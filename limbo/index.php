@@ -1,5 +1,6 @@
 <?
 include(__DIR__ . '/../lib/include.php');
+
 session_start();
 $db = 'limbo.db';
 $create = !file_exists($db);

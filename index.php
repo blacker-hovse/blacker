@@ -1,6 +1,7 @@
 <?
 include(__DIR__ . '/lib/include.php');
 include(__DIR__ . '/lib/md/Michelf/MarkdownExtra.inc.php');
+
 $server = parse_url($_SERVER['REQUEST_URI']);
 $page = 'error';
 
