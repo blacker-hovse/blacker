@@ -4,3 +4,9 @@
 [submodule "limbo"]
 	path = limbo
 	url = https://github.com/blacker-hovse/limbo
+[submodule "hell-quotes"]
+	path = hell-quotes
+	url = https://github.com/DThought/hell-quotes
+[submodule "quotes"]
+	path = quotes
+	url = https://github.com/DThought/hell-quotes
