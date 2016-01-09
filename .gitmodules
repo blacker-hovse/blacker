@@ -1,0 +1,3 @@
+[submodule "blink"]
+	path = blink
+	url = https://github.com/blacker-hovse/blink
