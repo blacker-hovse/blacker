@@ -1,3 +1,6 @@
 [submodule "blink"]
 	path = blink
 	url = https://github.com/blacker-hovse/blink
+[submodule "limbo"]
+	path = limbo
+	url = https://github.com/blacker-hovse/limbo
