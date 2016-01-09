@@ -643,7 +643,6 @@ UNION ALL SELECT NULL AS `name`,
 FROM `balance_changes`
 WHERE `user` = :user
 ORDER BY `updated` DESC
-
 EOF
 		);
 

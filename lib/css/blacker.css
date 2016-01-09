@@ -270,6 +270,24 @@ body .btn-lg {
 	left: 1.5em;
 	line-height: 1;
 }
+.list-group {
+	padding: 0;
+	list-style-type: none;
+}
+.list-group-item {
+	padding: 0.5em;
+	background: #111;
+}
+.close {
+	float: right;
+	border: 0;
+	background: transparent;
+	color: #808080;
+	font-size: 1.5em;
+}
+.close:hover {
+	color: #ccc;
+}
 .clearfix {
 	clear: both;
 }
