@@ -80,16 +80,16 @@ EOF;
 				</div>
 				<div class="form-control">
 					<div class="input-group">
+						<div class="pull-right">
+							<a class="btn" href="?action=play">&nbsp;&#9654;&nbsp;</a>
+							<a class="btn" href="?action=skip">&nbsp;&#9197;&nbsp;</a>
+							<a class="btn" href="?action=stop">&nbsp;&#9724;&nbsp;</a>
+						</div>
 						<input type="submit" value="Submit" />
 					</div>
 				</div>
 			</form>
 			<h2>Recently Added</h2>
-			<p class="text-center">
-				<a class="btn btn-lg" href="?action=play">&#9654;</a>
-				<a class="btn btn-lg" href="?action=skip">&#9197;</a>
-				<a class="btn btn-lg" href="?action=stop">&#9724;</a>
-			</p>
 <?
 $result = $pdo->prepare(<<<EOF
 SELECT *
