@@ -10,3 +10,6 @@
 [submodule "quotes"]
 	path = quotes
 	url = https://github.com/DThought/hell-quotes
+[submodule "nearer"]
+	path = nearer
+	url = https://github.com/blacker-hovse/nearer

@@ -270,6 +270,25 @@ body .btn-lg {
 	left: 1.5em;
 	line-height: 1;
 }
+.media {
+	position: relative;
+	margin: 3em 0;
+}
+.media > * {
+	margin-left: 30%;
+	padding: 0 0.5em;
+}
+.media > .pull-left {
+	position: absolute;
+	top: 0.5em;
+	right: 70%;
+	bottom: 0;
+	left: 0;
+	margin-left: 0;
+}
+.media > .pull-left img {
+	width: 100%;
+}
 .list-group {
 	padding: 0;
 	list-style-type: none;
