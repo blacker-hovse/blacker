@@ -274,6 +274,10 @@ body .btn-lg {
 	position: relative;
 	margin: 3em 0;
 }
+.media.active {
+	left: -3px;
+	border-left: 3px solid #999;
+}
 .media > * {
 	margin-left: 30%;
 	padding: 0 0.5em;
