@@ -98,6 +98,9 @@ body {
 #main > .success {
 	background-color: #55aa55;
 }
+#main > .error a, #main > .success a {
+	color: #000;
+}
 .pull-left {
 	float: left;
 }
@@ -225,6 +228,7 @@ body .btn-lg {
 }
 .form-control {
 	position: relative;
+	clear: both;
 	padding: 1em;
 	font-size: 0.9em;
 }
@@ -290,6 +294,30 @@ body .btn-lg {
 .nav > li.active a {
 	background-color: #222;
 }
+.voting {
+	display: inline-block;
+	background-color: #111;
+}
+.voting.upvoted {
+	background-color: #522514;
+}
+.voting.upvoted .upvote {
+	background-color: #a34929;
+}
+.voting.downvoted {
+	background-color: #1f1f47;
+}
+.voting.downvoted .downvote {
+	background-color: #3d3d8f;
+}
+.pagination {
+	margin: 1em 0;
+	text-align: center;
+	font-weight: bold;
+}
+.pagination a {
+	padding: 0 0.2em;
+}
 .media {
 	position: relative;
 	margin: 3em 0;
@@ -333,6 +361,36 @@ body .btn-lg {
 }
 .clearfix {
 	clear: both;
+}
+blockquote {
+	position: relative;
+	clear: both;
+	margin: 2em 0;
+	padding-left: 4em;
+}
+blockquote::before {
+	content: '\201c';
+	position: absolute;
+	left: 0.1em;
+	color: #333;
+	font-size: 6em;
+	line-height: 1;
+	font-family: fantasy;
+}
+blockquote p {
+	margin: 0;
+	font-size: 1.2em;
+}
+blockquote .quote-tags {
+	font-size: 0.8em;
+}
+blockquote cite {
+	margin-left: -0.5em;
+	font-size: 0.8em;
+	font-style: normal;
+}
+blockquote cite > * {
+	margin: 0 0.5em;
 }
 h1 {
 	margin-top: 0.5em;
