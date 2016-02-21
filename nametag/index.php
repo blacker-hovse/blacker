@@ -59,7 +59,7 @@ EOF
 		$majors = '';
 
 		while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-			$majors .= ', ' . htmlentities($row[strlen(str_replace('/[^A-Z]/', '', $row['short'])) < 3 ? 'long' : 'short'], NULL, 'UTF-8');
+			$majors .= ', ' . htmlentities($row[strlen(preg_replace('/[^A-Z]/', '', $row['short'])) < 3 ? 'long' : 'short'], NULL, 'UTF-8');
 		}
 
 		$majors = substr($majors, 2);
