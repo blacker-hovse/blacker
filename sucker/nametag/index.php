@@ -13,7 +13,7 @@ print_head('Nametag');
 		<div id="main">
 			<h1>Nametag</h1>
 			<h2>Automagic</h2>
-			<div style="page-break-after: always;">
+			<div>
 <?
 $pdo = new PDO('sqlite:../hovselist.db');
 
@@ -24,16 +24,11 @@ WHERE `alley` <> 'Social'
 EOF;
 
 $result = $pdo->prepare($statement);
-
 $result->execute();
 
 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	generate_nametag($pdo, $row);
 }
-?>			</div>
-			<div>
-<?
-$pdo = new PDO('sqlite:../hovselist.db');
 
 $result = $pdo->prepare($statement);
 $result->execute();
