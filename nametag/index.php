@@ -6,9 +6,7 @@ include(__DIR__ . '/../sucker/include.php');
 	<head>
 <?
 print_head('Nametag');
-?>		<link href="//fonts.googleapis.com/css?family=Squada+One" rel="stylesheet" type="text/css" />
-		<link href="/lib/css/nametag.css" rel="stylesheet" type="text/css" />
-	</head>
+?>	</head>
 	<body>
 		<div id="main">
 			<h1>Nametag</h1>

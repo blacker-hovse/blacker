@@ -362,6 +362,59 @@ body .btn-lg {
 .clearfix {
 	clear: both;
 }
+.nametag {
+	position: relative;
+	width: 5in;
+	height: 3in;
+	margin: auto;
+	border: 1px dotted #666;
+	color: #fff;
+	background-image: url('/lib/strip.png');
+	background-size: 100% 100%;
+	font-size: 0.3in;
+	line-height: 1;
+	font-family: 'Squada One', sans-serif;
+}
+.nametag-sm {
+	width: 3in;
+	height: 2in;
+	font-size: 0.2in;
+}
+.nametag > * {
+	position: absolute;
+	padding: 5%;
+}
+.nametag span {
+	display: block;
+}
+.nametag .top {
+	right: 0;
+	left: 15%;
+	text-align: right;
+}
+.nametag .bottom {
+	bottom: 0;
+	right: 0;
+	left: 15%;
+}
+.nametag .left {
+	right: 100%;
+	width: 100%;
+	padding: 4%;
+	transform: rotate(-90deg);
+	transform-origin: top right;
+	-webkit-transform: rotate(-90deg);
+	-webkit-transform-origin: top right;
+	-o-transform: rotate(-90deg);
+	-o-transform-origin: top right;
+	-moz-transform: rotate(-90deg);
+	-moz-transform-origin: top right;
+	text-align: right;
+	font-size: 1.2em;
+}
+.nametag .big {
+	font-size: 1.8em;
+}
 blockquote {
 	position: relative;
 	clear: both;
@@ -495,5 +548,27 @@ a:hover {
 		float: none;
 		margin: 0;
 		width: 100%;
+	}
+}
+@page {
+	margin: 0.4in;
+}
+@media print {
+	h1, h2, #footer {
+		display: none;
+	}
+	#main > div {
+		margin: 0;
+	}
+	.nametag {
+		float: left;
+		page-break-inside: avoid;
+	}
+	.nametag-sm {
+		margin: 0.5in -0.5in;
+		transform: rotate(-90deg);
+		-webkit-transform: rotate(-90deg);
+		-o-transform: rotate(-90deg);
+		-moz-transform: rotate(-90deg);
 	}
 }
