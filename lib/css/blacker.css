@@ -594,6 +594,9 @@ a:hover {
 	h1, h2, #footer {
 		display: none;
 	}
+	.phead img {
+		top: 0 !important;
+	}
 	.phead h3 {
 		background-color: transparent;
 		color: #fff;
