@@ -587,11 +587,21 @@ a:hover {
 	margin: 0.4in;
 }
 @media print {
+	body {
+		background-color: #fff;
+		color: #000;
+	}
 	h1, h2, #footer {
 		display: none;
 	}
-	#main > div {
-		margin: 0;
+	.phead h3 {
+		background-color: transparent;
+		color: #fff;
+	}
+	#main > div, #main .hovselist {
+		width: 100%;
+		margin-left: 0;
+		margin-right: 0;
 	}
 	.nametag {
 		float: left;
