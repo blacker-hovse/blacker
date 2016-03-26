@@ -362,6 +362,39 @@ body .btn-lg {
 .clearfix {
 	clear: both;
 }
+#main .phead {
+	position: relative;
+	margin: 0;
+	overflow: hidden;
+	background-color: #222;
+}
+.phead img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+.phead h3 {
+	position: relative;
+	width: 30%;
+	margin: 0;
+	padding: 1em 0 1em 20%;
+	background-color: rgba(0, 0, 0, 0.5);
+	font-size: 2em;
+}
+#main .hovselist {
+	width: 60%;
+	margin: 4em 20%;
+	font-size: 0.7em;
+}
+.hovselist th, .hovselist td {
+	padding: 0.5em;
+	text-align: left;
+	white-space: nowrap;
+}
+.hovselist .break {
+	white-space: normal;
+}
 .nametag {
 	position: relative;
 	width: 5in;

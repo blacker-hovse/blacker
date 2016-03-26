@@ -1,5 +1,5 @@
 <?
-function generate_nametag($pdo, $row, $small = false) {
+function generate_class($mole, $social) {
 	$classes = array(
 		'Senior',
 		'Junior',
@@ -7,8 +7,28 @@ function generate_nametag($pdo, $row, $small = false) {
 		'Frosh'
 	);
 
-	$class = $row['class'] - date('Y') - (date('n') > 6);
+	$class = $mole['class'] - date('Y') - (date('n') > 6);
 	$class = $class < 0 ? 'Supersenior' : $classes[$class];
+
+	if ($social and $mole['alley'] == 'Social') {
+		$class = 'Social ' . $class;
+	}
+
+	return $class;
+}
+
+function generate_location($mole) {
+	$location = htmlentities("$mole[location]", NULL, 'UTF-8');
+
+	if ($mole['alley'] != 'Social') {
+		$location = htmlentities("$mole[alley] ", NULL, 'UTF-8') . $location;
+	}
+
+	return $location;
+}
+
+function generate_nametag($pdo, $mole, $small = false) {
+	$class = generate_class($mole, true);
 
 	$subresult = $pdo->prepare(<<<EOF
 SELECT `majors`.*
@@ -20,23 +40,16 @@ EOF
 		);
 
 	$subresult->execute(array(
-		':uid' => $row['uid']
+		':uid' => $mole['uid']
 	));
 
-	$name = htmlentities($row['name'], NULL, 'UTF-8');
-	$position = htmlentities($row['position'], NULL, 'UTF-8');
-	$location = htmlentities("$row[location]", NULL, 'UTF-8');
-
-	if ($row['alley'] == 'Social') {
-		$class = 'Social ' . $class;
-	} else {
-		$location = htmlentities("$row[alley] ", NULL, 'UTF-8') . $location;
-	}
-
+	$name = htmlentities($mole['name'], NULL, 'UTF-8');
+	$position = htmlentities($mole['position'], NULL, 'UTF-8');
+	$location = generate_location($mole);
 	$majors = '';
 
-	while ($row = $subresult->fetch(PDO::FETCH_ASSOC)) {
-		$majors .= ', ' . htmlentities($row[strlen(preg_replace('/[^A-Z]/', '', $row['short'])) < 3 ? 'long' : 'short'], NULL, 'UTF-8');
+	while ($mole = $subresult->fetch(PDO::FETCH_ASSOC)) {
+		$majors .= ', ' . htmlentities($mole[strlen(preg_replace('/[^A-Z]/', '', $mole['short'])) < 3 ? 'long' : 'short'], NULL, 'UTF-8');
 	}
 
 	$majors = substr($majors, 2);
