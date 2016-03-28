@@ -383,8 +383,7 @@ body .btn-lg {
 	font-size: 2em;
 }
 #main .hovselist {
-	width: 60%;
-	margin: 4em 20%;
+	margin: 4em 0;
 	font-size: 0.7em;
 }
 .hovselist th, .hovselist td {
@@ -601,7 +600,7 @@ a:hover {
 		background-color: transparent;
 		color: #fff;
 	}
-	#main > div, #main .hovselist {
+	#main > div {
 		width: 100%;
 		margin-left: 0;
 		margin-right: 0;

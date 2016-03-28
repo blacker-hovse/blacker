@@ -19,16 +19,17 @@ $alleys = array(
 
 function hovselist_print($moles) {
 	echo <<<EOF
-			<table class="hovselist">
-				<thead>
-					<th>Name</th>
-					<th>Class</th>
-					<th>Position</th>
-					<th>Location</th>
-					<th>Email</th>
-					<th>Phone</th>
-				</thead>
-				<tbody>
+			<div>
+				<table class="hovselist">
+					<thead>
+						<th>Name</th>
+						<th>Class</th>
+						<th>Position</th>
+						<th>Location</th>
+						<th>Email</th>
+						<th>Phone</th>
+					</thead>
+					<tbody>
 
 EOF;
 
@@ -41,21 +42,22 @@ EOF;
 		$phone = htmlentities($mole['phone'], NULL, 'UTF-8');
 
 		echo <<<EOF
-					<tr>
-						<td>$name</td>
-						<td>$class</td>
-						<td class="break">$position</td>
-						<td>$location</td>
-						<td>$email</td>
-						<td>$phone</td>
-					</tr>
+						<tr>
+							<td>$name</td>
+							<td>$class</td>
+							<td class="break">$position</td>
+							<td>$location</td>
+							<td>$email</td>
+							<td>$phone</td>
+						</tr>
 
 EOF;
 	}
 
 	echo <<<EOF
-				</tbody>
-			</table>
+					</tbody>
+				</table>
+			</div>
 
 EOF;
 }
