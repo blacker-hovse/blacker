@@ -116,7 +116,7 @@ $result = $pdo->prepare(<<<EOF
 SELECT $cols
 FROM `moles`
 WHERE `alley` IN $hovse
-ORDER BY `alley`
+ORDER BY `alley`, CAST(`location` AS int), `location`
 EOF
 	);
 
@@ -142,7 +142,7 @@ SELECT $cols
 FROM `moles`
 WHERE `alley` NOT IN $hovse
 	AND `alley` <> 'Social'
-ORDER BY `alley`
+ORDER BY `alley`, `location`
 EOF
 	);
 
@@ -161,7 +161,7 @@ $result = $pdo->prepare(<<<EOF
 SELECT $cols
 FROM `moles`
 WHERE `alley` = 'Social'
-ORDER BY `alley`
+ORDER BY `location`
 EOF
 	);
 
