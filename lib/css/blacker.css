@@ -597,13 +597,19 @@ a:hover {
 		top: 0 !important;
 	}
 	.phead h3 {
+		width: auto;
+		padding: 1em 20%;
 		background-color: transparent;
 		color: #fff;
+		font-size: 1.2em;
 	}
 	#main > div {
 		width: 100%;
 		margin-left: 0;
 		margin-right: 0;
+	}
+	#main .hovselist {
+		margin: 2em 0;
 	}
 	.nametag {
 		float: left;
