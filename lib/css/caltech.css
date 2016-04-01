@@ -206,3 +206,11 @@ h2 + table td:first-child {
 	text-align: right;
 	vertical-align: top;
 }
+@media screen and (max-width: 640px) {
+	#header, #main, #footer > * {
+		width: auto;
+	}
+	#footer h1 {
+		display: none;
+	}
+}
