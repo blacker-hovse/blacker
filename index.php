@@ -1,4 +1,5 @@
 <?
+$troll = true;
 include(__DIR__ . '/lib/include.php');
 include(__DIR__ . '/lib/md/Michelf/MarkdownExtra.inc.php');
 

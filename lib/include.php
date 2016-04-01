@@ -1,17 +1,21 @@
 <?
 function print_head($title = NULL) {
+	global $troll;
+
 	if ($title) {
 		$title .= ' - Blacker';
 	} else {
 		$title = 'Blacker';
 	}
 
+	$style = $troll ? 'caltech' : 'blacker';
+
 	echo <<<EOF
 		<title>$title</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link href="//fonts.googleapis.com/css?family=Squada+One|Roboto:400,700|Oswald|Advent+Pro&amp;subset=latin,greek" rel="stylesheet" type="text/css" />
-		<link href="/lib/css/blacker.css" rel="stylesheet" type="text/css" />
+		<link href="/lib/css/$style.css" rel="stylesheet" type="text/css" />
 		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 		<script type="text/javascript">// <![CDATA[
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
