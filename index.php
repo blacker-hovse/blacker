@@ -1,5 +1,5 @@
 <?
-$troll = true;
+$troll = false;
 include(__DIR__ . '/lib/include.php');
 include(__DIR__ . '/lib/md/Michelf/MarkdownExtra.inc.php');
 
@@ -14,7 +14,7 @@ if ($server['path'] == '/') {
 		die();
 	}
 
-	$path = substr($server['path'], 1, -1);
+	$path = str_replace('/', '.', substr($server['path'], 1, -1));
 
 	if ($path != 'home' && file_exists(__DIR__ . "/src/$path.md")) {
 		$page = $path;
