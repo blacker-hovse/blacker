@@ -14,7 +14,7 @@ if ($server['path'] == '/') {
 		die();
 	}
 
-	$path = str_replace('/', '.', substr($server['path'], 1, -1));
+	$path = strtr(substr($server['path'], 1, -1), '/', '.');
 
 	if ($path != 'home' && file_exists(__DIR__ . "/src/$path.md")) {
 		$page = $path;
@@ -32,7 +32,7 @@ if ($page == 'error') {
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 <?
-print_head(ucwords(strtr($page, '_/', ' :')));
+print_head(ucwords(strtr($page, '_.', ' :')));
 ?>	</head>
 	<body>
 <?
