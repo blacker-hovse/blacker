@@ -9,7 +9,7 @@ $data = $config['data_dir'] . '/' . @$_GET['p'];
 $web = $config['web_dir'] . '/' . @$_GET['p'];
 
 if (is_dir($data)) {
-	if (substr($_GET['p'], -1) != '/') {
+	if (substr($data, -1) != '/') {
 		header("Location: $web/", 301);
 	}
 
