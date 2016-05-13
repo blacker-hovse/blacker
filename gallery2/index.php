@@ -36,7 +36,14 @@ EOF;
 	while ($file = readdir($dh)) {
 		if (in_array(strtolower(substr($file, -4)), array('.gif', '.jpg', '.png'))) {
 			echo <<<EOF
-			<img src="$web$file" />
+			<a href="$web$file">
+				<img src="$web$file" alt="$file" />
+			</a>
+
+EOF;
+		} else {
+			echo <<<EOF
+			<a href="$web$file">$file</a>
 
 EOF;
 		}
