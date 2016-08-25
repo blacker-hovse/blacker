@@ -1,4 +1,5 @@
 <?
+include(__DIR__ . '/../lib/class/Mole.class.php');
 include(__DIR__ . '/../lib/include.php');
 include(__DIR__ . '/../sucker/include.php');
 
@@ -34,12 +35,12 @@ function hovselist_print($moles) {
 EOF;
 
 	foreach ($moles as $mole) {
-		$name = htmlentities($mole['name'], NULL, 'UTF-8');
-		$class = generate_class($mole, false);
-		$position = htmlentities($mole['position'], NULL, 'UTF-8');
-		$location = generate_location($mole);
-		$email = htmlentities($mole['email'], NULL, 'UTF-8');
-		$phone = htmlentities($mole['phone'], NULL, 'UTF-8');
+		$name = htmlentities($mole->name, NULL, 'UTF-8');
+		$class = $mole->getClass(false);
+		$position = htmlentities($mole->position, NULL, 'UTF-8');
+		$location = $mole->getLocation();
+		$email = htmlentities($mole->email, NULL, 'UTF-8');
+		$phone = htmlentities($mole->phone, NULL, 'UTF-8');
 
 		echo <<<EOF
 						<tr>
@@ -121,7 +122,7 @@ EOF
 	);
 
 $result->execute(array());
-$rows = $result->fetchAll(PDO::FETCH_ASSOC|PDO::FETCH_GROUP);
+$rows = $result->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_GROUP, 'Mole');
 
 foreach ($alleys as $alley) {
 	$lower = strtolower(preg_replace(array('#\W+#', '#^_|_$#'), array('_', ''), $alley));
@@ -155,7 +156,7 @@ echo <<<EOF
 EOF;
 
 $result->execute(array());
-hovselist_print($result->fetchAll(PDO::FETCH_ASSOC));
+hovselist_print($result->fetchAll(PDO::FETCH_CLASS, 'Mole'));
 
 $result = $pdo->prepare(<<<EOF
 SELECT $cols
@@ -174,7 +175,7 @@ echo <<<EOF
 EOF;
 
 $result->execute(array());
-hovselist_print($result->fetchAll(PDO::FETCH_ASSOC));
+hovselist_print($result->fetchAll(PDO::FETCH_CLASS, 'Mole'));
 ?>		</div>
 <?
 print_footer(
