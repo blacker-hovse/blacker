@@ -30,11 +30,22 @@ class Mole {
 		return $class;
 	}
 
+	public function getCohort() {
+		$classes = array(
+			'Senior',
+			'Junior',
+			'Smore',
+			'Frosh'
+		);
+
+		return $classes[$this->cohort - date('Y') - (date('n') > 6)];
+	}
+
 	public function getLocation() {
-		$location = htmlentities("$this->location", NULL, 'UTF-8');
+		$location = "$this->location";
 
 		if ($this->alley != 'Social') {
-			$location = htmlentities("$this->alley ", NULL, 'UTF-8') . $location;
+			$location = "$this->alley " . $location;
 		}
 
 		return $location;
@@ -57,7 +68,7 @@ EOF
 		$majors = array();
 
 		while ($mole = $subresult->fetch(PDO::FETCH_ASSOC)) {
-			$majors[$mole['short']] = $mole['long'];
+			$majors[$mole['short']] = strlen(preg_replace('/[^A-Z]/', '', $mole['short'])) < 3 ? $mole['long'] : $mole['short'];
 		}
 
 		return $majors;

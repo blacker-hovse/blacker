@@ -1,4 +1,5 @@
 <?
+include(__DIR__ . '/../../lib/class/Mole.class.php');
 include(__DIR__ . '/../../lib/include.php');
 include(__DIR__ . '/../include.php');
 ?><!DOCTYPE html>
@@ -24,14 +25,14 @@ EOF;
 $result = $pdo->prepare($statement);
 $result->execute();
 
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+while ($row = $result->fetchObject('Mole')) {
 	generate_nametag($pdo, $row);
 }
 
 $result = $pdo->prepare($statement);
 $result->execute();
 
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+while ($row = $result->fetchObject('Mole')) {
 	generate_nametag($pdo, $row, true);
 }
 ?>			</div>

@@ -1,17 +1,10 @@
 <?
 function generate_nametag($pdo, $mole, $small = false) {
-	$class = $mole->getClass(true);
+	$class = htmlentities($mole->getClass(true), NULL, 'UTF-8');
 	$name = htmlentities($mole->name, NULL, 'UTF-8');
 	$position = htmlentities($mole->position, NULL, 'UTF-8');
-	$location = $mole->getLocation();
-	$majors = $mole->getMajors($pdo);
-	$string = '';
-
-	foreach ($majors as $short => $long) {
-		$string .= ', ' . htmlentities(strlen(preg_replace('/[^A-Z]/', '', $short)) < 3 ? $long : $short, NULL, 'UTF-8');
-	}
-
-	$string = substr($string, 2);
+	$location = htmlentities($mole->getLocation(), NULL, 'UTF-8');
+	$majors = htmlentities(implode(', ', $mole->getMajors($pdo)), NULL, 'UTF-8');
 	$small = $small ? ' nametag-sm' : '';
 
 	echo <<<EOF
@@ -21,7 +14,7 @@ function generate_nametag($pdo, $mole, $small = false) {
 						<span>$class</span>
 					</span>
 					<span class="bottom">
-						<span>$string</span>
+						<span>$majors</span>
 						<span>$position</span>
 					</span>
 					<span class="left">

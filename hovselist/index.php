@@ -46,7 +46,7 @@ EOF;
 						<tr>
 							<td>$name</td>
 							<td>$class</td>
-							<td class="break">$position</td>
+							<td class="col-position">$position</td>
 							<td>$location</td>
 							<td>$email</td>
 							<td>$phone</td>

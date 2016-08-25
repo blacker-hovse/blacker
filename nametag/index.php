@@ -1,4 +1,5 @@
 <?
+include(__DIR__ . '/../lib/class/Mole.class.php');
 include(__DIR__ . '/../lib/include.php');
 include(__DIR__ . '/../sucker/include.php');
 ?><!DOCTYPE html>
@@ -34,7 +35,7 @@ EOF
 
 EOF;
 
-	generate_nametag($pdo, $result->fetch(PDO::FETCH_ASSOC));
+	generate_nametag($pdo, $result->fetchObject('Mole'));
 
 	echo <<<EOF
 			</div>

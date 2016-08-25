@@ -389,10 +389,14 @@ body .btn-lg {
 .hovselist th, .hovselist td {
 	padding: 0.5em;
 	text-align: left;
+	vertical-align: top;
 	white-space: nowrap;
 }
-.hovselist .break {
+.hovselist .col-position {
 	white-space: normal;
+}
+.hovselist .col-major span {
+	display: block;
 }
 .nametag {
 	position: relative;
