@@ -7,7 +7,84 @@ include(__DIR__ . '/../include.php');
 	<head>
 <?
 print_head('Hovselist');
-?>	</head>
+?>		<script type="text/javascript" src="/lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/lib/js/selectize.min.js"></script>
+		<script type="text/javascript">// <![CDATA[
+			var classes = [
+				'<?
+echo implode(<<<EOF
+',
+				'
+EOF
+	, Mole::getClasses());
+?>'
+			];
+
+			var year = new Date();
+
+			year = year.getFullYear() + (year.getMonth() >= 6);
+
+			$(function() {
+				$('.hovselist').on('click', '.edit', function() {
+					$(this).parent().siblings().each(function() {
+						if (!$(this).hasClass('col-uid')) {
+							var e = '';
+
+							if ($(this).hasClass('col-cohort')) {
+								e = '<select><option value="0"></option>';
+
+								for (var i = 0; i < classes.length; i++) {
+									e += '<option value="' + (year + i);
+
+									if (classes[i] == $(this).html()) {
+										e += '" selected="selected';
+									}
+
+									e += '">' + classes[i] + '</option>';
+								}
+
+								e += '</select>';
+							} else if ($(this).hasClass('col-position')) {
+								e = '<textarea rows="2">' + $(this).html() + '</textarea>';
+							} else if ($(this).hasClass('col-major')) {
+								e = '<input type="text" value="' + $(this).children().map(function() {
+									return $(this).html();
+								}).get().join() + '" />';
+							} else {
+								e = 'text';
+
+								if ($(this).hasClass('col-class') || $(this).hasClass('col-terms')) {
+									e = 'number';
+								} else if ($(this).hasClass('col-email')) {
+									e = 'email';
+								} else if ($(this).hasClass('col-phone')) {
+									e = 'tel';
+								}
+
+								e = '<input type="' + e + '" value="' + $(this).html();
+
+								if ($(this).hasClass('col-class')) {
+									e += '" min="2000" max="' + (year + 4) + '" step="1';
+								}
+
+								e += '" />';
+							}
+
+							$(this).html(e);
+
+							if ($(this).hasClass('col-major')) {
+								$(this).children().selectize();
+							}
+						}
+					}).parent().addClass('active');
+
+					return false;
+				}).on('click', '.save', function() {
+
+				});
+			});
+		// ]]></script>
+	</head>
 	<body>
 	    <div id="main">
 			<h1>Hovselist</h1>
@@ -16,19 +93,7 @@ print_head('Hovselist');
 			<table class="hovselist">
 				<tr>
 					<th><?
-$cols = array(
-	'uid' => 'UID',
-	'name' => 'Name',
-	'legal' => 'Legal',
-	'class' => 'Class',
-	'cohort' => 'Cohort',
-	'position' => 'Position',
-	'email' => 'Email',
-	'phone' => 'Phone',
-	'alley' => 'Alley',
-	'location' => 'Location',
-	'terms' => 'Terms'
-);
+$cols = Mole::getFields();
 
 echo implode(<<<EOF
 </th>
@@ -41,18 +106,12 @@ EOF
 <?
 $pdo = new PDO('sqlite:../hovselist.db');
 
-$statement = <<<EOF
-SELECT `uid`,
-	`name`,
-	`legal`,
-	`class`,
-	`cohort`,
-	`position`,
-	`email`,
-	`phone`,
-	`alley`,
-	`location`,
-	`terms`
+$statement = 'SELECT `' . implode(<<<EOF
+`,
+	`
+EOF
+	, array_keys($cols)) . <<<EOF
+`
 FROM `moles`
 WHERE `alley` <> 'Social'
 EOF;
@@ -62,7 +121,7 @@ $result->execute();
 
 while ($mole = $result->fetchObject('Mole')) {
 	echo <<<EOF
-				<tr id="u$mole->uid">
+				<tr id="u$mole->uid" class="form-control">
 
 EOF;
 
@@ -90,6 +149,10 @@ EOF;
 	}
 
 	echo <<<EOF
+					</td>
+					<td>
+						<a class="btn btn-sm edit" href="#">Edit</a>
+						<a class="btn btn-sm save" href="#">Save</a>
 					</td>
 				</tr>
 

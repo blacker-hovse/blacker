@@ -116,7 +116,7 @@ body {
 .text-center {
 	text-align: center;
 }
-input, textarea, #main .selectize-input {
+input, select, textarea, #main .selectize-input {
 	display: block;
 	box-shadow: none;
 	box-sizing: content-box;
@@ -133,8 +133,11 @@ input, textarea, #main .selectize-input {
 	line-height: 1;
 	font-family: Roboto, sans-serif;
 }
+select {
+	height: 1em;
+}
 #main .selectize-input input {
-	color: #ccc;
+	background-color: transparent;
 	font-size: 1em;
 }
 .selectize-dropdown.selectize-dropdown {
@@ -149,7 +152,7 @@ input, textarea, #main .selectize-input {
 	background-color: #333;
 	color: #ccc;
 }
-input:hover, textarea:hover, #main .selectize-input:hover, input:focus, textarea:focus, #main .selectize-input.focus {
+input:hover, select:hover, textarea:hover, #main .selectize-input:hover, input:focus, select:focus, textarea:focus, #main .selectize-input.focus {
 	border-color: #ccc;
 	color: #fff;
 }
@@ -197,7 +200,7 @@ body .btn-sm {
 body .btn-lg {
 	font-size: 1.2em;
 }
-.form-control input, .form-control textarea, #main .form-control .selectize-input, .form-control .btn {
+.form-control input, .form-control select, .form-control textarea, #main .form-control .selectize-input, .form-control .btn {
 	font-size: 1em;
 }
 .form-control .btn-sm {
@@ -392,11 +395,20 @@ body .btn-lg {
 	vertical-align: top;
 	white-space: nowrap;
 }
+.hovselist td > .btn, .hovselist td > input[type=submit], .hovselist td > input[type=reset] {
+	margin: 0;
+}
 .hovselist .col-position {
 	white-space: normal;
 }
 .hovselist .col-major span {
 	display: block;
+}
+.hovselist .save, .hovselist .active .edit {
+	display: none;
+}
+.hovselist .active .save {
+	display: inline-block;
 }
 .nametag {
 	position: relative;

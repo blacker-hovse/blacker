@@ -11,17 +11,57 @@ class Mole {
 	public $alley;
 	public $location;
 	public $terms;
+	private $nameBak;
+	private $legalBak;
+	private $classBak;
+	private $cohortBak;
+	private $positionBak;
+	private $emailBak;
+	private $phoneBak;
+	private $alleyBak;
+	private $locationBak;
+	private $termsBak;
 
-	public function getClass($social) {
-		$classes = array(
+	public static function getClasses() {
+		return array(
 			'Senior',
 			'Junior',
 			'Smore',
 			'Frosh'
 		);
+	}
 
+	public static function getFields() {
+		return array(
+			'uid' => 'UID',
+			'name' => 'Name',
+			'legal' => 'Legal',
+			'class' => 'Class',
+			'cohort' => 'Cohort',
+			'position' => 'Position',
+			'email' => 'Email',
+			'phone' => 'Phone',
+			'alley' => 'Alley',
+			'location' => 'Location',
+			'terms' => 'Terms'
+		);
+	}
+
+	public function __construct() {
+		$fields = self::getFields();
+
+		foreach ($fields as $field => $label) {
+			if ($field != 'uid') {
+				$bak = $field . 'Bak';
+				$this->$bak = $this->$field;
+			}
+		}
+	}
+
+	public function getClass($social) {
+		$classes = self::getClasses();
 		$class = $this->class - date('Y') - (date('n') > 6);
-		$class = $class < 0 ? 'Supersenior' : $classes[$class];
+		$class = $class < 0 ? 'Supersenior' : @$classes[$class];
 
 		if ($social and $this->alley == 'Social') {
 			$class = 'Social ' . $class;
@@ -31,14 +71,8 @@ class Mole {
 	}
 
 	public function getCohort() {
-		$classes = array(
-			'Senior',
-			'Junior',
-			'Smore',
-			'Frosh'
-		);
-
-		return $classes[$this->cohort - date('Y') - (date('n') > 6)];
+		$classes = self::getClasses();
+		return @$classes[$this->cohort - date('Y') - (date('n') >= 7)];
 	}
 
 	public function getLocation() {
