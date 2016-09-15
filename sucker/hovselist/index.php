@@ -2,6 +2,13 @@
 include(__DIR__ . '/../../lib/class/Mole.class.php');
 include(__DIR__ . '/../../lib/include.php');
 include(__DIR__ . '/../include.php');
+
+if (array_key_exists('action', $_POST)) {
+	switch ($_POST['action']) {
+		case 'update':
+
+	}
+}
 ?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -22,65 +29,97 @@ EOF
 
 			var year = new Date();
 
+			function done() {
+				$('.error, .success').remove();
+				$('h1').after('<div class="success">Successfully saved mole.</div>');
+			}
+
+			function fail() {
+				window.location = './?error=Failed%20to%20save%20mole.';
+			}
+
 			year = year.getFullYear() + (year.getMonth() >= 6);
 
 			$(function() {
 				$('.hovselist').on('click', '.edit', function() {
-					$(this).parent().siblings().each(function() {
-						if (!$(this).hasClass('col-uid')) {
-							var e = '';
+					$(this).parent().siblings().slice(1).each(function() {
+						var e = '';
 
-							if ($(this).hasClass('col-cohort')) {
-								e = '<select><option value="0"></option>';
+						if ($(this).hasClass('col-cohort')) {
+							e = '<select><option value="0"></option>';
 
-								for (var i = 0; i < classes.length; i++) {
-									e += '<option value="' + (year + i);
+							for (var i = 0; i < classes.length; i++) {
+								e += '<option value="' + (year + i);
 
-									if (classes[i] == $(this).html()) {
-										e += '" selected="selected';
-									}
-
-									e += '">' + classes[i] + '</option>';
+								if (classes[i] == $(this).html()) {
+									e += '" selected="selected';
 								}
 
-								e += '</select>';
-							} else if ($(this).hasClass('col-position')) {
-								e = '<textarea rows="2">' + $(this).html() + '</textarea>';
-							} else if ($(this).hasClass('col-major')) {
-								e = '<input type="text" value="' + $(this).children().map(function() {
-									return $(this).html();
-								}).get().join() + '" />';
-							} else {
-								e = 'text';
-
-								if ($(this).hasClass('col-class') || $(this).hasClass('col-terms')) {
-									e = 'number';
-								} else if ($(this).hasClass('col-email')) {
-									e = 'email';
-								} else if ($(this).hasClass('col-phone')) {
-									e = 'tel';
-								}
-
-								e = '<input type="' + e + '" value="' + $(this).html();
-
-								if ($(this).hasClass('col-class')) {
-									e += '" min="2000" max="' + (year + 4) + '" step="1';
-								}
-
-								e += '" />';
+								e += '">' + classes[i] + '</option>';
 							}
 
-							$(this).html(e);
+							e += '</select>';
+						} else if ($(this).hasClass('col-position')) {
+							e = '<textarea rows="2">' + $(this).html() + '</textarea>';
+						} else if ($(this).hasClass('col-major')) {
+							e = '<input type="text" value="' + $(this).children().map(function() {
+								return $(this).html();
+							}).get().join() + '" />';
+						} else {
+							e = 'text';
 
-							if ($(this).hasClass('col-major')) {
-								$(this).children().selectize();
+							if ($(this).hasClass('col-class') || $(this).hasClass('col-terms')) {
+								e = 'number';
+							} else if ($(this).hasClass('col-email')) {
+								e = 'email';
+							} else if ($(this).hasClass('col-phone')) {
+								e = 'tel';
 							}
+
+							e = '<input type="' + e + '" value="' + $(this).html();
+
+							if ($(this).hasClass('col-class')) {
+								e += '" min="2000" max="' + (year + 4);
+							}
+
+							e += '" />';
+						}
+
+						$(this).html(e);
+
+						if ($(this).hasClass('col-major')) {
+							$(this).children().selectize();
 						}
 					}).parent().addClass('active');
 
 					return false;
 				}).on('click', '.save', function() {
+					var e = {
+						action: 'update'
+					};
 
+					$(this).parent().siblings().each(function() {
+						if ($(this).hasClass('col-uid')) {
+							e.uid = parseInt($(this).text());
+						} else {
+							var f = $(this).children().val();
+
+							e[this.className.slice(4)] = f;
+
+							if ($(this).hasClass('col-cohort')) {
+								f = $(this).find('option:selected').text();
+							}
+
+							if ($(this).hasClass('col-major')) {
+								$(this).html('<span>' + f.split(',').join('</span><span>') + '</span>');
+							} else {
+								$(this).text(f);
+							}
+						}
+					}).parent().removeClass('active');
+
+					$.post('./', e).done(done).fail(fail);
+					return false;
 				});
 			});
 		// ]]></script>
@@ -88,7 +127,16 @@ EOF
 	<body>
 	    <div id="main">
 			<h1>Hovselist</h1>
-			<h2>Feel the Power</h2>
+<?
+if (@$_GET['error']) {
+	$error = htmlentities($_GET['error'], NULL, 'UTF-8');
+
+	echo <<<EOF
+			<div class="error">$error</div>
+
+EOF;
+}
+?>			<h2>Feel the Power</h2>
 			<p></p>
 			<table class="hovselist">
 				<tr>
@@ -113,7 +161,6 @@ EOF
 	, array_keys($cols)) . <<<EOF
 `
 FROM `moles`
-WHERE `alley` <> 'Social'
 EOF;
 
 $result = $pdo->prepare($statement);
