@@ -13,29 +13,14 @@ print_head('Nametag');
 			<h1>Nametag</h1>
 <?
 if (array_key_exists('uid', $_GET)) {
-	$parameters = array(
-		':uid' => (int) $_GET['uid']
-	);
-
-	$pdo = new PDO('sqlite:../sucker/hovselist.db');
-
-	$result = $pdo->prepare(<<<EOF
-SELECT *
-FROM `moles`
-WHERE `uid` = :uid
-	AND `alley` <> 'Social'
-EOF
-		);
-
-	$result->execute($parameters);
-
 	echo <<<EOF
 			<h2>Automagic</h2>
 			<div>
 
 EOF;
 
-	generate_nametag($pdo, $result->fetchObject('Mole'));
+	$pdo = new PDO('sqlite:../sucker/hovselist.db');
+	generate_nametag($pdo, Mole::getMoleByUid($pdo, (int) $_GET['uid']));
 
 	echo <<<EOF
 			</div>
