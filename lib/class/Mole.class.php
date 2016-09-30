@@ -74,8 +74,42 @@ EOF
 		return $result->fetchObject(__CLASS__);
 	}
 
+	public static function killMoleByUid($pdo, $uid) {
+		$parameters = array(
+			':uid' => $uid
+		);
+
+		$result = $pdo->prepare(<<<EOF
+DELETE FROM `moles`
+WHERE `uid` = :uid
+EOF
+			);
+
+		if (!$result) {
+			return $pdo->errorInfo()[2];
+		}
+
+		if (!$result->execute($parameters)) {
+			return $result->errorInfo()[2];
+		}
+
+		$result = $pdo->prepare(<<<EOF
+DELETE FROM `mole_majors`
+WHERE `mole` = :uid
+EOF
+			);
+
+		if (!$result) {
+			return $pdo->errorInfo()[2];
+		}
+
+		if (!$result->execute($parameters)) {
+			return $result->errorInfo()[2];
+		}
+	}
+
 	public function __construct() {
-		$fields = array_slice(self::getFields(), 1);
+		$fields = array_slice(self::getFields(), 1, -1);
 
 		foreach ($fields as $field => $label) {
 			$bak = $field . 'Bak';
@@ -134,6 +168,10 @@ EOF
 	}
 
 	public function insert($pdo) {
+		if (self::getMoleByUid($pdo, $this->uid)) {
+			return 'UID ' . (int) $this->uid . ' already exists.';
+		}
+
 		$fields = array_keys(array_slice(self::getFields(), 0, -1));
 
 		foreach ($fields as $field) {
@@ -160,8 +198,64 @@ EOF
 			return $pdo->errorInfo()[2];
 		}
 
-		$result->execute($parameters);
-		return $result->errorInfo()[2];
+		if (!$result->execute($parameters)) {
+			return $result->errorInfo()[2];
+		}
+	}
+
+	public function setMajors($pdo, $majors) {
+		$parameters = array(
+			':uid' => $this->uid
+		);
+
+		$result = $pdo->prepare(<<<EOF
+DELETE FROM `mole_majors`
+WHERE `mole` = :uid
+EOF
+			);
+
+		if (!$result) {
+			return $pdo->errorInfo()[2];
+		}
+
+		if (!$result->execute(array(
+			':uid' => $this->uid
+		))) {
+			return $result->errorInfo()[2];
+		}
+
+		$vals = array();
+
+		foreach ($majors as $i => $major) {
+			$parameters[':major' . $i] = $major;
+			$vals[] = "(:uid, :major$i)";
+		}
+
+		$vals = implode(',
+	', $vals);
+
+		if (!$vals) {
+			return;
+		}
+
+		$result = $pdo->prepare(<<<EOF
+INSERT INTO `mole_majors` (
+	`mole`,
+	`major`
+)
+VALUES $vals
+EOF
+			);
+
+		if (!$result) {
+			return $pdo->errorInfo()[2];
+		}
+
+		if (!$result->execute($parameters)) {
+			return $result->errorInfo()[2];
+		}
+
+		die('fuck');
 	}
 
 	public function update($pdo) {
@@ -185,7 +279,7 @@ EOF
 	', $settings);
 
 		if (!$settings) {
-			return 'No changes were made.';
+			return;
 		}
 
 		$result = $pdo->prepare(<<<EOF
@@ -199,8 +293,9 @@ EOF
 			return $pdo->errorInfo()[2];
 		}
 
-		$result->execute($parameters);
-		return $result->errorInfo()[2];
+		if (!$result->execute($parameters)) {
+			return $result->errorInfo()[2];
+		}
 	}
 }
 ?>

@@ -404,7 +404,7 @@ body .btn-lg {
 .hovselist .col-major span {
 	display: block;
 }
-.hovselist .save, .hovselist .active .edit {
+.hovselist .save, .hovselist .active .edit, .hovselist .active .del {
 	display: none;
 }
 .hovselist .active .save {

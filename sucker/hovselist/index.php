@@ -11,6 +11,9 @@ if (array_key_exists('action', $_POST)) {
 	$content = 'Invalid action ' . htmlentities($_POST['action'], NULL, 'UTF-8') . '.';
 
 	switch ($_POST['action']) {
+		case 'delete':
+			$content = Mole::killMoleByUid($pdo, (int) $_POST['uid']);
+			break;
 		case 'insert':
 			$mole = new Mole;
 
@@ -21,6 +24,11 @@ if (array_key_exists('action', $_POST)) {
 			}
 
 			$content = $mole->insert($pdo);
+
+			if (!$content and array_key_exists('major', $_POST)) {
+				$content = $mole->setMajors($pdo, explode(',', $_POST['major']));
+			}
+
 			break;
 		case 'update':
 			$mole = Mole::getMoleByUid($pdo, (int) $_POST['uid']);
@@ -32,6 +40,16 @@ if (array_key_exists('action', $_POST)) {
 			}
 
 			$content = $mole->update($pdo);
+
+			if (!$content and array_key_exists('major', $_POST)) {
+				$majors = explode(',', $_POST['major']);
+				$majors_bak = array_keys($mole->getMajors($pdo));
+
+				if (count($majors) != count($majors_bak) or array_diff($majors, $majors_bak)) {
+					$content = $mole->setMajors($pdo, $majors);
+				}
+			}
+
 			break;
 	}
 
@@ -43,7 +61,7 @@ if (array_key_exists('action', $_POST)) {
 	die($content);
 }
 
-$btns = '<a class="btn btn-sm edit" href="#">Edit</a><a class="btn btn-sm save" href="#">Save</a>';
+$btns = '<a class="btn btn-sm edit" href="#">Edit</a><a class="btn btn-sm del" href="#">Delete</a><a class="btn btn-sm save" href="#">Save</a>';
 ?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -98,7 +116,7 @@ EOF;
 						e = '<textarea rows="2">' + $(this).html() + '</textarea>';
 					} else if ($(this).hasClass('col-major')) {
 						e = '<input type="text" value="' + $(this).children().map(function() {
-							return $(this).html();
+							return this.className.slice(10);
 						}).get().join() + '" />';
 					} else {
 						e = 'text';
@@ -130,11 +148,31 @@ EOF;
 				}).parent().addClass('active');
 			}
 
+			function fail(e) {
+				$('.error, .success').remove();
+				$('h1').after('<div class="error">Failed to save mole: ' + e.responseText + '</div>');
+				$(document).scrollTop(0);
+			}
 
 			$(function() {
 				$('.hovselist').on('click', '.edit', function() {
 					edit($(this).parent().siblings().slice(1));
 					return false;
+				}).on('click', '.del', function() {
+					if (confirm('Are you sure you want to delete this mole?')) {
+						var g = $(this).parent().parent();
+
+						$.post('./', {
+							action: 'delete',
+							uid: g.children('.col-uid').text()
+						}).done(function() {
+							g.remove();
+							$('.error, .success').remove();
+							$('h1').after('<div class="success">Successfully deleted mole.</div>');
+						}).fail(fail);
+
+						return false;
+					}
 				}).on('click', '.save', function() {
 					var e = {
 						action: $(this).parent().hasClass('add') ? 'insert' : 'update'
@@ -145,8 +183,8 @@ EOF;
 					g.each(function() {
 						var f = $(this).children().val();
 
-						if (!f && $(this).hasClass('col-uid')) {
-							f = $(this).text();
+						if ($(this).hasClass('col-uid')) {
+							f = f ? parseInt(f) : $(this).text();
 						}
 
 						if ($(this).hasClass('col-terms')) {
@@ -162,11 +200,9 @@ EOF;
 						e.cohort = g.filter('.col-cohort').find('option:selected').text();
 
 						if (e.action == 'insert') {
-							g.parent().clone().insertAfter(g.siblings('.add').html('<?
+							edit(g.parent().clone().insertAfter(g.siblings('.add').html('<?
 echo $btns;
-?>').removeClass('add').parent()).children().each(function() {
-								$(this).children().val('');
-							});
+?>').removeClass('add').parent()).children(':not(.add)').empty());
 						}
 
 						g.each(function() {
@@ -177,16 +213,22 @@ echo $btns;
 							}
 
 							if ($(this).hasClass('col-major')) {
-								$(this).html('<span>' + f.split(',').join('</span><span>') + '</span>');
+								$(this).html(f.split(',').map(function(e) {
+									var f = '';
+
+									for (var i = 0; i < majors.length; i++) {
+										if (majors[i].value == e) {
+											f = majors[i].text;
+										}
+									}
+
+									return '<span class="col-major-' + e + '">' + f + '</span>';
+								}).join(''));
 							} else {
 								$(this).text(f);
 							}
 						}).parent().removeClass('active');
-					}).fail(function(e) {
-						$('.error, .success').remove();
-						$('h1').after('<div class="error">Failed to save mole: ' + e.responseText + '</div>');
-						$(document).scrollTop(0);
-					});
+					}).fail(fail);
 
 					return false;
 				});
@@ -231,7 +273,7 @@ EOF;
 
 			foreach ($majors as $short => $long) {
 				$val .= <<<EOF
-						<span class="maj-$short">$long</span>
+						<span class="col-major-$short">$long</span>
 
 EOF;
 			}
