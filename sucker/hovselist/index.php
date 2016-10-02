@@ -14,6 +14,13 @@ if (array_key_exists('action', $_POST)) {
 		case 'delete':
 			$content = Mole::killMoleByUid($pdo, (int) $_POST['uid']);
 			break;
+		case 'gen_class':
+		case 'gen_cohort':
+		case 'gen_location':
+		case 'gen_mole':
+		case 'restart_mailingset':
+			$content = exec('/srv/git/imss/bin/mailingset restart');
+			break;
 		case 'insert':
 			$mole = new Mole;
 
@@ -233,6 +240,16 @@ echo $btns;
 					return false;
 				});
 
+				$('.gen').click(function() {
+					$.post('./', {action: this.id.replace('-', '_')}).done(function(e) {
+						$('.error, .success').remove();
+						$('h1').after('<div class="success">Updated lists: ' + e + '.</div>');
+						$(document).scrollTop(0);
+					}).fail(fail);
+
+					return false;
+				});
+
 				edit($('.add').siblings());
 			});
 		// ]]></script>
@@ -241,7 +258,13 @@ echo $btns;
 	    <div id="main">
 			<h1>Hovselist</h1>
 			<h2>Feel the Power</h2>
-			<p></p>
+			<p class="text-center">
+				<a id="gen-class" class="btn btn-lg gen" href="#">Generate Class Lists</a>
+				<a id="gen-cohort" class="btn btn-lg gen" href="#">Generate Cohort Lists</a>
+				<a id="gen-location" class="btn btn-lg gen" href="#">Generate Location Lists</a>
+				<a id="gen-mole" class="btn btn-lg gen" href="#">Generate Membership Lists</a>
+				<a id="restart-mailingset" class="btn btn-lg gen" href="#">Restart Mailingset</a>
+			</p>
 			<table class="hovselist">
 				<tr>
 					<th><?
