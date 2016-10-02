@@ -463,6 +463,50 @@ body .btn-lg {
 .nametag .big {
 	font-size: 1.8em;
 }
+.baseball {
+	position: relative;
+	width: 5in;
+	height: 3in;
+	margin: auto;
+	border: 1px dotted #666;
+	background-color: #fff;
+	color: #000;
+	font-size: 0.15in;
+	line-height: 1;
+}
+.baseball .mugshot {
+	float: left;
+	height: 1.25in;
+	width: 1in;
+	margin: 0.1in;
+}
+.baseball .ranking {
+	float: right;
+	margin-left: 0.1in;
+	margin-right: 0.1in;
+	font-style: italic;
+	font-weight: bold;
+}
+.baseball .tag {
+	display: none;
+	border-radius: 0.02in;
+	padding: 0.02in 0.04in;
+	color: #fff;
+	font-weight: bold;
+}
+.baseball .tag.active {
+	display: inline-block;
+}
+.baseball .tag.success {
+	background-color: #55aa55;
+}
+.baseball .tag.error {
+	background-color: #d46a6a;
+}
+.baseball p {
+	margin-left: 0.1in;
+	margin-right: 0.1in;
+}
 blockquote {
 	position: relative;
 	clear: both;
@@ -627,7 +671,7 @@ a:hover {
 	#main .hovselist {
 		margin: 2em 0;
 	}
-	.nametag {
+	.nametag, .baseball {
 		float: left;
 		page-break-inside: avoid;
 	}
