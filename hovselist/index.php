@@ -110,11 +110,10 @@ echo <<<EOF
 EOF;
 
 $pdo = new PDO('sqlite:../sucker/hovselist.db');
-$cols = '`alley`, `alley`, `name`, `class`, `position`, `email`, `phone`, `location`';
 $hovse = "('" . implode("', '", $alleys) . "')";
 
 $result = $pdo->prepare(<<<EOF
-SELECT $cols
+SELECT `alley`, *
 FROM `moles`
 WHERE `alley` IN $hovse
 ORDER BY `alley`, CAST(`location` AS int), `location`
@@ -122,7 +121,7 @@ EOF
 	);
 
 $result->execute(array());
-$rows = $result->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_GROUP, 'Mole');
+$rows = $result->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_GROUP, 'Mole');
 
 foreach ($alleys as $alley) {
 	$lower = strtolower(preg_replace(array('#\W+#', '#^_|_$#'), array('_', ''), $alley));
@@ -139,7 +138,7 @@ EOF;
 }
 
 $result = $pdo->prepare(<<<EOF
-SELECT $cols
+SELECT `alley`, *
 FROM `moles`
 WHERE `alley` NOT IN $hovse
 	AND `alley` <> 'Social'
@@ -159,7 +158,7 @@ $result->execute(array());
 hovselist_print($result->fetchAll(PDO::FETCH_CLASS, 'Mole'));
 
 $result = $pdo->prepare(<<<EOF
-SELECT $cols
+SELECT `alley`, *
 FROM `moles`
 WHERE `alley` = 'Social'
 ORDER BY `location`

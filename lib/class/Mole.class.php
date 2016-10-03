@@ -108,6 +108,11 @@ EOF
 		}
 	}
 
+	public static function yearToCohort($year) {
+		$classes = self::getClasses();
+		return @$classes[$year - date('Y') - (date('n') >= 7)];
+	}
+
 	public function __construct() {
 		$fields = array_slice(self::getFields(), 1, -1);
 
@@ -119,7 +124,7 @@ EOF
 
 	public function getClass($social) {
 		$classes = self::getClasses();
-		$class = $this->class - date('Y') - (date('n') > 6);
+		$class = $this->class - date('Y') - (date('n') >= 7);
 		$class = $class < 0 ? 'Supersenior' : @$classes[$class];
 
 		if ($social and $this->alley == 'Social') {
@@ -130,8 +135,7 @@ EOF
 	}
 
 	public function getCohort() {
-		$classes = self::getClasses();
-		return @$classes[$this->cohort - date('Y') - (date('n') >= 7)];
+		return self::yearToCohort($this->cohort);
 	}
 
 	public function getLocation() {

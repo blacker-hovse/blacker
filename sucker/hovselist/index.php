@@ -3,23 +3,158 @@ include(__DIR__ . '/../../lib/class/Mole.class.php');
 include(__DIR__ . '/../../lib/include.php');
 include(__DIR__ . '/../include.php');
 
+$ocas = "('Off-campus', 'Alcatraz', 'Fort Knight', 'Munth')";
 $pdo = new PDO('sqlite:../hovselist.db');
 
 if (array_key_exists('action', $_POST)) {
 	header('HTTP/1.1 400 Bad Request');
 	header('Status: 400 Bad Request');
 	$content = 'Invalid action ' . htmlentities($_POST['action'], NULL, 'UTF-8') . '.';
+	$format = "`name` || ' ''' || SUBSTR(`class`, 3) || ' <' || `email` || '>'";
+	$fail = true;
 
 	switch ($_POST['action']) {
 		case 'delete':
 			$content = Mole::killMoleByUid($pdo, (int) $_POST['uid']);
 			break;
 		case 'gen_class':
+			$year = date('Y') + (date('n') >= 7);
+
+			$result = $pdo->prepare(<<<EOF
+SELECT `class`,
+	$format
+FROM `moles`
+WHERE `alley` <> 'Social'
+	AND `class` <> ''
+	AND `class` >= $year
+EOF
+				);
+
+			$result->execute();
+			$rows = $result->fetchAll(PDO::FETCH_COLUMN | PDO::FETCH_GROUP);
+			$lists = array();
+			$fail = false;
+
+			foreach ($rows as $year => $moles) {
+				$handle = popen(__DIR__ . '/mailingset write mole-' . $year, 'w');
+
+				if (!$handle) {
+					$content = "Failed to generate list mole-$year.";
+					$fail = true;
+					break;
+				}
+
+				foreach ($moles as $mole) {
+					fwrite($handle, $mole . "\n");
+				}
+
+				pclose($handle);
+				$lists[] = 'mole-' . $year;
+			}
+
+			if ($lists) {
+				$content = $fail ? $content . ' ' : '';
+				$content .= 'Successfully generated lists ' . implode(', ', $lists) . '.';
+			}
+
+			break;
 		case 'gen_cohort':
+			$year = date('Y') + (date('n') >= 7);
+
+			$result = $pdo->prepare(<<<EOF
+SELECT `cohort`,
+	$format
+FROM `moles`
+WHERE `alley` <> 'Social'
+	AND `cohort` <> ''
+	AND `cohort` >= $year
+EOF
+				);
+
+			$result->execute();
+			$rows = $result->fetchAll(PDO::FETCH_COLUMN | PDO::FETCH_GROUP);
+			$lists = array();
+			$fail = false;
+
+			foreach ($rows as $year => $moles) {
+				$cohort = strtolower(Mole::yearToCohort($year)) . 's';
+				$handle = popen(__DIR__ . '/mailingset write mole-' . $cohort, 'w');
+
+				if (!$handle) {
+					$content = "Failed to generate mole-$cohort.";
+					$fail = true;
+					break;
+				}
+
+				foreach ($moles as $mole) {
+					fwrite($handle, $mole . "\n");
+				}
+
+				pclose($handle);
+				$lists[] = 'mole-' . $cohort;
+			}
+
+			if ($lists) {
+				$content = $fail ? $content . ' ' : '';
+				$content .= 'Successfully generated ' . implode(', ', $lists) . '.';
+			}
+
+			break;
 		case 'gen_location':
+			$fail = false;
+
+			$result = $pdo->prepare(<<<EOF
+SELECT $format
+FROM `moles`
+WHERE `alley` <> 'Social'
+	AND `alley` NOT IN $ocas
+EOF
+				);
+
+			$result->execute();
+			$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+			$handle = popen(__DIR__ . '/mailingset write mole-oncampus', 'w');
+
+			if (!$handle) {
+				$content = 'Failed to generate mole-oncampus.';
+				$fail = true;
+				break;
+			}
+
+			foreach ($moles as $mole) {
+				fwrite($handle, $mole . "\n");
+			}
+
+			pclose($handle);
+
+			$result = $pdo->prepare(<<<EOF
+SELECT $format
+FROM `moles`
+WHERE `alley` <> 'Social'
+	AND `alley` IN $ocas
+EOF
+				);
+
+			$result->execute();
+			$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+			$handle = popen(__DIR__ . '/mailingset write mole-offcampus', 'w');
+
+			if (!$handle) {
+				$content = 'Failed to generate mole-offcampus. Successfully generated mole-oncampus.';
+				$fail = true;
+				break;
+			}
+
+			foreach ($moles as $mole) {
+				fwrite($handle, $mole . "\n");
+			}
+
+			pclose($handle);
+			break;
 		case 'gen_mole':
 		case 'restart_mailingset':
-			$content = exec('/srv/git/imss/bin/mailingset restart');
+			exec(__DIR__ . '/mailingset restart', $output, $fail);
+			$content = $fail ? 'Failed to restart Mailingset.' : 'Successfully restarted Mailingset.';
 			break;
 		case 'insert':
 			$mole = new Mole;
@@ -60,7 +195,7 @@ if (array_key_exists('action', $_POST)) {
 			break;
 	}
 
-	if (!$content) {
+	if (!$fail or !$content) {
 		header('HTTP/1.1 200 OK');
 		header('Status: 200 OK');
 	}
@@ -157,7 +292,7 @@ EOF;
 
 			function fail(e) {
 				$('.error, .success').remove();
-				$('h1').after('<div class="error">Failed to save mole: ' + e.responseText + '</div>');
+				$('h1').after('<div class="error">Action failed: ' + e.responseText + '</div>');
 				$(document).scrollTop(0);
 			}
 
@@ -177,9 +312,9 @@ EOF;
 							$('.error, .success').remove();
 							$('h1').after('<div class="success">Successfully deleted mole.</div>');
 						}).fail(fail);
-
-						return false;
 					}
+
+					return false;
 				}).on('click', '.save', function() {
 					var e = {
 						action: $(this).parent().hasClass('add') ? 'insert' : 'update'
@@ -243,7 +378,7 @@ echo $btns;
 				$('.gen').click(function() {
 					$.post('./', {action: this.id.replace('-', '_')}).done(function(e) {
 						$('.error, .success').remove();
-						$('h1').after('<div class="success">Updated lists: ' + e + '.</div>');
+						$('h1').after('<div class="success">' + e + '</div>');
 						$(document).scrollTop(0);
 					}).fail(fail);
 
@@ -275,11 +410,7 @@ echo implode("</th>
 ?></th>
 				</tr>
 <?
-$statement = 'SELECT `' . implode('`,
-	`', array_slice(array_keys($cols), 0, -1)) . '`
-FROM `moles`';
-
-$result = $pdo->prepare($statement);
+$result = $pdo->prepare('SELECT `' . implode('`, `', array_slice(array_keys($cols), 0, -1)) . '` FROM `moles`');
 $result->execute();
 
 while ($mole = $result->fetchObject('Mole')) {
