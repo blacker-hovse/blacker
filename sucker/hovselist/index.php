@@ -77,7 +77,7 @@ EOF
 			$fail = false;
 
 			foreach ($rows as $year => $moles) {
-				$cohort = strtolower(Mole::yearToCohort($year))
+				$cohort = strtolower(Mole::yearToCohort($year));
 
 				if ($cohort != 'frosh') {
 					$cohort .= 's';
