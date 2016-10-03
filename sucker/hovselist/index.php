@@ -460,7 +460,7 @@ echo implode("</th>
 ?></th>
 				</tr>
 <?
-$result = $pdo->prepare('SELECT `' . implode('`, `', array_slice(array_keys($cols), 0, -1)) . '` FROM `moles`');
+$result = $pdo->prepare('SELECT `' . implode('`, `', array_slice(array_keys($cols), 0, -1)) . '` FROM `moles` ORDER BY `name`');
 $result->execute();
 
 while ($mole = $result->fetchObject('Mole')) {

@@ -258,8 +258,6 @@ EOF
 		if (!$result->execute($parameters)) {
 			return $result->errorInfo()[2];
 		}
-
-		die('fuck');
 	}
 
 	public function update($pdo) {
