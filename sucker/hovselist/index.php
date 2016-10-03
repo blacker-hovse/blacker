@@ -77,7 +77,12 @@ EOF
 			$fail = false;
 
 			foreach ($rows as $year => $moles) {
-				$cohort = strtolower(Mole::yearToCohort($year)) . 's';
+				$cohort = strtolower(Mole::yearToCohort($year))
+
+				if ($cohort != 'frosh') {
+					$cohort .= 's';
+				}
+
 				$handle = popen(__DIR__ . '/mailingset write mole-' . $cohort, 'w');
 
 				if (!$handle) {
