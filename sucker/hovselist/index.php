@@ -27,6 +27,7 @@ FROM `moles`
 WHERE `alley` <> 'Social'
 	AND `class` <> ''
 	AND `class` >= $year
+	AND `position` <> 'RA'
 EOF
 				);
 
@@ -68,6 +69,7 @@ FROM `moles`
 WHERE `alley` <> 'Social'
 	AND `cohort` <> ''
 	AND `cohort` >= $year
+	AND `position` <> 'RA'
 EOF
 				);
 
@@ -113,6 +115,7 @@ SELECT $format
 FROM `moles`
 WHERE `alley` <> 'Social'
 	AND `alley` NOT IN $ocas
+	AND `position` <> 'RA'
 EOF
 				);
 
@@ -137,6 +140,7 @@ SELECT $format
 FROM `moles`
 WHERE `alley` <> 'Social'
 	AND `alley` IN $ocas
+	AND `position` <> 'RA'
 EOF
 				);
 
@@ -164,6 +168,7 @@ EOF
 SELECT $format
 FROM `moles`
 WHERE `alley` <> 'Social'
+	AND `position` <> 'RA'
 EOF
 				);
 
@@ -187,6 +192,7 @@ EOF
 SELECT $format
 FROM `moles`
 WHERE `alley` = 'Social'
+	AND `position` <> 'RA'
 EOF
 				);
 
