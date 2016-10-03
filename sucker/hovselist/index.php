@@ -150,8 +150,58 @@ EOF
 			}
 
 			pclose($handle);
+			$content = 'Successfully generated mole-oncampus, mole-offcampus.';
 			break;
 		case 'gen_mole':
+			$fail = false;
+
+			$result = $pdo->prepare(<<<EOF
+SELECT $format
+FROM `moles`
+WHERE `alley` <> 'Social'
+EOF
+				);
+
+			$result->execute();
+			$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+			$handle = popen(__DIR__ . '/mailingset write mole-full-prime', 'w');
+
+			if (!$handle) {
+				$content = 'Failed to generate mole-full-prime.';
+				$fail = true;
+				break;
+			}
+
+			foreach ($moles as $mole) {
+				fwrite($handle, $mole . "\n");
+			}
+
+			pclose($handle);
+
+			$result = $pdo->prepare(<<<EOF
+SELECT $format
+FROM `moles`
+WHERE `alley` = 'Social'
+EOF
+				);
+
+			$result->execute();
+			$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+			$handle = popen(__DIR__ . '/mailingset write mole-social-prime', 'w');
+
+			if (!$handle) {
+				$content = 'Failed to generate mole-social-prime. Successfully generated mole-full-prime.';
+				$fail = true;
+				break;
+			}
+
+			foreach ($moles as $mole) {
+				fwrite($handle, $mole . "\n");
+			}
+
+			pclose($handle);
+			$content = 'Successfully generated mole-full-prime, mole-social-prime.';
+			break;
 		case 'restart_mailingset':
 			exec(__DIR__ . '/mailingset restart', $output, $fail);
 			$content = $fail ? 'Failed to restart Mailingset.' : 'Successfully restarted Mailingset.';
