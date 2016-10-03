@@ -6,6 +6,12 @@ include(__DIR__ . '/../include.php');
 $ocas = "('Off-campus', 'Alcatraz', 'Fort Knight', 'Munth')";
 $pdo = new PDO('sqlite:../hovselist.db');
 
+$super = <<<EOF
+President <mole-president@blacker.caltech.edu>
+Secretary <mole-secretary@blacker.caltech.edu>
+
+EOF;
+
 if (array_key_exists('action', $_POST)) {
 	header('HTTP/1.1 400 Bad Request');
 	header('Status: 400 Bad Request');
@@ -49,6 +55,7 @@ EOF
 					fwrite($handle, $mole . "\n");
 				}
 
+				fwrite($handle, $super);
 				pclose($handle);
 				$lists[] = 'mole-' . $year;
 			}
@@ -97,6 +104,15 @@ EOF
 					fwrite($handle, $mole . "\n");
 				}
 
+				if ($cohort == 'frosh') {
+					fwrite($handle, <<<EOF
+mole-permafrosh <mole-permafrosh@blacker.caltech.edu>
+
+EOF
+						);
+				}
+
+				fwrite($handle, $super);
 				pclose($handle);
 				$lists[] = 'mole-' . $cohort;
 			}
@@ -133,6 +149,7 @@ EOF
 				fwrite($handle, $mole . "\n");
 			}
 
+			fwrite($handle, $super);
 			pclose($handle);
 
 			$result = $pdo->prepare(<<<EOF
@@ -158,6 +175,7 @@ EOF
 				fwrite($handle, $mole . "\n");
 			}
 
+			fwrite($handle, $super);
 			pclose($handle);
 			$content = 'Successfully generated mole-oncampus, mole-offcampus.';
 			break;
