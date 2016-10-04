@@ -389,7 +389,8 @@ EOF;
 
 					if ($(this).hasClass('col-major')) {
 						$(this).children().selectize({
-							options: majors
+							options: majors,
+							searchField: ['text', 'value']
 						});
 					}
 				}).parent().addClass('active');
