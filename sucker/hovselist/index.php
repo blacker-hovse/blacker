@@ -5,6 +5,7 @@ include(__DIR__ . '/../include.php');
 
 $ocas = "('Off-campus', 'Alcatraz', 'Fort Knight', 'Munth')";
 $pdo = new PDO('sqlite:../hovselist.db');
+$year = date('Y') + (date('n') >= 7);
 
 $super = <<<EOF
 President <mole-president@blacker.caltech.edu>
@@ -24,8 +25,6 @@ if (array_key_exists('action', $_POST)) {
 			$content = Mole::killMoleByUid($pdo, (int) $_POST['uid']);
 			break;
 		case 'gen_class':
-			$year = date('Y') + (date('n') >= 7);
-
 			$result = $pdo->prepare(<<<EOF
 SELECT `class`,
 	$format
@@ -42,11 +41,11 @@ EOF
 			$lists = array();
 			$fail = false;
 
-			foreach ($rows as $year => $moles) {
-				$handle = popen(__DIR__ . '/mailingset write mole-' . $year, 'w');
+			foreach ($rows as $class => $moles) {
+				$handle = popen(__DIR__ . '/mailingset write mole-' . $class, 'w');
 
 				if (!$handle) {
-					$content = "Failed to generate list mole-$year.";
+					$content = "Failed to generate list mole-$class.";
 					$fail = true;
 					break;
 				}
@@ -57,7 +56,7 @@ EOF
 
 				fwrite($handle, $super);
 				pclose($handle);
-				$lists[] = 'mole-' . $year;
+				$lists[] = 'mole-' . $class;
 			}
 
 			if ($lists) {
@@ -67,8 +66,6 @@ EOF
 
 			break;
 		case 'gen_cohort':
-			$year = date('Y') + (date('n') >= 7);
-
 			$result = $pdo->prepare(<<<EOF
 SELECT `cohort`,
 	$format
@@ -85,8 +82,8 @@ EOF
 			$lists = array();
 			$fail = false;
 
-			foreach ($rows as $year => $moles) {
-				$cohort = strtolower(Mole::yearToCohort($year));
+			foreach ($rows as $class => $moles) {
+				$cohort = strtolower(Mole::yearToCohort($class));
 
 				if ($cohort != 'frosh') {
 					$cohort .= 's';
@@ -325,7 +322,9 @@ echo implode("',
 ?>'
 			];
 
-			var year = new Date().getFullYear();
+			var year = <?
+echo $year;
+?>;
 
 			var majors = [
 <?
