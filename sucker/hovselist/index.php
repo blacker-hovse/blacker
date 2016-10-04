@@ -157,6 +157,7 @@ SELECT $format
 FROM `moles`
 WHERE `alley` <> 'Social'
 	AND `alley` IN $ocas
+	AND `alley` <> 'Munth'
 	AND `position` <> 'RA'
 EOF
 				);
@@ -177,7 +178,33 @@ EOF
 
 			fwrite($handle, $super);
 			pclose($handle);
-			$content = 'Successfully generated mole-oncampus, mole-offcampus.';
+
+			$result = $pdo->prepare(<<<EOF
+SELECT $format
+FROM `moles`
+WHERE `alley` <> 'Social'
+	AND `alley` = 'Munth'
+	AND `position` <> 'RA'
+EOF
+				);
+
+			$result->execute();
+			$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+			$handle = popen(__DIR__ . '/mailingset write mole-munth-prime', 'w');
+
+			if (!$handle) {
+				$content = 'Failed to generate mole-munth. Successfully generated mole-oncampus, mole-offcampus.';
+				$fail = true;
+				break;
+			}
+
+			foreach ($moles as $mole) {
+				fwrite($handle, $mole . "\n");
+			}
+
+			fwrite($handle, $super);
+			pclose($handle);
+			$content = 'Successfully generated mole-oncampus, mole-offcampus, mole-munth.';
 			break;
 		case 'gen_mole':
 			$fail = false;
