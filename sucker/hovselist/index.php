@@ -325,7 +325,7 @@ echo implode("',
 ?>'
 			];
 
-			var year = new Date();
+			var year = new Date().getFullYear();
 
 			var majors = [
 <?
@@ -398,7 +398,7 @@ EOF;
 
 			function fail(e) {
 				$('.error, .success').remove();
-				$('h1').after('<div class="error">Action failed: ' + e.responseText + '</div>');
+				$('#main h1').after('<div class="error">Action failed: ' + e.responseText + '</div>');
 				$(document).scrollTop(0);
 			}
 
@@ -416,7 +416,7 @@ EOF;
 						}).done(function() {
 							g.remove();
 							$('.error, .success').remove();
-							$('h1').after('<div class="success">Successfully deleted mole.</div>');
+							$('#main h1').after('<div class="success">Successfully deleted mole.</div>');
 						}).fail(fail);
 					}
 
@@ -444,7 +444,7 @@ EOF;
 
 					$.post('./', e).done(function() {
 						$('.error, .success').remove();
-						$('h1').after('<div class="success">Successfully saved mole.</div>');
+						$('#main h1').after('<div class="success">Successfully saved mole.</div>');
 						e.cohort = g.filter('.col-cohort').find('option:selected').text();
 
 						if (e.action == 'insert') {
@@ -484,7 +484,7 @@ echo $btns;
 				$('.gen').click(function() {
 					$.post('./', {action: this.id.replace('-', '_')}).done(function(e) {
 						$('.error, .success').remove();
-						$('h1').after('<div class="success">' + e + '</div>');
+						$('#main h1').after('<div class="success">' + e + '</div>');
 						$(document).scrollTop(0);
 					}).fail(fail);
 
