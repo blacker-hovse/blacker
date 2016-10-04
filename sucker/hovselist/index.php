@@ -500,11 +500,11 @@ echo $btns;
 			<h1>Hovselist</h1>
 			<h2>Feel the Power</h2>
 			<p class="text-center">
-				<a id="gen-class" class="btn btn-lg gen" href="#">Generate Class Lists</a>
-				<a id="gen-cohort" class="btn btn-lg gen" href="#">Generate Cohort Lists</a>
-				<a id="gen-location" class="btn btn-lg gen" href="#">Generate Location Lists</a>
-				<a id="gen-mole" class="btn btn-lg gen" href="#">Generate Membership Lists</a>
-				<a id="restart-mailingset" class="btn btn-lg gen" href="#">Restart Mailingset</a>
+				<a id="gen-class" class="btn btn gen" href="#">Generate Class Lists</a>
+				<a id="gen-cohort" class="btn btn gen" href="#">Generate Cohort Lists</a>
+				<a id="gen-location" class="btn btn gen" href="#">Generate Location Lists</a>
+				<a id="gen-mole" class="btn btn gen" href="#">Generate Membership Lists</a>
+				<a id="restart-mailingset" class="btn btn gen" href="#">Restart Mailingset</a>
 			</p>
 			<table class="hovselist">
 				<tr>
