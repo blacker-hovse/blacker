@@ -401,7 +401,7 @@ body .btn-lg {
 .hovselist .col-position {
 	white-space: normal;
 }
-.hovselist .col-major span {
+.hovselist .col-major > span {
 	display: block;
 }
 .hovselist .save, .hovselist .active .edit, .hovselist .active .del {
