@@ -22,7 +22,7 @@ function hovselist_position($roles, $moles) {
 }
 
 function hovselist_write($list, $moles) {
-	$handle = popen(__DIR__ . '/mailingset write mole-' . $list, 'w');
+	$handle = popen(__DIR__ . '/mailingset write ' . $list, 'w');
 
 	if (!$handle) {
 		throw new UnexpectedValueException($list);
@@ -144,7 +144,7 @@ EOF
 				foreach ($rows as $list => $moles) {
 					$moles[] = $president;
 					$moles[] = $secretary;
-					hovselist_write($list, $moles);
+					hovselist_write('mole-' . $list, $moles);
 					$lists[] = 'mole-' . $list;
 				}
 
@@ -179,10 +179,37 @@ EOF;
 
 					$moles[] = $president;
 					$moles[] = $secretary;
-					hovselist_write($list, $moles);
+					hovselist_write('mole-' . $list, $moles);
 					$lists[] = 'mole-' . $list;
 				}
 
+				break;
+			case 'gen-gender':
+				$result = $pdo->prepare(<<<EOF
+SELECT $format
+FROM `moles`
+WHERE `gender` LIKE '%m%'
+$order
+EOF
+					);
+
+				$result->execute();
+				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+				hovselist_write('hemoles', $moles);
+				$lists[] = 'hemoles';
+
+				$result = $pdo->prepare(<<<EOF
+SELECT $format
+FROM `moles`
+WHERE `gender` LIKE '%f%'
+$order
+EOF
+					);
+
+				$result->execute();
+				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+				hovselist_write('femoles', $moles);
+				$lists[] = 'femoles';
 				break;
 			case 'gen_location':
 				$result = $pdo->prepare(<<<EOF
@@ -199,7 +226,7 @@ EOF
 				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
 				$moles[] = $president;
 				$moles[] = $secretary;
-				hovselist_write('oncampus', $moles);
+				hovselist_write('mole-oncampus', $moles);
 				$lists[] = 'mole-oncampus';
 
 				$result = $pdo->prepare(<<<EOF
@@ -217,7 +244,7 @@ EOF
 				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
 				$moles[] = $president;
 				$moles[] = $secretary;
-				hovselist_write('offcampus', $moles);
+				hovselist_write('mole-offcampus', $moles);
 				$lists[] = 'mole-offcampus';
 
 				$result = $pdo->prepare(<<<EOF
@@ -234,7 +261,7 @@ EOF
 				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
 				$moles[] = $president;
 				$moles[] = $secretary;
-				hovselist_write('munth-prime', $moles);
+				hovselist_write('mole-munth-prime', $moles);
 				$lists[] = 'mole-munth';
 				break;
 			case 'gen_mole':
@@ -249,7 +276,7 @@ EOF
 
 				$result->execute();
 				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
-				hovselist_write('full-prime', $moles);
+				hovselist_write('mole-full-prime', $moles);
 				$lists[] = 'mole-full';
 
 				$result = $pdo->prepare(<<<EOF
@@ -263,7 +290,7 @@ EOF
 
 				$result->execute();
 				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
-				hovselist_write('social-prime', $moles);
+				hovselist_write('mole-social-prime', $moles);
 				$lists[] = 'mole-social';
 				break;
 			case 'gen_offices':
@@ -289,7 +316,7 @@ EOF
 						$moles[] = $secretary;
 					}
 
-					hovselist_write($list, $moles);
+					hovselist_write('mole-' . $list, $moles);
 					$lists[] = 'mole-' . $list;
 				}
 
@@ -554,6 +581,7 @@ echo $btns;
 				<a id="gen-offices" class="btn btn gen" href="#">Generate Team Lists</a>
 				<a id="gen-people" class="btn btn gen" href="#">Generate Office Lists</a>
 				<a id="gen-support" class="btn btn gen" href="#">Generate Support Lists</a>
+				<a id="gen-gender" class="btn btn gen" href="#">Generate Gender Lists</a>
 				<a id="gen-mole" class="btn btn gen" href="#">Generate Membership Lists</a>
 				<a id="restart-mailingset" class="btn btn gen" href="#">Restart Mailingset</a>
 			</p>

@@ -47,6 +47,7 @@ EOF
 			'uid' => 'UID',
 			'name' => 'Name',
 			'legal' => 'Legal',
+			'gender' => 'Gender',
 			'class' => 'Class',
 			'cohort' => 'Cohort',
 			'position' => 'Position',
