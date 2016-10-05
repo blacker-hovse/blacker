@@ -7,6 +7,70 @@ $ocas = "('Off-campus', 'Alcatraz', 'Fort Knight', 'Munth')";
 $pdo = new PDO('sqlite:../hovselist.db');
 $year = date('Y') + (date('n') >= 7);
 
+$offices = array(
+	'athteam' => array(
+		'athteam'
+	),
+	'damage' => array(
+		'damagecontrol'
+	),
+	'historians' => array(
+		'historian'
+	),
+	'imss' => array(
+		'imssrep'
+	),
+	'librarians' => array(
+		'librarian'
+	),
+	'socteam' => array(
+		'socteam'
+	)
+);
+
+$people = array(
+	'arc' => array(
+		'arcrep'
+	),
+	'boc' => array(
+		'bocrep'
+	),
+	'bookie' => array(
+		'bookie'
+	),
+	'crc' => array(
+		'crcrep'
+	),
+	'pope' => array(
+		'pope'
+	),
+	'president' => array(
+		'treasurer'
+	),
+	'secretary' => array(
+		'secretary'
+	),
+	'treasurer' => array(
+		'treasurer'
+	),
+	'vp' => array(
+		'vicepresident'
+	)
+);
+
+$support = array(
+	'healthad' => array(
+		'healthad'
+	),
+	'ra-prime' => array(
+		'ra'
+	),
+	'ucc-prime' => array(
+		'coheaducc',
+		'ucc'
+	)
+);
+
 $super = <<<EOF
 President <mole-president@blacker.caltech.edu>
 Secretary <mole-secretary@blacker.caltech.edu>
@@ -133,7 +197,6 @@ EOF
 				);
 
 			$result->execute();
-			$moles = $result->fetchAll(PDO::FETCH_COLUMN);
 			$handle = popen(__DIR__ . '/mailingset write mole-oncampus', 'w');
 
 			if (!$handle) {
@@ -142,7 +205,7 @@ EOF
 				break;
 			}
 
-			foreach ($moles as $mole) {
+			while ($mole = $result->fetch(PDO::FETCH_COLUMN)) {
 				fwrite($handle, $mole . "\n");
 			}
 
@@ -160,7 +223,6 @@ EOF
 				);
 
 			$result->execute();
-			$moles = $result->fetchAll(PDO::FETCH_COLUMN);
 			$handle = popen(__DIR__ . '/mailingset write mole-offcampus', 'w');
 
 			if (!$handle) {
@@ -169,7 +231,7 @@ EOF
 				break;
 			}
 
-			foreach ($moles as $mole) {
+			while ($mole = $result->fetch(PDO::FETCH_COLUMN)) {
 				fwrite($handle, $mole . "\n");
 			}
 
@@ -186,7 +248,6 @@ EOF
 				);
 
 			$result->execute();
-			$moles = $result->fetchAll(PDO::FETCH_COLUMN);
 			$handle = popen(__DIR__ . '/mailingset write mole-munth-prime', 'w');
 
 			if (!$handle) {
@@ -195,7 +256,7 @@ EOF
 				break;
 			}
 
-			foreach ($moles as $mole) {
+			while ($mole = $result->fetch(PDO::FETCH_COLUMN)) {
 				fwrite($handle, $mole . "\n");
 			}
 
@@ -215,7 +276,6 @@ EOF
 				);
 
 			$result->execute();
-			$moles = $result->fetchAll(PDO::FETCH_COLUMN);
 			$handle = popen(__DIR__ . '/mailingset write mole-full-prime', 'w');
 
 			if (!$handle) {
@@ -224,7 +284,7 @@ EOF
 				break;
 			}
 
-			foreach ($moles as $mole) {
+			while ($mole = $result->fetch(PDO::FETCH_COLUMN)) {
 				fwrite($handle, $mole . "\n");
 			}
 
@@ -239,7 +299,6 @@ EOF
 				);
 
 			$result->execute();
-			$moles = $result->fetchAll(PDO::FETCH_COLUMN);
 			$handle = popen(__DIR__ . '/mailingset write mole-social-prime', 'w');
 
 			if (!$handle) {
@@ -248,12 +307,170 @@ EOF
 				break;
 			}
 
-			foreach ($moles as $mole) {
+			while ($mole = $result->fetch(PDO::FETCH_COLUMN)) {
 				fwrite($handle, $mole . "\n");
 			}
 
 			pclose($handle);
 			$content = 'Successfully generated mole-full-prime, mole-social-prime.';
+			break;
+		case 'gen_offices':
+			$lists = array();
+			$fail = false;
+
+			$positions = array_map(function() {
+				return $array();
+			}, $offices);
+
+			$result = $pdo->prepare(<<<EOF
+SELECT `position`,
+	$format AS `format`
+FROM `moles`
+WHERE `alley` <> 'Social'
+EOF
+				);
+
+			$result->execute();
+
+			while ($mole = $result->fetch(PDO::FETCH_ASSOC)) {
+				$position = strtolower(preg_replace('/\W+/', '', explode(',', $mole['position'])));
+
+				foreach ($offices as $list => $office) {
+					if (in_array($position, $office)) {
+						$positions[$list][] = $mole['format'];
+					}
+				}
+			}
+
+			foreach ($positions as $list => $moles) {
+				$handle = popen(__DIR__ . '/mailingset write mole-' . $list, 'w');
+
+				if (!$handle) {
+					$content = "Failed to generate mole-$list.";
+					$fail = true;
+					break;
+				}
+
+				foreach ($moles as $mole) {
+					fwrite($handle, $mole . "\n");
+				}
+
+				fwrite($handle, $super);
+				pclose($handle);
+				$lists[] = 'mole-' . $list;
+			}
+
+			if ($lists) {
+				$content = $fail ? $content . ' ' : '';
+				$content .= 'Successfully generated ' . implode(', ', $lists) . '.';
+			}
+
+			break;
+		case 'gen_people':
+			$lists = array();
+			$fail = false;
+
+			$positions = array_map(function() {
+				return $array();
+			}, $offices);
+
+			$result = $pdo->prepare(<<<EOF
+SELECT `position`,
+	$format AS `format`
+FROM `moles`
+WHERE `alley` <> 'Social'
+EOF
+				);
+
+			$result->execute();
+
+			while ($mole = $result->fetch(PDO::FETCH_ASSOC)) {
+				$position = strtolower(preg_replace('/\W+/', '', explode(',', $mole['position'])));
+
+				foreach ($people as $list => $office) {
+					if (in_array($position, $office)) {
+						$positions[$list][] = $mole['format'];
+					}
+				}
+			}
+
+			foreach ($positions as $list => $moles) {
+				$handle = popen(__DIR__ . '/mailingset write mole-' . $list, 'w');
+
+				if (!$handle) {
+					$content = "Failed to generate mole-$list.";
+					$fail = true;
+					break;
+				}
+
+				foreach ($moles as $mole) {
+					fwrite($handle, $mole . "\n");
+				}
+
+				pclose($handle);
+				$lists[] = 'mole-' . $list;
+			}
+
+			if ($lists) {
+				$content = $fail ? $content . ' ' : '';
+				$content .= 'Successfully generated ' . implode(', ', $lists) . '.';
+			}
+
+			break;
+		case 'gen_support':
+			$lists = array();
+			$fail = false;
+
+			$positions = array_map(function() {
+				return $array();
+			}, $offices);
+
+			$result = $pdo->prepare(<<<EOF
+SELECT `position`,
+	$format AS `format`
+FROM `moles`
+WHERE `alley` <> 'Social'
+EOF
+				);
+
+			$result->execute();
+
+			while ($mole = $result->fetch(PDO::FETCH_ASSOC)) {
+				$position = strtolower(preg_replace('/\W+/', '', explode(',', $mole['position'])));
+
+				foreach ($support as $list => $office) {
+					if (in_array($position, $office)) {
+						$positions[$list][] = $mole['format'];
+					}
+				}
+			}
+
+			foreach ($positions as $list => $moles) {
+				$handle = popen(__DIR__ . '/mailingset write mole-' . $list, 'w');
+
+				if (!$handle) {
+					$content = "Failed to generate mole-$list.";
+					$fail = true;
+					break;
+				}
+
+				foreach ($moles as $mole) {
+					fwrite($handle, $mole . "\n");
+				}
+
+				if ($list == 'healthad') {
+					fwrite($handle, $super);
+				}
+
+				pclose($handle);
+				$lists[] = 'mole-' . $list;
+			}
+
+			if ($lists) {
+				$content = $fail ? $content . ' ' : '';
+				$content .= 'Successfully generated ' . implode(', ', $lists) . '.';
+			}
+
 			break;
 		case 'restart_mailingset':
 			exec(__DIR__ . '/mailingset restart', $output, $fail);
@@ -503,6 +720,9 @@ echo $btns;
 				<a id="gen-class" class="btn btn gen" href="#">Generate Class Lists</a>
 				<a id="gen-cohort" class="btn btn gen" href="#">Generate Cohort Lists</a>
 				<a id="gen-location" class="btn btn gen" href="#">Generate Location Lists</a>
+				<a id="gen-offices" class="btn btn gen" href="#">Generate Team Lists</a>
+				<a id="gen-people" class="btn btn gen" href="#">Generate Office Lists</a>
+				<a id="gen-support" class="btn btn gen" href="#">Generate Support Lists</a>
 				<a id="gen-mole" class="btn btn gen" href="#">Generate Membership Lists</a>
 				<a id="restart-mailingset" class="btn btn gen" href="#">Restart Mailingset</a>
 			</p>

@@ -124,7 +124,7 @@ $result->execute(array());
 $rows = $result->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_GROUP, 'Mole');
 
 foreach ($alleys as $alley) {
-	$lower = strtolower(preg_replace(array('#\W+#', '#^_|_$#'), array('_', ''), $alley));
+	$lower = strtolower(preg_replace(array('/\W+/', '/^_|_$/'), array('_', ''), $alley));
 
 	echo <<<EOF
 			<div class="phead">
