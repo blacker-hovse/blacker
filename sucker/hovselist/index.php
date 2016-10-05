@@ -184,7 +184,7 @@ EOF;
 				}
 
 				break;
-			case 'gen-gender':
+			case 'gen_gender':
 				$result = $pdo->prepare(<<<EOF
 SELECT $format
 FROM `moles`
