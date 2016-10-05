@@ -24,4 +24,21 @@ function generate_nametag($pdo, $mole, $small = false) {
 
 EOF;
 }
+
+function get_alleys() {
+	return array(
+		'Cannes',
+		'Heaven',
+		'Hell',
+		'Kremlin',
+		'Pub',
+		'Swamp',
+		'Tunnel',
+		'Upper P',
+		'Vatican',
+		'Fort Knight',
+		'Munth',
+		'Womb'
+	);
+}
 ?>

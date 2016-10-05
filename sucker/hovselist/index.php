@@ -3,93 +3,130 @@ include(__DIR__ . '/../../lib/class/Mole.class.php');
 include(__DIR__ . '/../../lib/include.php');
 include(__DIR__ . '/../include.php');
 
-$ocas = "('Off-campus', 'Alcatraz', 'Fort Knight', 'Munth')";
+function hovselist_position($roles, $moles) {
+	$positions = array_map(function() {
+		return array();
+	}, $roles);
+
+	foreach ($moles as $mole) {
+		$position = explode(',', strtolower(preg_replace('/[^\w,]+/', '', $mole['position'])));
+
+		foreach ($roles as $list => $titles) {
+			if (array_intersect($titles, $position)) {
+				$positions[$list][] = $mole['format'];
+			}
+		}
+	}
+
+	return $positions;
+}
+
+function hovselist_write($list, $moles) {
+	$handle = popen(__DIR__ . '/mailingset write mole-' . $list, 'w');
+
+	if (!$handle) {
+		throw new UnexpectedValueException($list);
+	}
+
+	foreach ($moles as $mole) {
+		fwrite($handle, $mole . "\n");
+	}
+
+	if (pclose($handle)) {
+		throw new UnexpectedValueException($list);
+	}
+}
+
+$alleys = "('" . implode("', '", array_diff(get_alleys(), array(
+	'Fort Knight',
+	'Munth'
+))). "')";
+
+$roles = array(
+	'offices' => array(
+		'athteam' => array(
+			'athteam'
+		),
+		'damage' => array(
+			'damagecontrol'
+		),
+		'historians' => array(
+			'historian'
+		),
+		'imss' => array(
+			'headimssrep',
+			'imssrep'
+		),
+		'librarians' => array(
+			'librarian'
+		),
+		'socteam' => array(
+			'socteam'
+		)
+	),
+	'people' => array(
+		'arc' => array(
+			'arcrep'
+		),
+		'boc' => array(
+			'bocrep'
+		),
+		'bookie' => array(
+			'bookie'
+		),
+		'crc' => array(
+			'crcrep'
+		),
+		'pope' => array(
+			'pope'
+		),
+		'president' => array(
+			'president'
+		),
+		'secretary' => array(
+			'secretary'
+		),
+		'treasurer' => array(
+			'treasurer'
+		),
+		'vp' => array(
+			'vicepresident'
+		)
+	),
+	'support' => array(
+		'healthad' => array(
+			'healthad'
+		),
+		'ra-prime' => array(
+			'ra'
+		),
+		'ucc-prime' => array(
+			'coheaducc',
+			'ucc'
+		)
+	)
+);
+
+$order = 'ORDER BY `class`, `name`';
+$president = 'President <mole-president@blacker.caltech.edu>';
+$secretary = 'Secretary <mole-secretary@blacker.caltech.edu>';
 $pdo = new PDO('sqlite:../hovselist.db');
 $year = date('Y') + (date('n') >= 7);
-
-$offices = array(
-	'athteam' => array(
-		'athteam'
-	),
-	'damage' => array(
-		'damagecontrol'
-	),
-	'historians' => array(
-		'historian'
-	),
-	'imss' => array(
-		'imssrep'
-	),
-	'librarians' => array(
-		'librarian'
-	),
-	'socteam' => array(
-		'socteam'
-	)
-);
-
-$people = array(
-	'arc' => array(
-		'arcrep'
-	),
-	'boc' => array(
-		'bocrep'
-	),
-	'bookie' => array(
-		'bookie'
-	),
-	'crc' => array(
-		'crcrep'
-	),
-	'pope' => array(
-		'pope'
-	),
-	'president' => array(
-		'treasurer'
-	),
-	'secretary' => array(
-		'secretary'
-	),
-	'treasurer' => array(
-		'treasurer'
-	),
-	'vp' => array(
-		'vicepresident'
-	)
-);
-
-$support = array(
-	'healthad' => array(
-		'healthad'
-	),
-	'ra-prime' => array(
-		'ra'
-	),
-	'ucc-prime' => array(
-		'coheaducc',
-		'ucc'
-	)
-);
-
-$super = <<<EOF
-President <mole-president@blacker.caltech.edu>
-Secretary <mole-secretary@blacker.caltech.edu>
-
-EOF;
 
 if (array_key_exists('action', $_POST)) {
 	header('HTTP/1.1 400 Bad Request');
 	header('Status: 400 Bad Request');
-	$content = 'Invalid action ' . htmlentities($_POST['action'], NULL, 'UTF-8') . '.';
+	$content = '';
 	$format = "`name` || ' ''' || SUBSTR(`class`, 3) || ' <' || `email` || '>'";
-	$fail = true;
+	$lists = array();
 
-	switch ($_POST['action']) {
-		case 'delete':
-			$content = Mole::killMoleByUid($pdo, (int) $_POST['uid']);
-			break;
-		case 'gen_class':
-			$result = $pdo->prepare(<<<EOF
+	try {
+		switch ($_POST['action']) {
+			case 'delete':
+				$content = Mole::killMoleByUid($pdo, (int) $_POST['uid']);
+				break;
+			case 'gen_class':
+				$result = $pdo->prepare(<<<EOF
 SELECT `class`,
 	$format
 FROM `moles`
@@ -97,40 +134,23 @@ WHERE `alley` <> 'Social'
 	AND `class` <> ''
 	AND `class` >= $year
 	AND `position` <> 'RA'
+$order
 EOF
-				);
+					);
 
-			$result->execute();
-			$rows = $result->fetchAll(PDO::FETCH_COLUMN | PDO::FETCH_GROUP);
-			$lists = array();
-			$fail = false;
+				$result->execute();
+				$rows = $result->fetchAll(PDO::FETCH_COLUMN | PDO::FETCH_GROUP);
 
-			foreach ($rows as $class => $moles) {
-				$handle = popen(__DIR__ . '/mailingset write mole-' . $class, 'w');
-
-				if (!$handle) {
-					$content = "Failed to generate list mole-$class.";
-					$fail = true;
-					break;
+				foreach ($rows as $list => $moles) {
+					$moles[] = $president;
+					$moles[] = $secretary;
+					hovselist_write($list, $moles);
+					$lists[] = 'mole-' . $list;
 				}
 
-				foreach ($moles as $mole) {
-					fwrite($handle, $mole . "\n");
-				}
-
-				fwrite($handle, $super);
-				pclose($handle);
-				$lists[] = 'mole-' . $class;
-			}
-
-			if ($lists) {
-				$content = $fail ? $content . ' ' : '';
-				$content .= 'Successfully generated lists ' . implode(', ', $lists) . '.';
-			}
-
-			break;
-		case 'gen_cohort':
-			$result = $pdo->prepare(<<<EOF
+				break;
+			case 'gen_cohort':
+				$result = $pdo->prepare(<<<EOF
 SELECT `cohort`,
 	$format
 FROM `moles`
@@ -138,386 +158,197 @@ WHERE `alley` <> 'Social'
 	AND `cohort` <> ''
 	AND `cohort` >= $year
 	AND `position` <> 'RA'
+$order
 EOF
-				);
+					);
 
-			$result->execute();
-			$rows = $result->fetchAll(PDO::FETCH_COLUMN | PDO::FETCH_GROUP);
-			$lists = array();
-			$fail = false;
+				$result->execute();
+				$rows = $result->fetchAll(PDO::FETCH_COLUMN | PDO::FETCH_GROUP);
 
-			foreach ($rows as $class => $moles) {
-				$cohort = strtolower(Mole::yearToCohort($class));
+				foreach ($rows as $class => $moles) {
+					$list = strtolower(Mole::yearToCohort($class));
 
-				if ($cohort != 'frosh') {
-					$cohort .= 's';
-				}
-
-				$handle = popen(__DIR__ . '/mailingset write mole-' . $cohort, 'w');
-
-				if (!$handle) {
-					$content = "Failed to generate mole-$cohort.";
-					$fail = true;
-					break;
-				}
-
-				foreach ($moles as $mole) {
-					fwrite($handle, $mole . "\n");
-				}
-
-				if ($cohort == 'frosh') {
-					fwrite($handle, <<<EOF
+					if ($list != 'frosh') {
+						$list .= 's';
+					} else {
+						$moles[] = <<<EOF
 mole-permafrosh <mole-permafrosh@blacker.caltech.edu>
 
-EOF
-						);
+EOF;
+					}
+
+					$moles[] = $president;
+					$moles[] = $secretary;
+					hovselist_write($list, $moles);
+					$lists[] = 'mole-' . $list;
 				}
 
-				fwrite($handle, $super);
-				pclose($handle);
-				$lists[] = 'mole-' . $cohort;
-			}
-
-			if ($lists) {
-				$content = $fail ? $content . ' ' : '';
-				$content .= 'Successfully generated ' . implode(', ', $lists) . '.';
-			}
-
-			break;
-		case 'gen_location':
-			$fail = false;
-
-			$result = $pdo->prepare(<<<EOF
-SELECT $format
-FROM `moles`
-WHERE `alley` <> 'Social'
-	AND `alley` NOT IN $ocas
-	AND `position` <> 'RA'
-EOF
-				);
-
-			$result->execute();
-			$handle = popen(__DIR__ . '/mailingset write mole-oncampus', 'w');
-
-			if (!$handle) {
-				$content = 'Failed to generate mole-oncampus.';
-				$fail = true;
 				break;
-			}
-
-			while ($mole = $result->fetch(PDO::FETCH_COLUMN)) {
-				fwrite($handle, $mole . "\n");
-			}
-
-			fwrite($handle, $super);
-			pclose($handle);
-
-			$result = $pdo->prepare(<<<EOF
+			case 'gen_location':
+				$result = $pdo->prepare(<<<EOF
 SELECT $format
 FROM `moles`
 WHERE `alley` <> 'Social'
-	AND `alley` IN $ocas
+	AND `alley` IN $alleys
+	AND `position` <> 'RA'
+$order
+EOF
+					);
+
+				$result->execute();
+				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+				$moles[] = $president;
+				$moles[] = $secretary;
+				hovselist_write('oncampus', $moles);
+				$lists[] = 'mole-oncampus';
+
+				$result = $pdo->prepare(<<<EOF
+SELECT $format
+FROM `moles`
+WHERE `alley` <> 'Social'
+	AND `alley` NOT IN $alleys
 	AND `alley` <> 'Munth'
 	AND `position` <> 'RA'
+$order
 EOF
-				);
+					);
 
-			$result->execute();
-			$handle = popen(__DIR__ . '/mailingset write mole-offcampus', 'w');
+				$result->execute();
+				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+				$moles[] = $president;
+				$moles[] = $secretary;
+				hovselist_write('offcampus', $moles);
+				$lists[] = 'mole-offcampus';
 
-			if (!$handle) {
-				$content = 'Failed to generate mole-offcampus. Successfully generated mole-oncampus.';
-				$fail = true;
-				break;
-			}
-
-			while ($mole = $result->fetch(PDO::FETCH_COLUMN)) {
-				fwrite($handle, $mole . "\n");
-			}
-
-			fwrite($handle, $super);
-			pclose($handle);
-
-			$result = $pdo->prepare(<<<EOF
+				$result = $pdo->prepare(<<<EOF
 SELECT $format
 FROM `moles`
 WHERE `alley` <> 'Social'
 	AND `alley` = 'Munth'
 	AND `position` <> 'RA'
+$order
 EOF
-				);
+					);
 
-			$result->execute();
-			$handle = popen(__DIR__ . '/mailingset write mole-munth-prime', 'w');
-
-			if (!$handle) {
-				$content = 'Failed to generate mole-munth. Successfully generated mole-oncampus, mole-offcampus.';
-				$fail = true;
+				$result->execute();
+				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+				$moles[] = $president;
+				$moles[] = $secretary;
+				hovselist_write('munth-prime', $moles);
+				$lists[] = 'mole-munth';
 				break;
-			}
-
-			while ($mole = $result->fetch(PDO::FETCH_COLUMN)) {
-				fwrite($handle, $mole . "\n");
-			}
-
-			fwrite($handle, $super);
-			pclose($handle);
-			$content = 'Successfully generated mole-oncampus, mole-offcampus, mole-munth.';
-			break;
-		case 'gen_mole':
-			$fail = false;
-
-			$result = $pdo->prepare(<<<EOF
+			case 'gen_mole':
+				$result = $pdo->prepare(<<<EOF
 SELECT $format
 FROM `moles`
 WHERE `alley` <> 'Social'
 	AND `position` <> 'RA'
+$order
 EOF
-				);
+					);
 
-			$result->execute();
-			$handle = popen(__DIR__ . '/mailingset write mole-full-prime', 'w');
+				$result->execute();
+				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+				hovselist_write('full-prime', $moles);
+				$lists[] = 'mole-full';
 
-			if (!$handle) {
-				$content = 'Failed to generate mole-full-prime.';
-				$fail = true;
-				break;
-			}
-
-			while ($mole = $result->fetch(PDO::FETCH_COLUMN)) {
-				fwrite($handle, $mole . "\n");
-			}
-
-			pclose($handle);
-
-			$result = $pdo->prepare(<<<EOF
+				$result = $pdo->prepare(<<<EOF
 SELECT $format
 FROM `moles`
 WHERE `alley` = 'Social'
 	AND `position` <> 'RA'
+$order
 EOF
-				);
+					);
 
-			$result->execute();
-			$handle = popen(__DIR__ . '/mailingset write mole-social-prime', 'w');
-
-			if (!$handle) {
-				$content = 'Failed to generate mole-social-prime. Successfully generated mole-full-prime.';
-				$fail = true;
+				$result->execute();
+				$moles = $result->fetchAll(PDO::FETCH_COLUMN);
+				hovselist_write('social-prime', $moles);
+				$lists[] = 'mole-social';
 				break;
-			}
-
-			while ($mole = $result->fetch(PDO::FETCH_COLUMN)) {
-				fwrite($handle, $mole . "\n");
-			}
-
-			pclose($handle);
-			$content = 'Successfully generated mole-full-prime, mole-social-prime.';
-			break;
-		case 'gen_offices':
-			$lists = array();
-			$fail = false;
-
-			$positions = array_map(function() {
-				return $array();
-			}, $offices);
-
-			$result = $pdo->prepare(<<<EOF
+			case 'gen_offices':
+			case 'gen_people':
+			case 'gen_support':
+				$result = $pdo->prepare(<<<EOF
 SELECT `position`,
 	$format AS `format`
 FROM `moles`
 WHERE `alley` <> 'Social'
+$order
 EOF
-				);
+					);
 
-			$result->execute();
+				$set = substr($_POST['action'], 4);
+				$result->execute();
+				$moles = $result->fetchAll(PDO::FETCH_ASSOC);
+				$positions = hovselist_position($roles[$set], $moles);
 
-			while ($mole = $result->fetch(PDO::FETCH_ASSOC)) {
-				$position = strtolower(preg_replace('/\W+/', '', explode(',', $mole['position'])));
+				foreach ($positions as $list => $moles) {
+					if ($set == 'offices' or $list == 'healthad') {
+						$moles[] = $president;
+						$moles[] = $secretary;
+					}
 
-				foreach ($offices as $list => $office) {
-					if (in_array($position, $office)) {
-						$positions[$list][] = $mole['format'];
+					hovselist_write($list, $moles);
+					$lists[] = 'mole-' . $list;
+				}
+
+				break;
+			case 'restart_mailingset':
+				exec(__DIR__ . '/mailingset restart', $output, $fail);
+				$content = $fail ? 'Failed to restart Mailingset.' : 'Successfully restarted Mailingset.';
+				break;
+			case 'insert':
+				$mole = new Mole;
+
+				foreach ($_POST as $field => $val) {
+					if (property_exists('Mole', $field)) {
+						$mole->$field = $val;
 					}
 				}
-			}
 
-			foreach ($positions as $list => $moles) {
-				$handle = popen(__DIR__ . '/mailingset write mole-' . $list, 'w');
+				$content = $mole->insert($pdo);
 
-				if (!$handle) {
-					$content = "Failed to generate mole-$list.";
-					$fail = true;
-					break;
+				if (!$content and array_key_exists('major', $_POST)) {
+					$content = $mole->setMajors($pdo, explode(',', $_POST['major']));
 				}
 
-				foreach ($moles as $mole) {
-					fwrite($handle, $mole . "\n");
-				}
+				break;
+			case 'update':
+				$mole = Mole::getMoleByUid($pdo, (int) $_POST['uid']);
 
-				fwrite($handle, $super);
-				pclose($handle);
-				$lists[] = 'mole-' . $list;
-			}
-
-			if ($lists) {
-				$content = $fail ? $content . ' ' : '';
-				$content .= 'Successfully generated ' . implode(', ', $lists) . '.';
-			}
-
-			break;
-		case 'gen_people':
-			$lists = array();
-			$fail = false;
-
-			$positions = array_map(function() {
-				return $array();
-			}, $offices);
-
-			$result = $pdo->prepare(<<<EOF
-SELECT `position`,
-	$format AS `format`
-FROM `moles`
-WHERE `alley` <> 'Social'
-EOF
-				);
-
-			$result->execute();
-
-			while ($mole = $result->fetch(PDO::FETCH_ASSOC)) {
-				$position = strtolower(preg_replace('/\W+/', '', explode(',', $mole['position'])));
-
-				foreach ($people as $list => $office) {
-					if (in_array($position, $office)) {
-						$positions[$list][] = $mole['format'];
+				foreach ($_POST as $field => $val) {
+					if (property_exists('Mole', $field . 'Bak')) {
+						$mole->$field = $val;
 					}
 				}
-			}
 
-			foreach ($positions as $list => $moles) {
-				$handle = popen(__DIR__ . '/mailingset write mole-' . $list, 'w');
+				$content = $mole->update($pdo);
 
-				if (!$handle) {
-					$content = "Failed to generate mole-$list.";
-					$fail = true;
-					break;
-				}
+				if (!$content and array_key_exists('major', $_POST)) {
+					$majors = explode(',', $_POST['major']);
+					$majors_bak = array_keys($mole->getMajors($pdo));
 
-				foreach ($moles as $mole) {
-					fwrite($handle, $mole . "\n");
-				}
-
-				pclose($handle);
-				$lists[] = 'mole-' . $list;
-			}
-
-			if ($lists) {
-				$content = $fail ? $content . ' ' : '';
-				$content .= 'Successfully generated ' . implode(', ', $lists) . '.';
-			}
-
-			break;
-		case 'gen_support':
-			$lists = array();
-			$fail = false;
-
-			$positions = array_map(function() {
-				return $array();
-			}, $offices);
-
-			$result = $pdo->prepare(<<<EOF
-SELECT `position`,
-	$format AS `format`
-FROM `moles`
-WHERE `alley` <> 'Social'
-EOF
-				);
-
-			$result->execute();
-
-			while ($mole = $result->fetch(PDO::FETCH_ASSOC)) {
-				$position = strtolower(preg_replace('/\W+/', '', explode(',', $mole['position'])));
-
-				foreach ($support as $list => $office) {
-					if (in_array($position, $office)) {
-						$positions[$list][] = $mole['format'];
+					if (count($majors) != count($majors_bak) or array_diff($majors, $majors_bak)) {
+						$content = $mole->setMajors($pdo, $majors);
 					}
 				}
-			}
 
-			foreach ($positions as $list => $moles) {
-				$handle = popen(__DIR__ . '/mailingset write mole-' . $list, 'w');
+				break;
+			default:
+				throw new OutOfBoundsException;
+		}
 
-				if (!$handle) {
-					$content = "Failed to generate mole-$list.";
-					$fail = true;
-					break;
-				}
-
-				foreach ($moles as $mole) {
-					fwrite($handle, $mole . "\n");
-				}
-
-				if ($list == 'healthad') {
-					fwrite($handle, $super);
-				}
-
-				pclose($handle);
-				$lists[] = 'mole-' . $list;
-			}
-
-			if ($lists) {
-				$content = $fail ? $content . ' ' : '';
-				$content .= 'Successfully generated ' . implode(', ', $lists) . '.';
-			}
-
-			break;
-		case 'restart_mailingset':
-			exec(__DIR__ . '/mailingset restart', $output, $fail);
-			$content = $fail ? 'Failed to restart Mailingset.' : 'Successfully restarted Mailingset.';
-			break;
-		case 'insert':
-			$mole = new Mole;
-
-			foreach ($_POST as $field => $val) {
-				if (property_exists('Mole', $field)) {
-					$mole->$field = $val;
-				}
-			}
-
-			$content = $mole->insert($pdo);
-
-			if (!$content and array_key_exists('major', $_POST)) {
-				$content = $mole->setMajors($pdo, explode(',', $_POST['major']));
-			}
-
-			break;
-		case 'update':
-			$mole = Mole::getMoleByUid($pdo, (int) $_POST['uid']);
-
-			foreach ($_POST as $field => $val) {
-				if (property_exists('Mole', $field . 'Bak')) {
-					$mole->$field = $val;
-				}
-			}
-
-			$content = $mole->update($pdo);
-
-			if (!$content and array_key_exists('major', $_POST)) {
-				$majors = explode(',', $_POST['major']);
-				$majors_bak = array_keys($mole->getMajors($pdo));
-
-				if (count($majors) != count($majors_bak) or array_diff($majors, $majors_bak)) {
-					$content = $mole->setMajors($pdo, $majors);
-				}
-			}
-
-			break;
-	}
-
-	if (!$fail or !$content) {
 		header('HTTP/1.1 200 OK');
 		header('Status: 200 OK');
+	} catch (OutOfBoundsException $e) {
+		$content = 'Invalid action ' . htmlentities($_POST['action'], NULL, 'UTF-8') . '.';
+	} catch (UnexpectedValueException $e) {
+		$content = 'Failed to generate ' . $e->getMessage() . '.';
+	}
+
+	if ($lists) {
+		$content .= ' Successfully generated ' . implode(', ', $lists) . '.';
 	}
 
 	die($content);

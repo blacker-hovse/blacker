@@ -3,20 +3,7 @@ include(__DIR__ . '/../lib/class/Mole.class.php');
 include(__DIR__ . '/../lib/include.php');
 include(__DIR__ . '/../sucker/include.php');
 
-$alleys = array(
-	'Cannes',
-	'Heaven',
-	'Hell',
-	'Kremlin',
-	'Pub',
-	'Swamp',
-	'Tunnel',
-	'Upper P',
-	'Vatican',
-	'Fort Knight',
-	'Munth',
-	'Womb'
-);
+$alleys = get_alleys();
 
 function hovselist_print($moles) {
 	echo <<<EOF
