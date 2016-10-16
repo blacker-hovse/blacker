@@ -3,6 +3,7 @@ class Mole {
 	public $uid;
 	public $name;
 	public $legal;
+	public $gender;
 	public $class;
 	public $cohort;
 	public $position;
@@ -13,6 +14,7 @@ class Mole {
 	public $terms;
 	private $nameBak;
 	private $legalBak;
+	private $genderBak;
 	private $classBak;
 	private $cohortBak;
 	private $positionBak;
