@@ -178,6 +178,7 @@ input[type=checkbox], input[type=radio] {
 	text-decoration: none;
 	font-size: 0.9em;
 	line-height: 2;
+	cursor: default;
 }
 .btn:hover, input[type=submit]:hover, input[type=reset]:hover, .btn:focus, input[type=submit]:focus, input[type=reset]:focus {
 	border-color; #222;

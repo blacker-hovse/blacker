@@ -642,6 +642,7 @@ EOF;
 foreach ($cols as $col => $label) {
 	echo <<<EOF
 					<td class="col-$col"></td>
+
 EOF;
 }
 ?>					<td class="add">
