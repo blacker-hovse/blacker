@@ -618,7 +618,7 @@ EOF;
 EOF;
 			}
 
-			$val .= "\n\t\t\t\t\t";
+			$val .= "\t\t\t\t\t";
 		} elseif ($col == 'cohort') {
 			$val = $mole->getCohort();
 		} else {
