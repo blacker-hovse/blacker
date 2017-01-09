@@ -609,7 +609,7 @@ EOF;
 
 	foreach ($cols as $col => $label) {
 		if ($col == 'major') {
-			$val = '';
+			$val = "\n";
 
 			foreach ($majors as $short => $long) {
 				$val .= <<<EOF
@@ -617,6 +617,8 @@ EOF;
 
 EOF;
 			}
+
+			$val += "\n\t\t\t\t\t";
 		} elseif ($col == 'cohort') {
 			$val = $mole->getCohort();
 		} else {
