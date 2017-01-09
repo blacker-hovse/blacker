@@ -173,6 +173,7 @@ EOF
 					} else {
 						$moles[] = <<<EOF
 mole-permafrosh <mole-permafrosh@blacker.caltech.edu>
+mole-tempfrosh <mole-tempfrosh@blacker.caltech.edu>
 
 EOF;
 					}
