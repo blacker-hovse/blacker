@@ -101,7 +101,7 @@ $roles = array(
 			'ra'
 		),
 		'ucc-prime' => array(
-			'coheaducc',
+			'headucc',
 			'ucc'
 		)
 	)
