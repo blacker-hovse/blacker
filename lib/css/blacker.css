@@ -267,9 +267,39 @@ body .btn-lg {
 	left: 87%;
 	right: 1em;
 	margin-left: 0;
+	white-space: nowrap;
+}
+.input-group-right .btn {
+	position: relative;
+	top: -0.7em;
+	margin-left: -0.4em;
+	text-align: center;
+	line-height: 1;
 }
 .form-control-static {
-	margin: -0.4em;
+	margin: -0.5em;
+}
+.poll .input-group {
+	position: absolute;
+	top: 1em;
+	left: 1em;
+	margin-left: 0;
+}
+.poll .form-control > label, .poll .input-group-right {
+	position: static;
+	margin-left: 6.5em;
+	text-align: left;
+	font-weight: normal;
+}
+.poll .form-control > label {
+	margin-top: -0.5em;
+	padding: 0;
+}
+.poll .input-group input {
+	width: 4em;
+}
+.poll .input-group-right input {
+	width: 100%;
 }
 .percent::after {
 	content: '%';
@@ -325,13 +355,14 @@ body .btn-lg {
 .media {
 	position: relative;
 	margin: 3em 0;
+	padding: 1em 0;
 }
 .media.active {
 	left: -3px;
 	border-left: 3px solid #999;
 }
 .media > * {
-	margin-left: 30%;
+	margin: 0 0 0 30%;
 	padding: 0 0.5em;
 }
 .media > .pull-left {
@@ -350,8 +381,12 @@ body .btn-lg {
 	list-style-type: none;
 }
 .list-group-item {
+	margin-bottom: 1px;
 	padding: 0.5em;
 	background: #111;
+}
+.list-group-item > * {
+	margin: 0;
 }
 .close {
 	float: right;
@@ -362,6 +397,39 @@ body .btn-lg {
 }
 .close:hover {
 	color: #ccc;
+}
+.toggle {
+	position: relative;
+	width: 2em;
+	height: 1em;
+	margin: 0.5em;
+	border: 1px solid #333;
+	border-radius: 1em;
+	background-color: #666;
+	font-size: 1em;
+	cursor: pointer;
+}
+.toggle::before {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1em;
+	height: 1em;
+	margin: -1px;
+	border: 1px solid #333;
+	border-radius: 1em;
+	background-color: #999;
+}
+.toggle.active {
+	border-color: #2b552b;
+	background-color: #55aa55;
+}
+.toggle.active::before {
+	left: auto;
+	right: 0;
+	border-color: #2b552b;
 }
 .clearfix {
 	clear: both;
