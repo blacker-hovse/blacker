@@ -116,7 +116,7 @@ body {
 .text-center {
 	text-align: center;
 }
-input, select, textarea, #main .selectize-input {
+input, select, textarea, button, #main .selectize-input {
 	display: block;
 	box-shadow: none;
 	box-sizing: content-box;
