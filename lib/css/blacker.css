@@ -1,754 +1,754 @@
 body {
-	margin: 0;
-	background-color: #000;
-	color: #ccc;
-	font-family: Roboto, sans-serif;
-	font-size: 20px;
-	line-height: 2;
+  margin: 0;
+  background-color: #000;
+  color: #ccc;
+  font-family: Roboto, sans-serif;
+  font-size: 20px;
+  line-height: 2;
 }
 #header {
-	position: fixed;
-	z-index: 9;
-	border-bottom: 1px solid #111;
-	padding: 2em 10% 0.5em 10%;
-	width: 80%;
-	background-color: #000;
-	background-color: rgba(0, 0, 0, 0.8);
-	text-align: center;
+  position: fixed;
+  z-index: 9;
+  border-bottom: 1px solid #111;
+  padding: 2em 10% 0.5em 10%;
+  width: 80%;
+  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.8);
+  text-align: center;
 }
 #header ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	width: 40%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 40%;
 }
 #header li {
-	float: left;
-	width: 50%;
+  float: left;
+  width: 50%;
 }
 #header a {
-	padding: 0.5em;
-	text-decoration: none;
-	text-transform: uppercase;
-	font-family: Oswald, sans-serif;
-	letter-spacing: 0.3em;
+  padding: 0.5em;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: Oswald, sans-serif;
+  letter-spacing: 0.3em;
 }
 #header img {
-	margin-top: -1.5em;
-	border: 0;
-	width: 4em;
+  margin-top: -1.5em;
+  border: 0;
+  width: 4em;
 }
 #header + #main {
-	padding-top: 6em;
+  padding-top: 6em;
 }
 #main > * {
-	margin-left: 20%;
-	margin-right: 20%;
+  margin-left: 20%;
+  margin-right: 20%;
 }
 #footer {
-	clear: both;
-	margin-top: 3em;
-	border-top: 1px solid #111;
-	padding: 2em 10%;
-	color: #666;
-	text-align: center;
-	white-space: nowrap;
+  clear: both;
+  margin-top: 3em;
+  border-top: 1px solid #111;
+  padding: 2em 10%;
+  color: #666;
+  text-align: center;
+  white-space: nowrap;
 }
 #footer > * {
-	display: inline-block;
-	margin: 0;
-	border-left: 1px solid #222;
-	padding: 0 2em;
-	height: 6em;
-	vertical-align: middle;
-	text-align: left;
-	font-size: 0.6em;
+  display: inline-block;
+  margin: 0;
+  border-left: 1px solid #222;
+  padding: 0 2em;
+  height: 6em;
+  vertical-align: middle;
+  text-align: left;
+  font-size: 0.6em;
 }
 #footer > :first-child {
-	border-left: 0;
+  border-left: 0;
 }
 #footer img {
-	height: 5em;
-	opacity: 0.5;
+  height: 5em;
+  opacity: 0.5;
 }
 #footer h1 {
-	padding: 0 0.5em;
-	height: 1.2em;
-	color: #111;
-	font-family: 'Advent Pro', sans-serif;
-	font-size: 3em;
-	line-height: 1;
-	letter-spacing: 0.2em;
+  padding: 0 0.5em;
+  height: 1.2em;
+  color: #111;
+  font-family: 'Advent Pro', sans-serif;
+  font-size: 3em;
+  line-height: 1;
+  letter-spacing: 0.2em;
 }
 #main table {
-	margin: 0;
-	width: 100%;
-	font-size: 0.9em;
-	line-height: 1;
+  margin: 0;
+  width: 100%;
+  font-size: 0.9em;
+  line-height: 1;
 }
 #main > .error, #main > .success {
-	text-align: center;
-	margin: 0 25%;
-	border: 0.2em dotted #000;
-	color: #000;
+  text-align: center;
+  margin: 0 25%;
+  border: 0.2em dotted #000;
+  color: #000;
 }
 #main > .error {
-	background-color: #d46a6a;
+  background-color: #d46a6a;
 }
 #main > .success {
-	background-color: #55aa55;
+  background-color: #55aa55;
 }
 #main > .error a, #main > .success a {
-	color: #000;
+  color: #000;
 }
 .pull-left {
-	float: left;
+  float: left;
 }
 #main .pull-left {
-	margin-right: 0;
+  margin-right: 0;
 }
 .pull-right {
-	float: right;
+  float: right;
 }
 #main .pull-right {
-	margin-left: 0;
+  margin-left: 0;
 }
 .text-center {
-	text-align: center;
+  text-align: center;
 }
 input, select, textarea, button, #main .selectize-input {
-	display: block;
-	box-shadow: none;
-	box-sizing: content-box;
-	margin: -0.5em;
-	border-width: 0 0 1px 0;
-	border-style: solid;
-	border-color: #333;
-	border-radius: 0;
-	padding: 0.5em;
-	width: 100%;
-	background-color: #111;
-	color: #ccc;
-	font-size: 0.9em;
-	line-height: 1;
-	font-family: Roboto, sans-serif;
+  display: block;
+  box-shadow: none;
+  box-sizing: content-box;
+  margin: -0.5em;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: #333;
+  border-radius: 0;
+  padding: 0.5em;
+  width: 100%;
+  background-color: #111;
+  color: #ccc;
+  font-size: 0.9em;
+  line-height: 1;
+  font-family: Roboto, sans-serif;
 }
 select {
-	height: 1em;
+  height: 1em;
 }
 #main .selectize-input input {
-	background-color: transparent;
-	font-size: 1em;
+  background-color: transparent;
+  font-size: 1em;
 }
 .selectize-dropdown.selectize-dropdown {
-	margin-top: 0.5em;
-	margin-left: -0.5em;
-	border: 0;
-	background-color: #222;
-	color: #999;
-	font-size: 1em;
+  margin-top: 0.5em;
+  margin-left: -0.5em;
+  border: 0;
+  background-color: #222;
+  color: #999;
+  font-size: 1em;
 }
 .selectize-dropdown.selectize-dropdown .active {
-	background-color: #333;
-	color: #ccc;
+  background-color: #333;
+  color: #ccc;
 }
 input:hover, select:hover, textarea:hover, #main .selectize-input:hover, input:focus, select:focus, textarea:focus, #main .selectize-input.focus {
-	border-color: #ccc;
-	color: #fff;
+  border-color: #ccc;
+  color: #fff;
 }
 .selectize-input.focus input {
-	color: #fff;
+  color: #fff;
 }
 input[type=checkbox], input[type=radio] {
-	display: inline;
-	margin: 0;
-	width: 1em;
-	height: 1em;
+  display: inline;
+  margin: 0;
+  width: 1em;
+  height: 1em;
 }
 .btn, input[type=submit], input[type=reset] {
-	display: inline-block;
-	margin: 0.4em;
-	border: 1px solid #111;
-	border-radius: 0.3em;
-	outline: 0;
-	padding: 0.2em 0.6em;
-	width: auto;
-	background-color: #222;
-	color: #ccc;
-	text-decoration: none;
-	font-size: 0.9em;
-	line-height: 2;
-	cursor: default;
+  display: inline-block;
+  margin: 0.4em;
+  border: 1px solid #111;
+  border-radius: 0.3em;
+  outline: 0;
+  padding: 0.2em 0.6em;
+  width: auto;
+  background-color: #222;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.9em;
+  line-height: 2;
+  cursor: default;
 }
 .btn:hover, input[type=submit]:hover, input[type=reset]:hover, .btn:focus, input[type=submit]:focus, input[type=reset]:focus {
-	border-color; #222;
-	background-color: #333;
-	color: #ccc;
+  border-color; #222;
+  background-color: #333;
+  color: #ccc;
 }
 .btn:active, input[type=submit]:active, input[type=reset]:active {
-	border-color: #222;
-	background-color: #111;
-	color: #999;
+  border-color: #222;
+  background-color: #111;
+  color: #999;
 }
 .btn.disabled, input[type=submit].disabled, input[type=reset].disabled, .btn[disabled], input[type=submit][disabled], input[type=reset][disabled] {
-	border-color: #444;
-	background-color: #444;
-	color: #999;
+  border-color: #444;
+  background-color: #444;
+  color: #999;
 }
 body .btn-sm {
-	font-size: 0.7em;
+  font-size: 0.7em;
 }
 body .btn-lg {
-	font-size: 1.2em;
+  font-size: 1.2em;
 }
 .form-control input, .form-control select, .form-control textarea, #main .form-control .selectize-input, .form-control .btn {
-	font-size: 1em;
+  font-size: 1em;
 }
 .form-control .btn-sm {
-	font-size: 0.8em;
+  font-size: 0.8em;
 }
 .form-control .btn-lg {
-	font-size: 1.3em;
+  font-size: 1.3em;
 }
 .feed .item {
-	position: relative;
-	margin-left: 2em;
-	border-left: 0.3em solid #222;
-	padding: 1em 0 1em 4em;
-	font-size: 0.9em;
+  position: relative;
+  margin-left: 2em;
+  border-left: 0.3em solid #222;
+  padding: 1em 0 1em 4em;
+  font-size: 0.9em;
 }
 .selectize-dropdown .item > * {
-	display: block;
+  display: block;
 }
 .thumbnail {
-	position: absolute;
-	top: 1.2em;
-	left: -2.4em;
-	border-radius: 3em;
-	padding: 0.5em;
-	width: 3.6em;
-	height: 3.6em;
-	background-color: #222;
+  position: absolute;
+  top: 1.2em;
+  left: -2.4em;
+  border-radius: 3em;
+  padding: 0.5em;
+  width: 3.6em;
+  height: 3.6em;
+  background-color: #222;
 }
 .form-control {
-	position: relative;
-	clear: both;
-	padding: 1em;
-	font-size: 0.9em;
+  position: relative;
+  clear: both;
+  padding: 1em;
+  font-size: 0.9em;
 }
 .form-control > label {
-	position: absolute;
-	top: 0.1em;
-	left: 0;
-	right: 70%;
-	display: block;
-	padding: 0.5em 1em;
-	text-align: right;
-	font-weight: bold;
+  position: absolute;
+  top: 0.1em;
+  left: 0;
+  right: 70%;
+  display: block;
+  padding: 0.5em 1em;
+  text-align: right;
+  font-weight: bold;
 }
 .form-control.optional > label::before {
-	content: '(optional)';
-	padding-right: 0.5em;
-	color: #999;
-	font-weight: normal;
+  content: '(optional)';
+  padding-right: 0.5em;
+  color: #999;
+  font-weight: normal;
 }
 .input-group {
-	margin-left: 30%;
+  margin-left: 30%;
 }
 .input-group label {
-	padding-left: 0.5em;
+  padding-left: 0.5em;
 }
 .input-group-left {
-	width: 55%;
+  width: 55%;
 }
 .input-group-right {
-	position: absolute;
-	top: 1em;
-	left: 87%;
-	right: 1em;
-	margin-left: 0;
-	white-space: nowrap;
+  position: absolute;
+  top: 1em;
+  left: 87%;
+  right: 1em;
+  margin-left: 0;
+  white-space: nowrap;
 }
 .input-group-right .btn {
-	position: relative;
-	top: -0.7em;
-	margin-left: -0.4em;
-	text-align: center;
-	line-height: 1;
+  position: relative;
+  top: -0.7em;
+  margin-left: -0.4em;
+  text-align: center;
+  line-height: 1;
 }
 .form-control-static {
-	margin: -0.5em;
+  margin: -0.5em;
 }
 .poll .input-group {
-	position: absolute;
-	top: 1em;
-	left: 1em;
-	margin-left: 0;
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  margin-left: 0;
 }
 .poll .form-control > label, .poll .input-group-right {
-	position: static;
-	margin-left: 6.5em;
-	text-align: left;
-	font-weight: normal;
+  position: static;
+  margin-left: 6.5em;
+  text-align: left;
+  font-weight: normal;
 }
 .poll .form-control > label {
-	margin-top: -0.5em;
-	padding: 0;
+  margin-top: -0.5em;
+  padding: 0;
 }
 .poll .input-group input {
-	width: 4em;
+  width: 4em;
 }
 .poll .input-group-right input {
-	width: 100%;
+  width: 100%;
 }
 .percent::after {
-	content: '%';
-	position: absolute;
-	top: 0;
-	left: 1.5em;
-	line-height: 1;
+  content: '%';
+  position: absolute;
+  top: 0;
+  left: 1.5em;
+  line-height: 1;
 }
 .nav {
-	padding: 0;
-	list-style-type: none;
-	text-align: center;
-	font-size: 0.9em;
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
+  font-size: 0.9em;
 }
 .nav > li {
-	display: inline-block;
+  display: inline-block;
 }
 .nav > li > a {
-	display: block;
-	margin: -0.2em;
-	border: 1px solid #000;
-	padding: 0.2em 0.5em;
-	background-color: #111;
-	text-decoration: none;
+  display: block;
+  margin: -0.2em;
+  border: 1px solid #000;
+  padding: 0.2em 0.5em;
+  background-color: #111;
+  text-decoration: none;
 }
 .nav > li.active a {
-	background-color: #222;
+  background-color: #222;
 }
 .voting {
-	display: inline-block;
-	background-color: #111;
+  display: inline-block;
+  background-color: #111;
 }
 .voting.upvoted {
-	background-color: #522514;
+  background-color: #522514;
 }
 .voting.upvoted .upvote {
-	background-color: #a34929;
+  background-color: #a34929;
 }
 .voting.downvoted {
-	background-color: #1f1f47;
+  background-color: #1f1f47;
 }
 .voting.downvoted .downvote {
-	background-color: #3d3d8f;
+  background-color: #3d3d8f;
 }
 .pagination {
-	margin: 1em 0;
-	text-align: center;
-	font-weight: bold;
+  margin: 1em 0;
+  text-align: center;
+  font-weight: bold;
 }
 .pagination a {
-	padding: 0 0.2em;
+  padding: 0 0.2em;
 }
 .media {
-	position: relative;
-	margin: 3em 0;
-	padding: 1em 0;
+  position: relative;
+  margin: 3em 0;
+  padding: 1em 0;
 }
 .media.active {
-	left: -3px;
-	border-left: 3px solid #999;
+  left: -3px;
+  border-left: 3px solid #999;
 }
 .media > * {
-	margin: 0 0 0 30%;
-	padding: 0 0.5em;
+  margin: 0 0 0 30%;
+  padding: 0 0.5em;
 }
 .media > .pull-left {
-	position: absolute;
-	top: 0.5em;
-	right: 70%;
-	bottom: 0;
-	left: 0;
-	margin-left: 0;
+  position: absolute;
+  top: 0.5em;
+  right: 70%;
+  bottom: 0;
+  left: 0;
+  margin-left: 0;
 }
 .media > .pull-left img {
-	width: 100%;
+  width: 100%;
 }
 .list-group {
-	padding: 0;
-	list-style-type: none;
+  padding: 0;
+  list-style-type: none;
 }
 .list-group-item {
-	margin-bottom: 1px;
-	padding: 0.5em;
-	background: #111;
+  margin-bottom: 1px;
+  padding: 0.5em;
+  background: #111;
 }
 .list-group-item > * {
-	margin: 0;
+  margin: 0;
 }
 .close {
-	float: right;
-	border: 0;
-	background: transparent;
-	color: #808080;
-	font-size: 1.5em;
+  float: right;
+  border: 0;
+  background: transparent;
+  color: #808080;
+  font-size: 1.5em;
 }
 .close:hover {
-	color: #ccc;
+  color: #ccc;
 }
 .toggle {
-	position: relative;
-	width: 2em;
-	height: 1em;
-	margin: 0.5em;
-	border: 1px solid #333;
-	border-radius: 1em;
-	background-color: #666;
-	font-size: 1em;
-	cursor: pointer;
+  position: relative;
+  width: 2em;
+  height: 1em;
+  margin: 0.5em;
+  border: 1px solid #333;
+  border-radius: 1em;
+  background-color: #666;
+  font-size: 1em;
+  cursor: pointer;
 }
 .toggle::before {
-	content: '';
-	display: block;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 1em;
-	height: 1em;
-	margin: -1px;
-	border: 1px solid #333;
-	border-radius: 1em;
-	background-color: #999;
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1em;
+  height: 1em;
+  margin: -1px;
+  border: 1px solid #333;
+  border-radius: 1em;
+  background-color: #999;
 }
 .toggle.active {
-	border-color: #2b552b;
-	background-color: #55aa55;
+  border-color: #2b552b;
+  background-color: #55aa55;
 }
 .toggle.active::before {
-	left: auto;
-	right: 0;
-	border-color: #2b552b;
+  left: auto;
+  right: 0;
+  border-color: #2b552b;
 }
 .clearfix {
-	clear: both;
+  clear: both;
 }
 #main .phead {
-	position: relative;
-	margin: 0;
-	overflow: hidden;
-	background-color: #222;
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background-color: #222;
 }
 .phead img {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 .phead h3 {
-	position: relative;
-	width: 30%;
-	margin: 0;
-	padding: 1em 0 1em 20%;
-	background-color: rgba(0, 0, 0, 0.5);
-	font-size: 2em;
+  position: relative;
+  width: 30%;
+  margin: 0;
+  padding: 1em 0 1em 20%;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 2em;
 }
 #main .hovselist {
-	margin: 4em 0;
-	font-size: 0.7em;
+  margin: 4em 0;
+  font-size: 0.7em;
 }
 .hovselist th, .hovselist td {
-	padding: 0.5em;
-	text-align: left;
-	vertical-align: top;
-	white-space: nowrap;
+  padding: 0.5em;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
 }
 .hovselist td > .btn, .hovselist td > input[type=submit], .hovselist td > input[type=reset] {
-	margin: 0;
+  margin: 0;
 }
 .hovselist .col-position {
-	white-space: normal;
+  white-space: normal;
 }
 .hovselist .col-major > span {
-	display: block;
+  display: block;
 }
 .hovselist .save, .hovselist .active .edit, .hovselist .active .del {
-	display: none;
+  display: none;
 }
 .hovselist .active .save {
-	display: inline-block;
+  display: inline-block;
 }
 .nametag {
-	position: relative;
-	width: 5in;
-	height: 3in;
-	margin: auto;
-	border: 1px dotted #666;
-	color: #fff;
-	background-image: url('/lib/strip.png');
-	background-size: 100% 100%;
-	font-size: 0.3in;
-	line-height: 1;
-	font-family: 'Squada One', sans-serif;
+  position: relative;
+  width: 5in;
+  height: 3in;
+  margin: auto;
+  border: 1px dotted #666;
+  color: #fff;
+  background-image: url('/lib/strip.png');
+  background-size: 100% 100%;
+  font-size: 0.3in;
+  line-height: 1;
+  font-family: 'Squada One', sans-serif;
 }
 .nametag-sm {
-	width: 3in;
-	height: 2in;
-	font-size: 0.2in;
+  width: 3in;
+  height: 2in;
+  font-size: 0.2in;
 }
 .nametag > * {
-	position: absolute;
-	padding: 5%;
+  position: absolute;
+  padding: 5%;
 }
 .nametag span {
-	display: block;
+  display: block;
 }
 .nametag .top {
-	right: 0;
-	left: 15%;
-	text-align: right;
+  right: 0;
+  left: 15%;
+  text-align: right;
 }
 .nametag .bottom {
-	bottom: 0;
-	right: 0;
-	left: 15%;
+  bottom: 0;
+  right: 0;
+  left: 15%;
 }
 .nametag .left {
-	right: 100%;
-	width: 100%;
-	padding: 4%;
-	transform: rotate(-90deg);
-	transform-origin: top right;
-	-webkit-transform: rotate(-90deg);
-	-webkit-transform-origin: top right;
-	-o-transform: rotate(-90deg);
-	-o-transform-origin: top right;
-	-moz-transform: rotate(-90deg);
-	-moz-transform-origin: top right;
-	text-align: right;
-	font-size: 1.2em;
+  right: 100%;
+  width: 100%;
+  padding: 4%;
+  transform: rotate(-90deg);
+  transform-origin: top right;
+  -webkit-transform: rotate(-90deg);
+  -webkit-transform-origin: top right;
+  -o-transform: rotate(-90deg);
+  -o-transform-origin: top right;
+  -moz-transform: rotate(-90deg);
+  -moz-transform-origin: top right;
+  text-align: right;
+  font-size: 1.2em;
 }
 .nametag .big {
-	font-size: 1.8em;
+  font-size: 1.8em;
 }
 .baseball {
-	position: relative;
-	width: 5in;
-	height: 3in;
-	margin: auto;
-	border: 1px dotted #666;
-	background-color: #fff;
-	color: #000;
-	font-size: 0.15in;
-	line-height: 1;
+  position: relative;
+  width: 5in;
+  height: 3in;
+  margin: auto;
+  border: 1px dotted #666;
+  background-color: #fff;
+  color: #000;
+  font-size: 0.15in;
+  line-height: 1;
 }
 .baseball .mugshot {
-	float: left;
-	height: 1.25in;
-	width: 1in;
-	margin: 0.1in;
+  float: left;
+  height: 1.25in;
+  width: 1in;
+  margin: 0.1in;
 }
 .baseball .ranking {
-	float: right;
-	margin-left: 0.1in;
-	margin-right: 0.1in;
-	font-style: italic;
-	font-weight: bold;
+  float: right;
+  margin-left: 0.1in;
+  margin-right: 0.1in;
+  font-style: italic;
+  font-weight: bold;
 }
 .baseball .tag {
-	display: none;
-	border-radius: 0.02in;
-	padding: 0.02in 0.04in;
-	color: #fff;
-	font-weight: bold;
+  display: none;
+  border-radius: 0.02in;
+  padding: 0.02in 0.04in;
+  color: #fff;
+  font-weight: bold;
 }
 .baseball .tag.active {
-	display: inline-block;
+  display: inline-block;
 }
 .baseball .tag.success {
-	background-color: #55aa55;
+  background-color: #55aa55;
 }
 .baseball .tag.error {
-	background-color: #d46a6a;
+  background-color: #d46a6a;
 }
 .baseball p {
-	margin-left: 0.1in;
-	margin-right: 0.1in;
+  margin-left: 0.1in;
+  margin-right: 0.1in;
 }
 blockquote {
-	position: relative;
-	clear: both;
-	margin: 2em 0;
-	padding-left: 4em;
+  position: relative;
+  clear: both;
+  margin: 2em 0;
+  padding-left: 4em;
 }
 blockquote::before {
-	content: '\201c';
-	position: absolute;
-	left: 0.1em;
-	color: #333;
-	font-size: 6em;
-	line-height: 1;
-	font-family: fantasy;
+  content: '\201c';
+  position: absolute;
+  left: 0.1em;
+  color: #333;
+  font-size: 6em;
+  line-height: 1;
+  font-family: fantasy;
 }
 blockquote p {
-	margin: 0;
-	font-size: 1.2em;
+  margin: 0;
+  font-size: 1.2em;
 }
 blockquote .quote-tags {
-	font-size: 0.8em;
+  font-size: 0.8em;
 }
 blockquote cite {
-	margin-left: -0.5em;
-	font-size: 0.8em;
-	font-style: normal;
+  margin-left: -0.5em;
+  font-size: 0.8em;
+  font-style: normal;
 }
 blockquote cite > * {
-	margin: 0 0.5em;
+  margin: 0 0.5em;
 }
 h1 {
-	margin-top: 0.5em;
-	margin-bottom: 0;
-	color: #fff;
-	text-align: center;
-	font-family: Oswald, sans-serif;
-	font-size: 3em;
-	font-weight: normal;
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  color: #fff;
+  text-align: center;
+  font-family: Oswald, sans-serif;
+  font-size: 3em;
+  font-weight: normal;
 }
 h2 {
-	margin: 1em 20%;
-	border-top: 1px solid #222;
-	padding-top: 1em;
-	color: #999;
-	text-align: center;
-	text-transform: uppercase;
-	font-size: 1.5em;
-	font-weight: normal;
-	letter-spacing: 0.2em;
+  margin: 1em 20%;
+  border-top: 1px solid #222;
+  padding-top: 1em;
+  color: #999;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 1.5em;
+  font-weight: normal;
+  letter-spacing: 0.2em;
 }
 h3 {
-	font-size: 1.2em;
+  font-size: 1.2em;
 }
 p, form {
-	margin-top: 1em;
-	margin-bottom: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 small {
-	padding-left: 1em;
-	color: #999;
+  padding-left: 1em;
+  color: #999;
 }
 td {
-	padding: 0.5em;
-	text-align: center;
+  padding: 0.5em;
+  text-align: center;
 }
 h2 + table td {
-	text-align: left;
+  text-align: left;
 }
 h2 + table td:first-child {
-	width: 40%;
-	color: #fff;
-	text-align: right;
-	vertical-align: top;
+  width: 40%;
+  color: #fff;
+  text-align: right;
+  vertical-align: top;
 }
 a {
-	color: #999;
+  color: #999;
 }
 a:hover {
-	color: #fff;
+  color: #fff;
 }
 @media screen and (max-width: 960px) {
-	body {
-		font-size: 16px;
-	}
-	#main > * {
-		margin-left: 10%;
-		margin-right: 10%;
-	}
-	#main > .error, #main .success {
-		margin: 0 20%;
-	}
+  body {
+    font-size: 16px;
+  }
+  #main > * {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  #main > .error, #main .success {
+    margin: 0 20%;
+  }
 }
 @media screen and (max-width: 640px) {
-	body {
-		font-size: 12px;
-	}
+  body {
+    font-size: 12px;
+  }
 }
 @media screen and (max-width: 480px) {
-	#header {
-		position: static;
-		padding: 1em 0;
-		width: 100%;
-	}
-	#header ul {
-		width: auto;
-	}
-	#header li {
-		margin: 1em 0;
-		width: 50%;
-	}
-	#main {
-		padding-top: 0;
-	}
-	#main > *, #main > .error, #main > .success {
-		margin-left: 0;
-		margin-right: 0;
-	}
-	#footer {
-		margin: 0 -1em;
-		padding: 1em 0;
-	}
-	.pull-left, .pull-right {
-		float: none;
-	}
-	.form-control > label {
-		position: static;
-		padding: 1em 0;
-		text-align: left;
-	}
-	.input-group {
-		float: none;
-		margin: 0;
-		width: 100%;
-	}
+  #header {
+    position: static;
+    padding: 1em 0;
+    width: 100%;
+  }
+  #header ul {
+    width: auto;
+  }
+  #header li {
+    margin: 1em 0;
+    width: 50%;
+  }
+  #main {
+    padding-top: 0;
+  }
+  #main > *, #main > .error, #main > .success {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #footer {
+    margin: 0 -1em;
+    padding: 1em 0;
+  }
+  .pull-left, .pull-right {
+    float: none;
+  }
+  .form-control > label {
+    position: static;
+    padding: 1em 0;
+    text-align: left;
+  }
+  .input-group {
+    float: none;
+    margin: 0;
+    width: 100%;
+  }
 }
 @page {
-	margin: 0.4in;
+  margin: 0.4in;
 }
 @media print {
-	body {
-		background-color: #fff;
-		color: #000;
-	}
-	h1, h2, #footer {
-		display: none;
-	}
-	.phead img {
-		top: 0 !important;
-	}
-	.phead h3 {
-		width: auto;
-		padding: 1em 20%;
-		background-color: transparent;
-		color: #fff;
-		font-size: 1.2em;
-	}
-	#main > div {
-		width: 100%;
-		margin-left: 0;
-		margin-right: 0;
-	}
-	#main .hovselist {
-		margin: 2em 0;
-	}
-	.nametag, .baseball {
-		float: left;
-		page-break-inside: avoid;
-	}
-	.nametag-sm {
-		margin: 0.5in -0.5in;
-		transform: rotate(-90deg);
-		-webkit-transform: rotate(-90deg);
-		-o-transform: rotate(-90deg);
-		-moz-transform: rotate(-90deg);
-	}
+  body {
+    background-color: #fff;
+    color: #000;
+  }
+  h1, h2, #footer {
+    display: none;
+  }
+  .phead img {
+    top: 0 !important;
+  }
+  .phead h3 {
+    width: auto;
+    padding: 1em 20%;
+    background-color: transparent;
+    color: #fff;
+    font-size: 1.2em;
+  }
+  #main > div {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #main .hovselist {
+    margin: 2em 0;
+  }
+  .nametag, .baseball {
+    float: left;
+    page-break-inside: avoid;
+  }
+  .nametag-sm {
+    margin: 0.5in -0.5in;
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+  }
 }
