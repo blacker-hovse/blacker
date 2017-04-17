@@ -155,8 +155,7 @@ EOF
     $result = $pdo->prepare(<<<EOF
 SELECT `majors`.*
 FROM `majors`
-  INNER JOIN `mole_majors`
-    ON `major` = `short`
+INNER JOIN `mole_majors` ON `major` = `short`
 WHERE `mole` = :uid
 EOF
       );
