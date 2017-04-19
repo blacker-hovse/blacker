@@ -4,12 +4,12 @@
 [submodule "limbo"]
 	path = limbo
 	url = https://github.com/blacker-hovse/limbo
-[submodule "hell-quotes"]
-	path = hell-quotes
-	url = https://github.com/DThought/hell-quotes
 [submodule "quotes"]
 	path = quotes
 	url = https://github.com/DThought/hell-quotes
 [submodule "nearer"]
 	path = nearer
 	url = https://github.com/blacker-hovse/nearer
+[submodule "sucker/rigger"]
+	path = sucker/rigger
+	url = ssh://git@github.com/blacker-hovse/rigger-admin
