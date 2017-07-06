@@ -114,16 +114,21 @@ $pdo = new PDO('sqlite:../hovselist.db');
 $year = date('Y') + (date('n') >= 7);
 
 if (array_key_exists('action', $_POST)) {
-  header('HTTP/1.1 400 Bad Request');
-  header('Status: 400 Bad Request');
+  $fail = false;
   $content = '';
   $format = "`name` || ' ''' || SUBSTR(`class`, 3) || ' <' || `email` || '>'";
   $lists = array();
 
   try {
     switch ($_POST['action']) {
-      case 'delete':
+      case 'kill':
         $content = Mole::killMoleByUid($pdo, (int) $_POST['uid']);
+
+        if ($content) {
+          throw new RangeExeption($content);
+        }
+
+        $content = 'Successfully deleted mole.';
         break;
       case 'gen_class':
         $result = $pdo->prepare(<<<EOF
@@ -337,10 +342,19 @@ EOF
 
         $content = $mole->insert($pdo);
 
-        if (!$content and array_key_exists('major', $_POST)) {
-          $content = $mole->setMajors($pdo, explode(',', $_POST['major']));
+        if ($content) {
+          throw new RangeException($content);
         }
 
+        if (array_key_exists('major', $_POST)) {
+          $content = $mole->setMajors($pdo, explode(',', $_POST['major']));
+
+          if ($content) {
+            throw new RangeException($content);
+          }
+        }
+
+        $content = 'Successfully saved mole.';
         break;
       case 'update':
         $mole = Mole::getMoleByUid($pdo, (int) $_POST['uid']);
@@ -353,26 +367,45 @@ EOF
 
         $content = $mole->update($pdo);
 
-        if (!$content and array_key_exists('major', $_POST)) {
+        if ($content) {
+          throw new RangeException($content);
+        }
+
+        if (array_key_exists('major', $_POST)) {
           $majors = explode(',', $_POST['major']);
           $majors_bak = array_keys($mole->getMajors($pdo));
 
           if (count($majors) != count($majors_bak) or array_diff($majors, $majors_bak)) {
             $content = $mole->setMajors($pdo, $majors);
+
+            if ($content) {
+              throw new RangeException($content);
+            }
           }
         }
 
+        $content = 'Successfully saved mole.';
         break;
       default:
         throw new OutOfBoundsException;
     }
-
-    header('HTTP/1.1 200 OK');
-    header('Status: 200 OK');
   } catch (OutOfBoundsException $e) {
     $content = 'Invalid action ' . htmlentities($_POST['action'], NULL, 'UTF-8') . '.';
+    $fail = true;
+  } catch (RangeException $e) {
+    $content = 'Action failed: ' . $e->getMessage();
+    $fail = true;
   } catch (UnexpectedValueException $e) {
     $content = 'Failed to generate ' . $e->getMessage() . '.';
+    $fail = true;
+  }
+
+  if ($fail) {
+    header('HTTP/1.1 400 Bad Request');
+    header('Status: 400 Bad Request');
+  } else {
+    header('HTTP/1.1 200 OK');
+    header('Status: 200 OK');
   }
 
   if ($lists) {
@@ -416,6 +449,11 @@ foreach ($majors as $short => $long) {
 EOF;
 }
 ?>      ];
+
+      function done(e) {
+        $('.error, .success').remove();
+        $('#main h1').after('<div class="success">' + e + '</div>');
+      }
 
       function edit(e) {
         e.each(function() {
@@ -472,9 +510,9 @@ EOF;
         }).parent().addClass('active');
       }
 
-      function fail(e) {
+      function fail(e, f) {
         $('.error, .success').remove();
-        $('#main h1').after('<div class="error">Action failed: ' + e.responseText + '</div>');
+        $('#main h1').after('<div class="error">' + e.responseText + '</div>');
         $(document).scrollTop(0);
       }
 
@@ -487,12 +525,11 @@ EOF;
             var g = $(this).parent().parent();
 
             $.post('./', {
-              action: 'delete',
+              action: 'kill',
               uid: g.children('.col-uid').text()
-            }).done(function() {
+            }).done(function(e) {
               g.remove();
-              $('.error, .success').remove();
-              $('#main h1').after('<div class="success">Successfully deleted mole.</div>');
+              done(e);
             }).fail(fail);
           }
 
@@ -518,9 +555,8 @@ EOF;
             e[this.className.slice(4)] = f;
           });
 
-          $.post('./', e).done(function() {
-            $('.error, .success').remove();
-            $('#main h1').after('<div class="success">Successfully saved mole.</div>');
+          $.post('./', e).done(function(f) {
+            done(f);
             e.cohort = g.filter('.col-cohort').find('option:selected').text();
 
             if (e.action == 'insert') {
@@ -558,11 +594,7 @@ echo $btns;
         });
 
         $('.gen').click(function() {
-          $.post('./', {action: this.id.replace('-', '_')}).done(function(e) {
-            $('.error, .success').remove();
-            $('#main h1').after('<div class="success">' + e + '</div>');
-            $(document).scrollTop(0);
-          }).fail(fail);
+          $.post('./', {action: this.id.replace('-', '_')}).done(done).fail(fail);
 
           return false;
         });
