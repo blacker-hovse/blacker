@@ -142,7 +142,7 @@ EOF
   }
 
   public function getLocation() {
-    $location = "$this->location";
+    $location = $this->location;
 
     if ($this->alley != 'Social') {
       $location = "$this->alley " . $location;
@@ -174,6 +174,8 @@ EOF
   }
 
   public function insert($pdo) {
+    $this->normalize();
+
     if (self::getMoleByUid($pdo, $this->uid)) {
       return 'UID ' . (int) $this->uid . ' already exists.';
     }
@@ -207,6 +209,16 @@ EOF
     if (!$result->execute($parameters)) {
       return $result->errorInfo()[2];
     }
+  }
+
+  public function normalize() {
+    $this->uid = (float) $this->uid;
+    $this->class = (int) $this->class;
+    $this->cohort = (int) $this->cohort;
+    $this->terms = (float) $this->terms;
+    $this->classBak = (int) $this->classBak;
+    $this->cohortBak = (int) $this->cohortBak;
+    $this->termsBak = (float) $this->termsBak;
   }
 
   public function setMajors($pdo, $majors) {
@@ -263,6 +275,7 @@ EOF
   }
 
   public function update($pdo) {
+    $this->normalize();
     $fields = array_slice(self::getFields(), 1, -1);
     $settings = array();
 
