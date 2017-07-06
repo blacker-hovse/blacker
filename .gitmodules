@@ -10,6 +10,9 @@
 [submodule "nearer"]
 	path = nearer
 	url = https://github.com/blacker-hovse/nearer
+[submodule "rigger"]
+	path = rigger
+	url = ssh://git@github.com/blacker-hovse/rigger
 [submodule "sucker/rigger"]
 	path = sucker/rigger
 	url = ssh://git@github.com/blacker-hovse/rigger-admin
