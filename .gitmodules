@@ -1,15 +1,15 @@
 [submodule "blink"]
 	path = blink
-	url = https://github.com/blacker-hovse/blink
+	url = ssh://git@github.com/blacker-hovse/blink
 [submodule "limbo"]
 	path = limbo
-	url = https://github.com/blacker-hovse/limbo
+	url = ssh://git@github.com/blacker-hovse/limbo
 [submodule "quotes"]
 	path = quotes
-	url = https://github.com/DThought/hell-quotes
+	url = ssh://git@github.com/DThought/hell-quotes
 [submodule "nearer"]
 	path = nearer
-	url = https://github.com/blacker-hovse/nearer
+	url = ssh://git@github.com/blacker-hovse/nearer
 [submodule "rigger"]
 	path = rigger
 	url = ssh://git@github.com/blacker-hovse/rigger
