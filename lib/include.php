@@ -1,6 +1,6 @@
 <?
 function blacker_encode($str) {
-  return htmlentities(str_replace(array("\r", "\n"), '', trim($str)), NULL, 'UTF-8');
+  return htmlentities(preg_replace('/\\s+/', ' ', trim($str)), NULL, 'UTF-8');
 }
 
 function print_head($title = NULL) {
