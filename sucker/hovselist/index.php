@@ -415,14 +415,13 @@ EOF
   die($content);
 }
 
-$btns = '<a class="btn btn-sm edit" href="#">Edit</a><a class="btn btn-sm del" href="#">Delete</a><a class="btn btn-sm save" href="#">Save</a>';
+$btns = '<a class="btn btn-sm btn-persistent edit">Edit</a><a class="btn btn-sm btn-persistent del">Delete</a><a class="btn btn-sm btn-persistent save">Save</a>';
 ?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
 <?
 print_head('Hovselist');
-?>    <script type="text/javascript" src="/lib/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/lib/js/selectize.min.js"></script>
+?>    <script type="text/javascript" src="/lib/js/selectize.min.js"></script>
     <script type="text/javascript">// <![CDATA[
       var classes = [
         '<?
@@ -452,6 +451,7 @@ EOF;
 
       function done(e) {
         $('.error, .success').remove();
+        $('.gen.disabled').removeClass('disabled');
         $('#main h1').after('<div class="success">' + e + '</div>');
       }
 
@@ -512,6 +512,7 @@ EOF;
 
       function fail(e, f) {
         $('.error, .success').remove();
+        $('.gen.disabled').removeClass('disabled');
         $('#main h1').after('<div class="error">' + e.responseText + '</div>');
         $(document).scrollTop(0);
       }
@@ -608,15 +609,15 @@ echo $btns;
       <h1>Hovselist</h1>
       <h2>Feel the Power</h2>
       <p class="text-center">
-        <a id="gen-class" class="btn btn gen" href="#">Generate Class Lists</a>
-        <a id="gen-cohort" class="btn btn gen" href="#">Generate Cohort Lists</a>
-        <a id="gen-location" class="btn btn gen" href="#">Generate Location Lists</a>
-        <a id="gen-offices" class="btn btn gen" href="#">Generate Team Lists</a>
-        <a id="gen-people" class="btn btn gen" href="#">Generate Office Lists</a>
-        <a id="gen-support" class="btn btn gen" href="#">Generate Support Lists</a>
-        <a id="gen-gender" class="btn btn gen" href="#">Generate Gender Lists</a>
-        <a id="gen-mole" class="btn btn gen" href="#">Generate Membership Lists</a>
-        <a id="restart-mailingset" class="btn btn gen" href="#">Restart Mailingset</a>
+        <a id="gen-class" class="btn btn gen">Generate Class Lists</a>
+        <a id="gen-cohort" class="btn btn gen">Generate Cohort Lists</a>
+        <a id="gen-location" class="btn btn gen">Generate Location Lists</a>
+        <a id="gen-offices" class="btn btn gen">Generate Team Lists</a>
+        <a id="gen-people" class="btn btn gen">Generate Office Lists</a>
+        <a id="gen-support" class="btn btn gen">Generate Support Lists</a>
+        <a id="gen-gender" class="btn btn gen">Generate Gender Lists</a>
+        <a id="gen-mole" class="btn btn gen">Generate Membership Lists</a>
+        <a id="restart-mailingset" class="btn btn gen">Restart Mailingset</a>
       </p>
       <table class="hovselist">
         <tr>
@@ -680,7 +681,7 @@ foreach ($cols as $col => $label) {
 EOF;
 }
 ?>          <td class="add">
-            <a class="btn btn-sm save" href="#">Add</a>
+            <a class="btn btn-sm btn-persistent save">Add</a>
           </td>
         </tr>
       </table>

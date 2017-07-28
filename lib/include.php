@@ -30,6 +30,8 @@ function print_head($title = NULL) {
       ga('create', 'UA-65942614-1', 'auto');
       ga('send', 'pageview');
     // ]]></script>
+    <script type="text/javascript" src="/lib/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/lib/js/blacker.js"></script>
 
 EOF;
 }

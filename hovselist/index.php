@@ -54,8 +54,7 @@ EOF;
   <head>
 <?
 print_head('Hovselist');
-?>    <script type="text/javascript" src="/lib/js/jquery.min.js"></script>
-    <script type="text/javascript">// <![CDATA[
+?>    <script type="text/javascript">// <![CDATA[
       function f() {
         var h = $(document).scrollTop();
         var i = $(window).width();
