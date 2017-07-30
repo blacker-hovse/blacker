@@ -403,9 +403,6 @@ EOF
   if ($fail) {
     header('HTTP/1.1 400 Bad Request');
     header('Status: 400 Bad Request');
-  } else {
-    header('HTTP/1.1 200 OK');
-    header('Status: 200 OK');
   }
 
   if ($lists) {

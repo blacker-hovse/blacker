@@ -24,9 +24,6 @@ if ($server['path'] == '/') {
 if ($page == 'error') {
   header('HTTP/1.1 404 Not Found');
   header('Status: 404 Not Found');
-} else {
-  header('HTTP/1.1 200 OK');
-  header('Status: 200 OK');
 }
 ?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">

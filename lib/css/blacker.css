@@ -479,6 +479,47 @@ body .btn-lg {
 .hovselist .active .save {
   display: inline-block;
 }
+.pairwise {
+  width: auto;
+}
+.pairwise tr:first-child {
+  vertical-align: bottom;
+}
+.pairwise tr:first-child div {
+  float: left;
+  width: 0;
+  text-align: left;
+  white-space: nowrap;
+  transform: rotate(-30deg);
+  -webkit-transform: rotate(-30deg);
+  -o-transform: rotate(-30deg);
+  -moz-transform: rotate(-30deg);
+  transform-origin: top left;
+  -webkit-transform-origin: top left;
+  -o-transform-origin: top left;
+  -moz-transform-origin: top left;
+}
+.pairwise th:first-child {
+  padding-right: 0.5em;
+  text-align: right;
+}
+.pairwise-self {
+  background-color: #111;
+}
+.pairwise-tie {
+  background-color: #333;
+}
+.pairwise-win {
+  background-color: #2b552b;
+}
+.pairwise-loss {
+  background-color: #7b2424;
+}
+.ballot {
+  float: left;
+  width: 50%;
+  text-align: left;
+}
 .nametag {
   position: relative;
   width: 5in;
@@ -684,9 +725,8 @@ a:hover {
   }
   #header li {
     margin: 1em 0;
-    width: 50%;
   }
-  #main {
+  #header + #main {
     padding-top: 0;
   }
   #main > *, #main > .error, #main > .success {
