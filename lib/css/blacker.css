@@ -520,6 +520,11 @@ body .btn-lg {
   width: 50%;
   text-align: left;
 }
+.ballot ol {
+  margin: 0.5em;
+  border: 2px groove #333;
+  padding: 0.5em 1em 0.5em 2em;
+}
 .nametag {
   position: relative;
   width: 5in;
