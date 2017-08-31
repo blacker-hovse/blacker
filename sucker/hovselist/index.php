@@ -55,7 +55,9 @@ $roles = array(
     ),
     'imss' => array(
       'headimssrep',
-      'imssrep'
+      'headimssrepresentative',
+      'imssrep',
+      'imssrepresentative'
     ),
     'librarians' => array(
       'librarian'
@@ -66,16 +68,22 @@ $roles = array(
   ),
   'people' => array(
     'arc' => array(
-      'arcrep'
+      'arcrep',
+      'arcrepresentative'
     ),
     'boc' => array(
-      'bocrep'
+      'bocrep',
+      'bocrepresentative'
     ),
     'bookie' => array(
       'bookie'
     ),
+    'chiliczar' => array(
+      'chiliczar'
+    ),
     'crc' => array(
-      'crcrep'
+      'crcrep',
+      'crcrepresentative'
     ),
     'pope' => array(
       'pope'
@@ -90,15 +98,18 @@ $roles = array(
       'treasurer'
     ),
     'vp' => array(
+      'veep',
       'vicepresident'
     )
   ),
   'support' => array(
     'healthad' => array(
-      'healthad'
+      'healthad',
+      'healthadvocate'
     ),
     'ra-prime' => array(
-      'ra'
+      'ra',
+      'residentialassociate'
     ),
     'ucc-prime' => array(
       'headucc',
@@ -317,7 +328,7 @@ EOF
         $positions = hovselist_position($roles[$set], $moles);
 
         foreach ($positions as $list => $moles) {
-          if ($set == 'offices' or $list == 'healthad') {
+          if ($set == 'offices') {
             $moles[] = $president;
             $moles[] = $secretary;
           }
