@@ -9,10 +9,10 @@ function hovselist_position($roles, $moles) {
   }, $roles);
 
   foreach ($moles as $mole) {
-    $position = explode(',', strtolower(preg_replace('/[^\w,]+/', '', $mole['position'])));
+    $position = array_map('blacker_normalize', explode(',', $mole['position']));
 
     foreach ($roles as $list => $titles) {
-      if (array_intersect($titles, $position)) {
+      if (array_intersect(array_keys($titles), $position)) {
         $positions[$list][] = $mole['format'];
       }
     }
@@ -45,75 +45,71 @@ $alleys = "('" . implode("', '", array_diff(get_alleys(), array(
 $roles = array(
   'offices' => array(
     'athteam' => array(
-      'athteam'
+      'athteam' => 'Athteam'
     ),
     'damage' => array(
-      'damagecontrol'
+      'damagecontrol' => 'Damage Control'
     ),
     'historians' => array(
-      'historian'
+      'historian' => 'Historian'
     ),
     'imss' => array(
-      'headimssrep',
-      'headimssrepresentative',
-      'imssrep',
-      'imssrepresentative'
+      'headimssrep' => 'Head IMSS Rep',
+      'imssrep' => 'IMSS Rep'
     ),
     'librarians' => array(
-      'librarian'
+      'librarian' => 'Librarian'
     ),
     'socteam' => array(
-      'socteam'
+      'socteam' => 'Socteam'
     )
   ),
   'people' => array(
     'arc' => array(
-      'arcrep',
-      'arcrepresentative'
+      'arcrep' => 'ARC Rep'
     ),
     'boc' => array(
-      'bocrep',
-      'bocrepresentative'
+      'bocrep' => 'BOC Rep'
     ),
     'bookie' => array(
-      'bookie'
+      'bookie' => 'Bookie'
     ),
     'chiliczar' => array(
-      'chiliczar'
+      'chiliczar' => 'Chili Czar'
     ),
     'crc' => array(
-      'crcrep',
-      'crcrepresentative'
+      'crcrep' => 'CRC Rep'
     ),
     'pope' => array(
-      'pope'
+      'pope' => 'Pope'
+    ),
+    'permafrosh' => array(
+      'permafrosh' => 'Permafrosh'
     ),
     'president' => array(
-      'president'
+      'president' => 'President'
     ),
     'secretary' => array(
-      'secretary'
+      'secretary' => 'Secretary'
     ),
     'treasurer' => array(
-      'treasurer'
+      'treasurer' => 'Treasurer'
     ),
     'vp' => array(
-      'veep',
-      'vicepresident'
+      'vicepresident' => 'Vice President'
     )
   ),
   'support' => array(
     'healthad' => array(
-      'healthad',
-      'healthadvocate'
+      'healthad' => 'Health Ad',
+      'healthadintraining' => '(Health Ad)'
     ),
     'ra-prime' => array(
-      'ra',
-      'residentialassociate'
+      'ra' => 'RA'
     ),
     'ucc-prime' => array(
-      'headucc',
-      'ucc'
+      'headucc' => 'Head UCC',
+      'ucc' => 'UCC'
     )
   )
 );
@@ -457,6 +453,21 @@ EOF;
 }
 ?>      ];
 
+      var positions = [
+<?
+$positions = array_reduce(array_reduce($roles, 'array_merge', array()), 'array_merge', array());
+
+foreach ($positions as $position) {
+  echo <<<EOF
+        {
+          text: '$position',
+          value: '$position'
+        },
+
+EOF;
+}
+?>      ];
+
       function done(e) {
         $('.error, .success').remove();
         $('.gen.disabled').removeClass('disabled');
@@ -508,6 +519,21 @@ EOF;
           }
 
           $(this).html(e);
+
+          if ($(this).hasClass('col-position')) {
+            var g = $(this).children();
+
+            g.selectize({
+              create: true,
+              delimiter: ', ',
+              options: g.val().split(', ').map(function(f) {
+                return {
+                  text: f,
+                  value: f
+                };
+              }).concat(positions)
+            });
+          }
 
           if ($(this).hasClass('col-major')) {
             $(this).children().selectize({

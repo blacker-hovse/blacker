@@ -1,6 +1,10 @@
 <?
 function blacker_encode($str) {
-  return htmlentities(preg_replace('/\\s+/', ' ', trim($str)), NULL, 'UTF-8');
+  return htmlentities(preg_replace('/\s+/', ' ', trim($str)), NULL, 'UTF-8');
+}
+
+function blacker_normalize($str) {
+  return strtolower(preg_replace('/\W+/', '', $str));
 }
 
 function print_head($title = NULL) {
