@@ -527,43 +527,38 @@ body .btn-lg {
 }
 .nametag {
   position: relative;
-  width: 5in;
-  height: 3in;
+  width: 4.5in;
+  height: 1.75in;
   margin: auto;
   border: 1px dotted #666;
   color: #fff;
   background-image: url('/lib/strip.png');
   background-size: 100% 100%;
-  font-size: 0.3in;
+  font-size: 0.2in;
   line-height: 1;
   font-family: 'Squada One', sans-serif;
 }
-.nametag-sm {
-  width: 3in;
-  height: 2in;
-  font-size: 0.2in;
-}
 .nametag > * {
   position: absolute;
-  padding: 5%;
+  padding: 4%;
 }
 .nametag span {
   display: block;
 }
 .nametag .top {
   right: 0;
-  left: 15%;
+  left: 11%;
   text-align: right;
 }
 .nametag .bottom {
   bottom: 0;
   right: 0;
-  left: 15%;
+  left: 11%;
 }
 .nametag .left {
   right: 100%;
   width: 100%;
-  padding: 4%;
+  padding: 3%;
   transform: rotate(-90deg);
   transform-origin: top right;
   -webkit-transform: rotate(-90deg);
@@ -576,7 +571,7 @@ body .btn-lg {
   font-size: 1.2em;
 }
 .nametag .big {
-  font-size: 1.8em;
+  font-size: 2em;
 }
 .baseball {
   position: relative;

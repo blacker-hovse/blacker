@@ -28,13 +28,6 @@ $result->execute();
 while ($row = $result->fetchObject('Mole')) {
   generate_nametag($pdo, $row);
 }
-
-$result = $pdo->prepare($statement);
-$result->execute();
-
-while ($row = $result->fetchObject('Mole')) {
-  generate_nametag($pdo, $row, true);
-}
 ?>      </div>
     </div>
 <?
