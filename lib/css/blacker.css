@@ -573,6 +573,31 @@ body .btn-lg {
 .nametag .big {
   font-size: 2em;
 }
+.chemzap {
+  position: relative;
+  width: 2.25in;
+  height: 3.5in;
+  margin: auto;
+  border: 1px dotted #666;
+  background-image: url('/chemzap/chemzap.png');
+  background-size: 2.25in 3.5in;
+}
+.chemzap-name {
+  display: block;
+  position: relative;
+  top: 3in;
+  color: #000;
+  text-align: center;
+  font-size: 0.2in;
+  font-weight: bold;
+}
+.chemzap-photo {
+  position: absolute;
+  top: 1.825in;
+  left: .675in;
+  width: .905in;
+  height: 1.17in;
+}
 .baseball {
   position: relative;
   width: 5in;
@@ -780,7 +805,7 @@ a:hover {
   #main .hovselist {
     margin: 2em 0;
   }
-  .nametag, .baseball {
+  .nametag, .baseball, .chemzap {
     float: left;
     page-break-inside: avoid;
   }
