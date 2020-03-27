@@ -6,7 +6,7 @@
 	url = ssh://git@github.com/blacker-hovse/limbo
 [submodule "quotes"]
 	path = quotes
-	url = ssh://git@github.com/DThought/hell-quotes
+	url = ssh://git@github.com/deeptoaster/hell-quotes
 [submodule "nearer"]
 	path = nearer
 	url = ssh://git@github.com/blacker-hovse/nearer
