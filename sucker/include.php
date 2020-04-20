@@ -30,14 +30,11 @@ function get_alleys() {
     'Cannes',
     'Heaven',
     'Hell',
-    'Kremlin',
     'Pub',
     'Swamp',
     'Tunnel',
     'Upper P',
-    'Vatican',
-    'Fort Knight',
-    'Munth',
+    'Vatikremlin',
     'Womb'
   );
 }
