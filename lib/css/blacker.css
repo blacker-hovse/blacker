@@ -116,6 +116,9 @@ body {
 .text-center {
   text-align: center;
 }
+#captcha > div {
+  margin: auto;
+}
 input, select, textarea, button, #main .selectize-input {
   display: block;
   box-shadow: none;
