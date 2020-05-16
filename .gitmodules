@@ -25,3 +25,6 @@
 [submodule "baseball"]
 	path = baseball
 	url = ssh://git@bitbucket.org/blacker-hovse/baseball
+[submodule "carpet"]
+	path = carpet
+	url = ssh://git@bitbucket.org/blacker-hovse/carpet-bomb
