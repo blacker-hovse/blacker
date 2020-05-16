@@ -16,3 +16,9 @@
 [submodule "sucker/rigger"]
 	path = sucker/rigger
 	url = ssh://git@github.com/blacker-hovse/rigger-admin
+[submodule "hovselist"]
+	path = hovselist
+	url = ssh://git@github.com/blacker-hovse/hovselist
+[submodule "sucker/hovselist"]
+	path = sucker/hovselist
+	url = ssh://git@github.com/blacker-hovse/hovselist-admin
