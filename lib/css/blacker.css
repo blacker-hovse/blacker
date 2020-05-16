@@ -133,11 +133,8 @@ input, select, textarea, button, #main .selectize-input {
   background-color: #111;
   color: #ccc;
   font-size: 0.9em;
-  line-height: 1;
+  line-height: normal;
   font-family: Roboto, sans-serif;
-}
-select {
-  height: 1em;
 }
 #main .selectize-input input {
   background-color: transparent;
@@ -207,6 +204,10 @@ body .btn-lg {
 .form-control input, .form-control select, .form-control textarea, #main .form-control .selectize-input, .form-control .btn {
   font-size: 1em;
 }
+.form-control input[type=checkbox], .form-control input[type=radio] {
+  position: absolute;
+  margin: 0.5em;
+}
 .form-control .btn-sm {
   font-size: 0.8em;
 }
@@ -259,7 +260,8 @@ body .btn-lg {
   margin-left: 30%;
 }
 .input-group label {
-  padding-left: 0.5em;
+  display: inline-block;
+  margin-left: 2.5em;
 }
 .input-group-left {
   width: 55%;
@@ -659,6 +661,18 @@ body .btn-lg {
 .baseball p {
   margin-left: 0.1in;
   margin-right: 0.1in;
+}
+.glitchable {
+  position: relative;
+}
+.glitchable::before, .glitchable::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: inherit;
 }
 blockquote {
   position: relative;
