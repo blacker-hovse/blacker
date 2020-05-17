@@ -673,6 +673,22 @@ body .btn-lg {
   bottom: 0;
   left: 0;
   padding: inherit;
+  background-color: black;
+  animation-duration: 2s, 8s;
+  animation-timing-function: step-end;
+  animation-delay: 0s, 8s;
+  animation-iteration-count: 1, infinite;
+}
+.glitching .glitchable::before {
+  animation-name: glitch-red, glitch-red-low;
+}
+.glitching .glitchable::after {
+  animation-name: glitch-cyan, glitch-cyan-low;
+}
+.glitching input, .glitching textarea {
+  animation-name: glitch-input;
+  animation-duration: 2s;
+  animation-timing-function: step-end;
 }
 blockquote {
   position: relative;
@@ -847,5 +863,149 @@ a:hover {
     -webkit-transform: rotate(-90deg);
     -o-transform: rotate(-90deg);
     -moz-transform: rotate(-90deg);
+  }
+}
+@keyframes glitch-red {
+  0% {
+    left: -4px;
+    text-shadow: -8px 2px red;
+    clip-path: inset(20% 0 50% 0);
+  }
+  10% {
+    left: 0;
+    text-shadow: 0 0 red;
+    clip-path: inset(0 0 0 0);
+  }
+  30% {
+    left: 6px;
+    text-shadow: 10px 0 red;
+    clip-path: inset(10% 0 20% 0);
+  }
+  45% {
+    left: 0;
+    text-shadow: 0 0 red;
+    clip-path: inset(0 0 0 0);
+  }
+  80% {
+    left: 4px;
+    text-shadow: -2px 2px red;
+    clip-path: inset(30% 0 20% 0);
+  }
+  90% {
+    left: 0;
+    text-shadow: 0 0 red;
+    clip-path: inset(0 0 0 0);
+  }
+  92% {
+    left: -12px;
+    text-shadow: -8px 2px red;
+    clip-path: inset(10% 0 20% 0);
+  }
+  94% {
+    left: -20px;
+    text-shadow: -12px 4px red;
+    clip-path: inset(20% 0 10% 0);
+  }
+  96% {
+    left: 0;
+    text-shadow: 0 0 red;
+    clip-path: inset(0 0 0 0);
+  }
+  98% {
+    left: -80px;
+    text-shadow: -24px -12px red;
+    clip-path: inset(10% 0 10% 0);
+  }
+}
+@keyframes glitch-red-low {
+  0% {
+    left: -4px;
+    text-shadow: -8px 2px red;
+    clip-path: inset(20% 0 50% 0);
+  }
+  2.5% {
+    left: 0;
+    text-shadow: 0 0 red;
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes glitch-cyan {
+  0% {
+    left: 4px;
+    text-shadow: 8px -2px cyan;
+    clip-path: inset(70% 0 20% 0);
+  }
+  10% {
+    left: 0;
+    text-shadow: 0 0 cyan;
+    clip-path: inset(0 0 0 0);
+  }
+  25% {
+    left: -6px;
+    text-shadow: -4px 0 cyan;
+    clip-path: inset(40% 0 40% 0);
+  }
+  40% {
+    left: -4px;
+    text-shadow: -10px 0 cyan;
+    clip-path: inset(50% 0 30% 0);
+  }
+  45% {
+    left: 0;
+    text-shadow: 0 0 cyan;
+    clip-path: inset(0 0 0 0);
+  }
+  80% {
+    left: 8px;
+    text-shadow: 4px -4px cyan;
+    clip-path: inset(50% 0 40% 0);
+  }
+  90% {
+    left: 40px;
+    text-shadow: 20px 12px cyan;
+    clip-path: inset(30% 0 40% 0);
+  }
+}
+@keyframes glitch-cyan-low {
+  0% {
+    left: 4px;
+    text-shadow: 8px -2px cyan;
+    clip-path: inset(70% 0 20% 0);
+  }
+  2.5% {
+    left: 0;
+    text-shadow: 0 0 cyan;
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes glitch-input {
+  0% {
+    border-color: black;
+    background-color: black;
+    color: black;
+  }
+  40% {
+    background-color: #ccaaaa;
+    color: #aacccc;
+  }
+  42% {
+    background-color: #aacccc;
+    color: #ccaaaa;
+  }
+  45% {
+    background-color: black;
+    color: black;
+  }
+  90% {
+    background-color: #997777;
+    color: #779999;
+  }
+  92% {
+    background-color: #779999;
+    color: #997777;
+  }
+  95% {
+    background-color: black;
+    color: black;
   }
 }
