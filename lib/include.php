@@ -69,11 +69,15 @@ function print_header() {
 EOF;
 }
 
-function print_footer($arg0, $arg1) {
+function print_footer($arg0, $arg1, $arg2 = null) {
+  if ($arg2 == null) {
+    $arg2 = 'Website design by <a href="http://fishbotwilleatyou.com/">DT</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:mole-imss@blacker.caltech.edu">Contact</a>';
+  }
+
   echo <<<EOF
     <div id="footer">
       <img src="/lib/lion.png" alt="" />
-      <p>$arg0<br />$arg1<br />Website design by <a href="http://fishbotwilleatyou.com/">DT</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:mole-imss@blacker.caltech.edu">Contact</a></p>
+      <p>$arg0<br />$arg1<br />$arg2</p>
       <h1>&gamma;&delta;&beta;&gamma;</h1>
     </div>
 
