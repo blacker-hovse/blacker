@@ -24,7 +24,10 @@
 	url = ssh://git@github.com/blacker-hovse/hovselist-admin
 [submodule "baseball"]
 	path = baseball
-	url = ssh://git@bitbucket.org/blacker-hovse/baseball
+	url = ssh://git@github.com/blacker-hovse/baseball
 [submodule "carpet"]
 	path = carpet
-	url = ssh://git@bitbucket.org/blacker-hovse/carpet-bomb
+	url = ssh://git@github.com/blacker-hovse/carpet-bomb
+[submodule "hyper"]
+	path = hyper
+	url = ssh://git@github.com/deeptoaster/hyper-hello
