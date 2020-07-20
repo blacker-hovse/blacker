@@ -152,7 +152,8 @@ input, select, textarea, button, #main .selectize-input {
   background-color: #333;
   color: #ccc;
 }
-input:hover, select:hover, textarea:hover, #main .selectize-input:hover, input:focus, select:focus, textarea:focus, #main .selectize-input.focus {
+input:hover, select:hover, textarea:hover, #main .selectize-input:hover,
+input:focus, select:focus, textarea:focus, #main .selectize-input.focus {
   border-color: #ccc;
   color: #fff;
 }
@@ -180,7 +181,8 @@ input[type=checkbox], input[type=radio] {
   line-height: 2;
   cursor: default;
 }
-.btn:hover, input[type=submit]:hover, input[type=reset]:hover, .btn:focus, input[type=submit]:focus, input[type=reset]:focus {
+.btn:hover, input[type=submit]:hover, input[type=reset]:hover,
+.btn:focus, input[type=submit]:focus, input[type=reset]:focus {
   border-color; #222;
   background-color: #333;
   color: #ccc;
@@ -190,7 +192,8 @@ input[type=checkbox], input[type=radio] {
   background-color: #111;
   color: #999;
 }
-.btn.disabled, input[type=submit].disabled, input[type=reset].disabled, .btn[disabled], input[type=submit][disabled], input[type=reset][disabled] {
+.btn.disabled, input[type=submit].disabled, input[type=reset].disabled,
+.btn[disabled], input[type=submit][disabled], input[type=reset][disabled] {
   border-color: #444;
   background-color: #444;
   color: #999;
@@ -201,7 +204,8 @@ body .btn-sm {
 body .btn-lg {
   font-size: 1.2em;
 }
-.form-control input, .form-control select, .form-control textarea, #main .form-control .selectize-input, .form-control .btn {
+.form-control input, .form-control select, .form-control textarea,
+#main .form-control .selectize-input, .form-control .btn {
   font-size: 1em;
 }
 .form-control input[type=checkbox], .form-control input[type=radio] {
@@ -280,6 +284,27 @@ body .btn-lg {
   margin-left: -0.4em;
   text-align: center;
   line-height: 1;
+}
+.input-group-search {
+  position: relative;
+  margin-top: 0.3em;
+  margin-left: 0;
+}
+.input-group-search > input[type=submit] {
+  position: absolute;
+  top: 0;
+  right: -0.5em;
+  margin: 0;
+  border: 0;
+  padding: 0 0.5em;
+  background-color: transparent;
+  color: #666;
+  cursor: pointer;
+}
+.input-group-search > input:hover + input[type=submit],
+.input-group-search > input:focus + input[type=submit],
+.input-group-search > input[type=submit]:hover {
+  color: #ccc;
 }
 .form-control-static {
   margin: -0.5em;
