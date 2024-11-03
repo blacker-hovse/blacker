@@ -31,3 +31,6 @@
 [submodule "hyper"]
 	path = hyper
 	url = ssh://git@github.com/deeptoaster/hyper-hello
+[submodule "action"]
+	path = action
+	url = ssh://git@github.com/deeptoaster/action-terminal
